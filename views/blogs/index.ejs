@@ -1,0 +1,10 @@
+<%- include('../partials/navbar') %>
+<h1>All Blogs</h1>
+<% blogs.forEach(blog => { %>
+<div class="blog-card">
+  <h2><%= blog.title %></h2>
+  <p>By <%= blog.author.username %> on <%= blog.createdAt.toDateString() %></p>
+  <a href="/blogs/<%= blog._id %>">Read More</a>
+</div>
+<% }) %>
+<a href="/blogs/new">Create New Blog</a>

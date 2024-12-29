@@ -1,0 +1,24 @@
+<nav>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/blogs">Blogs</a></li>
+    <li><a href="/blogs/new">New Blog</a></li>
+    <li><a href="/logout">Logout</a></li>
+    <li><a href="/login">Login</a></li>
+    <li><a href="/register">Register</a></li>
+  </ul>
+</nav>
+
+<head>
+  <link rel="stylesheet" href="/css/styles.css" />
+
+  <script>
+    tinymce.init({
+      selector: '#content',
+      menubar: false,
+      plugins: 'link image lists table',
+      toolbar:
+        'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image',
+    });
+  </script>
+</head>

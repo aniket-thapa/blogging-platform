@@ -1,0 +1,6 @@
+<%- include('../partials/navbar') %>
+<h1><%= blog.title %></h1>
+<p>By <%= blog.author.username %> on <%= blog.createdAt.toDateString() %></p>
+<p><%- blog.content %></p>
+
+<a href="/blogs">Back to All Blogs</a>
