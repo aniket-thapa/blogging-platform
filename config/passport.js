@@ -5,24 +5,31 @@ const User = require('../models/User');
 
 // Local strategy for username and password
 passport.use(
-  new LocalStrategy(async (username, useremail, password, done) => {
-    try {
-      const user = await User.findOne({ useremail });
-      if (!user || !user.password) {
-        // Ensure password exists for traditional login
-        return done(null, false, {
-          message: 'User not found or invalid login method.',
-        });
+  new LocalStrategy(
+    {
+      usernameField: 'useremail', // Tell Passport that the "username" is the "useremail"
+      passwordField: 'password', // This is the default field for the password
+    },
+    async (useremail, password, done) => {
+      try {
+        const user = await User.findOne({ useremail });
+        if (!user || !user.password) {
+          // Ensure password exists for traditional login
+          return done(null, false, {
+            message: 'User not found or invalid login method.',
+          });
+        }
+
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch)
+          return done(null, false, { message: 'Incorrect password' });
+
+        return done(null, user);
+      } catch (err) {
+        return done(err);
       }
-
-      const isMatch = await user.comparePassword(password);
-      if (!isMatch) return done(null, false, { message: 'Incorrect password' });
-
-      return done(null, user);
-    } catch (err) {
-      return done(err);
     }
-  })
+  )
 );
 
 // Google strategy for OAuth
