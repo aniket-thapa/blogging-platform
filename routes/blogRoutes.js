@@ -1,6 +1,7 @@
 const express = require('express');
 const { isAuthenticated } = require('../middleware/authMiddleware');
 const Blog = require('../models/Blog');
+const Comment = require('../models/Comment');
 const router = express.Router();
 
 // Display All Blogs
@@ -34,11 +35,14 @@ router.post('/', isAuthenticated, async (req, res) => {
 // Show Single Blog
 router.get('/:id', async (req, res) => {
   try {
-    const blog = await Blog.findById(req.params.id).populate(
-      'author',
-      'username'
-    );
-    res.render('blogs/show', { blog });
+    const blog = await Blog.findById(req.params.id)
+      .populate('author', 'username')
+      .populate({
+        path: 'comments',
+        populate: { path: 'author', select: 'username' },
+      });
+    const user = req.user || null;
+    res.render('blogs/show', { blog, user });
   } catch (err) {
     res.redirect('/blogs');
   }
@@ -83,6 +87,48 @@ router.delete('/:id', isAuthenticated, async (req, res) => {
     }
     await blog.deleteOne();
     res.redirect('/blogs');
+  } catch (err) {
+    res.redirect('/blogs');
+  }
+});
+
+// Like a Blog
+router.post('/:id/like', isAuthenticated, async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+
+    // Prevent multiple likes by the same user
+    if (blog.likes.includes(req.user._id)) {
+      return res.redirect(`/blogs/${req.params.id}`);
+    }
+
+    blog.likes.push(req.user._id);
+    await blog.save();
+    res.redirect(`/blogs/${req.params.id}`);
+  } catch (err) {
+    res.redirect('/blogs');
+  }
+});
+
+// Add a Comment to a Blog
+router.post('/:id/comments', async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) {
+      return res.status(404).send('Blog not found');
+    }
+    // Create a new comment
+    const newComment = new Comment({
+      content: req.body.content,
+      author: req.user._id,
+      blog: blog._id,
+    });
+
+    await newComment.save();
+
+    blog.comments.push(newComment._id);
+    await blog.save();
+    res.redirect(`/blogs/${blog._id}`);
   } catch (err) {
     res.redirect('/blogs');
   }

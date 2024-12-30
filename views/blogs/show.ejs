@@ -3,4 +3,41 @@
 <p>By <%= blog.author.username %> on <%= blog.createdAt.toDateString() %></p>
 <p><%- blog.content %></p>
 
+<% if (user && blog.author._id.equals(user._id)) { %>
+<a href="/blogs/<%= blog._id %>/edit">Edit</a>
+<form
+  action="/blogs/<%= blog._id %>?_method=DELETE"
+  method="POST"
+  style="display: inline"
+>
+  <button type="submit">Delete</button>
+</form>
+<% } %>
+
+<!-- Display likes -->
+<p>Likes: <%= blog.likes.length %></p>
+
+<!-- Like Button -->
+<% if (user && !blog.likes.includes(user._id)) { %>
+<form action="/blogs/<%= blog._id %>/like" method="POST">
+  <button type="submit">Like</button>
+</form>
+<% } %>
+
+<!-- Comments Section -->
+<h3>Comments</h3>
+<% blog.comments.forEach(comment => { %>
+<div>
+  <p><strong><%= comment.author.username %>:</strong> <%= comment.content %></p>
+  <p><small>Commented on <%= comment.createdAt.toDateString() %></small></p>
+</div>
+<% }) %> <% if (user) { %>
+<!-- Comment Form -->
+
+<form action="/blogs/<%= blog._id %>/comments" method="POST">
+  <textarea name="content" required></textarea>
+  <button type="submit">Add Comment</button>
+</form>
+<% } %>
+
 <a href="/blogs">Back to All Blogs</a>
