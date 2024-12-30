@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const dotenv = require('dotenv');
 const passport = require('passport');
-
 const methodOverride = require('method-override');
 
 dotenv.config();
@@ -28,13 +27,12 @@ app.use(
     saveUninitialized: false,
   })
 );
-const passportconfi = require('./config/passport'); // Passport config
-const authRoutes = require('./routes/authRoutes'); // Auth routes
 
+const passportconfi = require('./config/passport'); // Passport config
 app.use(passportconfi.initialize());
 app.use(passportconfi.session());
 
-// Use routes
+const authRoutes = require('./routes/authRoutes'); // Auth routes
 app.use(authRoutes);
 
 // Use MethodOverride in Blogs CRUD Opprations
@@ -45,13 +43,19 @@ app.get('/', (req, res) => {
   res.render('home');
 });
 
-const userRoutes = require('./routes/userRoutes'); // User Routes
-
+// User Routes (for profile)
+const userRoutes = require('./routes/userRoutes');
 app.use('/profile', userRoutes);
 
-const blogRoutes = require('./routes/blogRoutes'); // Blog routes
-
+// Blog routes
+const blogRoutes = require('./routes/blogRoutes');
 app.use('/blogs', blogRoutes);
+
+// Error handling middleware (Optional but recommended)
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something went wrong!');
+});
 
 // Start Server
 const PORT = process.env.PORT || 3000;

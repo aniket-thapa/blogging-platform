@@ -7,9 +7,9 @@ const router = express.Router();
 router.get('/register', (req, res) => res.render('auth/register'));
 
 router.post('/register', async (req, res) => {
-  const { username, password } = req.body;
+  const { username, useremail, password } = req.body;
   try {
-    const user = new User({ username, password });
+    const user = new User({ username, useremail, password });
     await user.save();
     res.redirect('/login');
   } catch (err) {
@@ -24,6 +24,21 @@ router.post(
   '/login',
   passport.authenticate('local', {
     successRedirect: '/blogs',
+    failureRedirect: '/login',
+  })
+);
+
+// Google OAuth Login
+router.get(
+  '/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+// Google OAuth Callback
+router.get(
+  '/auth/google/callback',
+  passport.authenticate('google', {
+    successRedirect: '/profile',
     failureRedirect: '/login',
   })
 );
