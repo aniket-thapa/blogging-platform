@@ -1,35 +1,60 @@
 <%- include('../partials/navbar') %>
 
-<div class="container mx-auto px-4 py-8">
-  <!-- Page Title -->
-  <h1 class="text-3xl font-bold text-center text-blue-600 mb-8">All Blogs</h1>
+<div class="bg-gray-50 min-h-screen py-12">
+  <!-- Header -->
+  <div class="container mx-auto text-center mb-12">
+    <h1 class="text-4xl font-bold text-gray-800">
+      Welcome to <span class="text-blue-600">Our Blog Space</span>
+    </h1>
+    <p class="text-gray-600 mt-2 text-lg">
+      Dive into the latest thoughts, insights, and stories from our
+      contributors.
+    </p>
+  </div>
 
-  <!-- Blog Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <!-- Blogs Section -->
+  <div
+    class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+  >
     <% blogs.forEach(blog => { %>
-    <div class="blog-card bg-white shadow-lg rounded-lg p-6">
-      <h2 class="text-xl font-semibold text-gray-800 mb-2">
-        <%= blog.title %>
-      </h2>
-      <p class="text-sm text-gray-600 mb-4">
-        By
-        <span class="font-medium text-gray-800"
-          ><%= blog.author.username %></span
+    <div
+      class="relative bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:shadow-lg hover:scale-105"
+    >
+      <!-- Decorative Bar -->
+      <div class="absolute h-1 w-full bg-blue-600"></div>
+
+      <!-- Content -->
+      <div class="p-6 flex flex-col justify-between h-full line-clamp-2">
+        <div>
+          <h2 class="text-2xl font-semibold text-gray-800 line-clamp-2">
+            <%= blog.title %>
+          </h2>
+          <p class="text-sm text-gray-500 mt-2">
+            By
+            <span class="font-medium text-gray-700"
+              ><%= blog.author.username %></span
+            >
+            on <%= blog.createdAt.toDateString() %>
+          </p>
+        </div>
+
+        <a
+          href="/blogs/<%= blog._id %>"
+          class="inline-block mt-4 text-blue-500 font-medium hover:text-blue-700 transition"
         >
-        on <%= blog.createdAt.toDateString() %>
-      </p>
-      <a href="/blogs/<%= blog._id %>" class="text-blue-500 hover:underline"
-        >Read More</a
-      >
+          Read More →
+        </a>
+      </div>
     </div>
+
     <% }) %>
   </div>
 
-  <!-- Create New Blog Button -->
-  <div class="text-center mt-8">
+  <!-- Create New Blog -->
+  <div class="text-center mt-16">
     <a
       href="/blogs/new"
-      class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+      class="inline-block px-8 py-3 text-lg font-medium text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-700 hover:shadow-lg transition"
     >
       Create New Blog
     </a>
