@@ -1,43 +1,103 @@
 <%- include('../partials/navbar') %>
-<h1><%= blog.title %></h1>
-<p>By <%= blog.author.username %> on <%= blog.createdAt.toDateString() %></p>
-<p><%- blog.content %></p>
 
-<% if (user && blog.author._id.equals(user._id)) { %>
-<a href="/blogs/<%= blog._id %>/edit">Edit</a>
-<form
-  action="/blogs/<%= blog._id %>?_method=DELETE"
-  method="POST"
-  style="display: inline"
->
-  <button type="submit">Delete</button>
-</form>
-<% } %>
+<div class="container mx-auto px-4 py-8">
+  <!-- Blog Title -->
+  <h1 class="text-4xl font-bold text-gray-800 mb-4"><%= blog.title %></h1>
 
-<!-- Display likes -->
-<p>Likes: <%= blog.likes.length %></p>
+  <!-- Author and Date -->
+  <p class="text-sm text-gray-600 mb-6">
+    By
+    <span class="font-medium text-gray-800"><%= blog.author.username %></span>
+    on <%= blog.createdAt.toDateString() %>
+  </p>
 
-<!-- Like Button -->
-<% if (user && !blog.likes.includes(user._id)) { %>
-<form action="/blogs/<%= blog._id %>/like" method="POST">
-  <button type="submit">Like</button>
-</form>
-<% } %>
+  <!-- Blog Content -->
+  <div class="prose prose-lg max-w-full mb-6"><%- blog.content %></div>
 
-<!-- Comments Section -->
-<h3>Comments</h3>
-<% blog.comments.forEach(comment => { %>
-<div>
-  <p><strong><%= comment.author.username %>:</strong> <%= comment.content %></p>
-  <p><small>Commented on <%= comment.createdAt.toDateString() %></small></p>
+  <!-- Edit and Delete Buttons -->
+  <% if (user && blog.author._id.equals(user._id)) { %>
+  <div class="mb-6 flex space-x-4">
+    <a
+      href="/blogs/<%= blog._id %>/edit"
+      class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+    >
+      Edit
+    </a>
+    <form
+      action="/blogs/<%= blog._id %>?_method=DELETE"
+      method="POST"
+      style="display: inline"
+    >
+      <button
+        type="submit"
+        class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition"
+      >
+        Delete
+      </button>
+    </form>
+  </div>
+  <% } %>
+
+  <!-- Likes Section -->
+  <p class="text-gray-800 mb-6">Likes: <%= blog.likes.length %></p>
+
+  <% if (user && !blog.likes.includes(user._id)) { %>
+  <form action="/blogs/<%= blog._id %>/like" method="POST" class="mb-6">
+    <button
+      type="submit"
+      class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition"
+    >
+      Like
+    </button>
+  </form>
+  <% } %>
+
+  <!-- Comments Section -->
+  <h3 class="text-2xl font-bold text-gray-800 mb-4">Comments</h3>
+  <div class="space-y-4 mb-6">
+    <% blog.comments.forEach(comment => { %>
+    <div class="border rounded p-4 bg-gray-50">
+      <p class="font-medium text-gray-800"><%= comment.author.username %></p>
+      <p class="text-gray-700"><%= comment.content %></p>
+      <p class="text-sm text-gray-600">
+        Commented on <%= comment.createdAt.toDateString() %>
+      </p>
+    </div>
+    <% }) %>
+  </div>
+
+  <% if (user) { %>
+  <!-- Add Comment Form -->
+  <form
+    action="/blogs/<%= blog._id %>/comments"
+    method="POST"
+    class="space-y-4"
+  >
+    <textarea
+      name="content"
+      required
+      class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500"
+      placeholder="Write your comment..."
+    ></textarea>
+    <button
+      type="submit"
+      class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+    >
+      Add Comment
+    </button>
+  </form>
+  <% } %>
+
+  <!-- Copy Link Button -->
+  <button
+    onclick="navigator.clipboard.writeText('/blogs/<%= blog._id %>')"
+    class="mt-6 bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 transition"
+  >
+    Copy Link to Blog
+  </button>
+
+  <!-- Back to All Blogs -->
+  <a href="/blogs" class="block mt-4 text-blue-500 hover:underline"
+    >Back to All Blogs</a
+  >
 </div>
-<% }) %> <% if (user) { %>
-<!-- Comment Form -->
-
-<form action="/blogs/<%= blog._id %>/comments" method="POST">
-  <textarea name="content" required></textarea>
-  <button type="submit">Add Comment</button>
-</form>
-<% } %>
-
-<a href="/blogs">Back to All Blogs</a>

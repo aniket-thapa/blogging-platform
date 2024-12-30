@@ -1,10 +1,37 @@
 <%- include('../partials/navbar') %>
-<h1>All Blogs</h1>
-<% blogs.forEach(blog => { %>
-<div class="blog-card">
-  <h2><%= blog.title %></h2>
-  <p>By <%= blog.author.username %> on <%= blog.createdAt.toDateString() %></p>
-  <a href="/blogs/<%= blog._id %>">Read More</a>
+
+<div class="container mx-auto px-4 py-8">
+  <!-- Page Title -->
+  <h1 class="text-3xl font-bold text-center text-blue-600 mb-8">All Blogs</h1>
+
+  <!-- Blog Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% blogs.forEach(blog => { %>
+    <div class="blog-card bg-white shadow-lg rounded-lg p-6">
+      <h2 class="text-xl font-semibold text-gray-800 mb-2">
+        <%= blog.title %>
+      </h2>
+      <p class="text-sm text-gray-600 mb-4">
+        By
+        <span class="font-medium text-gray-800"
+          ><%= blog.author.username %></span
+        >
+        on <%= blog.createdAt.toDateString() %>
+      </p>
+      <a href="/blogs/<%= blog._id %>" class="text-blue-500 hover:underline"
+        >Read More</a
+      >
+    </div>
+    <% }) %>
+  </div>
+
+  <!-- Create New Blog Button -->
+  <div class="text-center mt-8">
+    <a
+      href="/blogs/new"
+      class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+    >
+      Create New Blog
+    </a>
+  </div>
 </div>
-<% }) %>
-<a href="/blogs/new">Create New Blog</a>

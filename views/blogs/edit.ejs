@@ -5,48 +5,80 @@
       src="https://cdn.tiny.cloud/1/lc69uvdgzdmy12x9k70w8diqldhmdteivxioy0lq1zkiio6x/tinymce/7/tinymce.min.js"
       referrerpolicy="origin"
     ></script>
-    <link rel="stylesheet" href="/css/styles.css" />
-  </head>
-  <body>
-    <h1>Edit Blog</h1>
-    <form
-      action="/blogs/<%= blog._id %>?_method=PUT"
-      method="POST"
-      onsubmit="tinymce.get('content').save();"
-    >
-      <label for="title">Title</label>
-      <input
-        type="text"
-        id="title"
-        name="title"
-        value="<%= blog.title %>"
-        required
-      />
-      <label for="content">Content</label>
-      <textarea id="content" name="content"><%= blog.content %></textarea>
-      <button type="submit">Update Blog</button>
-    </form>
-
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         tinymce.init({
-          selector: '#content', // Initialize TinyMCE on the 'content' textarea
+          selector: '#content',
           menubar: true,
           branding: false,
-          plugins: 'link image lists table code', // Remove 'spellchecker' if not needed
+          plugins: 'link image lists table code',
           toolbar:
             'undo redo | styleselect | formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image',
-
           setup: function (editor) {
             editor.on('init', function () {
-              // After TinyMCE is initialized, hide the original textarea and make it ready for form submission
               var textarea = document.getElementById('content');
-              textarea.style.display = 'none'; // Ensure the original textarea is hidden
-              textarea.removeAttribute('aria-hidden'); // Remove the 'aria-hidden' attribute if it exists
+              textarea.style.display = 'none';
+              textarea.removeAttribute('aria-hidden');
             });
           },
         });
       });
     </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen">
+    <%- include('../partials/navbar') %>
+
+    <div class="container mx-auto px-4 py-8">
+      <!-- Header -->
+      <h1 class="text-4xl font-bold text-blue-600 mb-6">Edit Blog</h1>
+
+      <!-- Form -->
+      <form
+        action="/blogs/<%= blog._id %>?_method=PUT"
+        method="POST"
+        onsubmit="tinymce.get('content').save();"
+        class="bg-white shadow-md rounded-lg p-6"
+      >
+        <!-- Title -->
+        <div class="mb-4">
+          <label for="title" class="block text-gray-700 font-semibold mb-2"
+            >Title</label
+          >
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value="<%= blog.title %>"
+            required
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+
+        <!-- Content -->
+        <div class="mb-4">
+          <label for="content" class="block text-gray-700 font-semibold mb-2"
+            >Content</label
+          >
+          <textarea
+            id="content"
+            name="content"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+<%= blog.content %>
+          </textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <div>
+          <button
+            type="submit"
+            class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg shadow-lg hover:bg-blue-600 transition"
+          >
+            Update Blog
+          </button>
+        </div>
+      </form>
+    </div>
   </body>
 </html>

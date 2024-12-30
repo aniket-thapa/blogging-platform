@@ -42,8 +42,12 @@ app.use(methodOverride('_method'));
 
 // Home Route
 app.get('/', (req, res) => {
-  res.send('Welcome to the Blog Website!');
+  res.render('home');
 });
+
+const userRoutes = require('./routes/userRoutes'); // User Routes
+
+app.use('/profile', userRoutes);
 
 const blogRoutes = require('./routes/blogRoutes'); // Blog routes
 
