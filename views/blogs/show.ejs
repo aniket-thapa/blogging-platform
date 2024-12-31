@@ -16,6 +16,8 @@
     </p>
   </div>
 
+  <hr style="border-top: 2px solid #000" />
+
   <!-- Blog Content -->
   <div id="blog-content" class="blog-content text-gray-900 text-xl space-y-6">
     <%- blog.content %>
@@ -30,46 +32,37 @@
 
   <!-- Edit and Delete Buttons -->
   <% if (user && blog.author._id.equals(user._id)) { %>
-  <div class="mb-6 flex space-x-4">
+  <div class="mb-6 flex gap-6 items-center">
     <a
       href="/blogs/<%= blog._id %>/edit"
-      class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+      class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition focus:ring-2 focus:ring-blue-700"
     >
       Edit
     </a>
-    <form
-      action="/blogs/<%= blog._id %>?_method=DELETE"
-      method="POST"
-      style="display: inline"
+    <button
+      onclick="deleteBlog('<%= blog._id %>')"
+      class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition focus:ring-2 focus:ring-red-700"
     >
-      <button
-        type="submit"
-        class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition"
-      >
-        Delete
-      </button>
-    </form>
+      Delete
+    </button>
   </div>
   <% } %>
 
   <!-- Likes Section -->
-  <p class="text-xl mb-6">
-    <i class="fa-solid fa-heart text-red-600"></i> <%= blog.likes.length %>
-  </p>
+  <div class="h-10 flex items-center gap-6 text-xl">
+    <p id="likes-count" class="">
+      <i class="fa-solid fa-heart text-red-600"></i> <%= blog.likes.length %>
+    </p>
 
-  <% if (user && !blog.likes.includes(user._id)) { %>
-  <form action="/blogs/<%= blog._id %>/like" method="POST" class="mb-6">
+    <% if (user && !blog.likes.includes(user._id)) { %>
     <button
-      type="submit"
-      class="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition"
+      id="like-button"
+      class="bg-red-500 text-white p-2 hover:bg-red-600 transition focus:ring-2 focus:ring-red-700"
     >
-      <i
-        class="fa-regular fa-heart"
-        onclick="this.classList.remove('fa-regular'); this.classList.add('fa-solid');"
-      ></i>
+      <i class="fa-regular fa-heart"></i>
     </button>
-  </form>
-  <% } %>
+    <% } %>
+  </div>
 
   <!-- Comments Section -->
   <h3 class="text-2xl font-bold text-gray-800 mb-4">Comments</h3>
@@ -109,7 +102,7 @@
 
   <!-- Copy Link Button -->
   <button
-    onclick="navigator.clipboard.writeText('/blogs/<%= blog._id %>')"
+    onclick="navigator.clipboard.writeText(window.location.origin + '/blogs/<%= blog._id %>')"
     class="mt-6 bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 transition"
   >
     Copy Link to Blog
@@ -199,9 +192,51 @@
     overflow-x: auto;
     font-size: 1rem;
   }
+
+  /* Style the copy code button */
+
+  .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    color: #555555;
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 2px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .copy-btn:hover {
+    opacity: 1;
+  }
+
+  .copy-btn .tooltip {
+    visibility: hidden;
+    background-color: #3e3e3e9e;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 4px 8px;
+    position: absolute;
+    z-index: 1;
+    top: -4px;
+    right: 22px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.7rem;
+  }
+
+  .copy-btn:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+  }
 </style>
 
 <script>
+  // Reading Time Count
   function stripHTML(html) {
     return html.replace(/<[^>]*>/g, '');
   }
@@ -223,5 +258,96 @@
     document.getElementById(
       'reading-time'
     ).textContent = `Reading Time: ${readingTime} minutes`;
+  });
+
+  // Delete a blog
+  function deleteBlog(blogId) {
+    const confirmed = confirm(
+      'Are you sure to delete this blog? This cannot be undo?'
+    );
+    if (confirmed) {
+      fetch(`/blogs/${blogId}?_method=DELETE`, {
+        method: 'POST', // Use POST to simulate DELETE with _method
+      })
+        .then((response) => {
+          if (response.ok) {
+            window.location.href = '/blogs';
+          } else {
+            alert('Failed to delete the blog');
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          alert('An error occurred');
+        });
+    }
+  }
+
+  // Likes show dynamically on the frontend with API call
+  const likeButton = document.getElementById('like-button');
+  const likesCount = document.getElementById('likes-count');
+
+  if (likeButton) {
+    likeButton.addEventListener('click', async () => {
+      try {
+        const response = await fetch('/blogs/<%= blog._id %>/like', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          likesCount.innerHTML = `<i class="fa-solid fa-heart text-red-600"></i> ${data.likes}`;
+          likeButton.style.display = 'none'; // Hide the like button after liking
+        } else {
+          console.error('Failed to like the blog');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    });
+  }
+
+  // code copy button
+  // Copy Code Icon //
+  document.addEventListener('DOMContentLoaded', function () {
+    const codeBlocks = document.querySelectorAll('#blog-content pre code');
+
+    codeBlocks.forEach((block) => {
+      // Create copy button
+      const copyButton = document.createElement('button');
+      copyButton.className = 'copy-btn';
+      copyButton.innerHTML =
+        '<i class="fa-regular fa-clone"></i><span class="tooltip">Copy</span>';
+
+      // Append the button to the pre element
+      const pre = block.parentElement;
+      pre.style.position = 'relative';
+      pre.appendChild(copyButton);
+
+      // Add copy functionality
+      copyButton.addEventListener('click', () => {
+        const text = block.innerText;
+        navigator.clipboard.writeText(text).then(() => {
+          copyButton.querySelector('.tooltip').textContent = 'Copied!';
+
+          const copyIcon = copyButton.querySelector('i');
+
+          copyIcon.classList.remove('fa-regular', 'fa-clone');
+          copyIcon.classList.add('fa-solid', 'fa-check');
+
+          copyButton.style.color = 'green';
+
+          setTimeout(() => {
+            copyButton.querySelector('.tooltip').textContent = 'Copy';
+            copyIcon.classList.add('fa-regular', 'fa-clone');
+            copyIcon.classList.remove('fa-solid', 'fa-check');
+            copyButton.style.color = '#555555';
+          }, 1500);
+        });
+      });
+    });
   });
 </script>

@@ -99,14 +99,15 @@ router.post('/:id/like', isAuthenticated, async (req, res) => {
 
     // Prevent multiple likes by the same user
     if (blog.likes.includes(req.user._id)) {
-      return res.redirect(`/blogs/${req.params.id}`);
+      return res.status(400).json({ message: 'Already liked' });
     }
 
     blog.likes.push(req.user._id);
     await blog.save();
-    res.redirect(`/blogs/${req.params.id}`);
+
+    res.status(200).json({ likes: blog.likes.length });
   } catch (err) {
-    res.redirect('/blogs');
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
