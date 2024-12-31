@@ -85,6 +85,7 @@ router.delete('/:id', isAuthenticated, async (req, res) => {
     if (!blog.author.equals(req.user._id)) {
       return res.redirect('/blogs');
     }
+    await Comment.deleteMany({ blog: blog._id });
     await blog.deleteOne();
     res.redirect('/blogs');
   } catch (err) {

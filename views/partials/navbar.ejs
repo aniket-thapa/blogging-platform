@@ -1,66 +1,93 @@
-<head>
-  <link
-    href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-    rel="stylesheet"
-  />
-  <script
-    src="https://kit.fontawesome.com/9ca9aa7819.js"
-    crossorigin="anonymous"
-  ></script>
-</head>
+<script src="https://cdn.tailwindcss.com"></script>
+<script
+  src="https://kit.fontawesome.com/9ca9aa7819.js"
+  crossorigin="anonymous"
+></script>
+<script>
+  // Tailwind configuration for dark mode
+  tailwind.config = {
+    darkMode: 'class',
+  };
+  // Ensure dark mode toggle works correctly
+  function toggleDarkMode() {
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    }
+  }
 
-<nav class="bg-blue-500 shadow-lg">
-  <div class="container mx-auto px-4">
-    <div class="flex justify-between items-center py-4">
-      <!-- Logo or Home -->
-      <div>
-        <a href="/" class="text-white text-2xl font-bold">My Blog</a>
-      </div>
-      <!-- Navigation Links -->
-      <ul class="flex space-x-6">
-        <li>
-          <a
-            href="/"
-            class="text-white hover:text-blue-200 transition duration-200"
-            >Home</a
-          >
-        </li>
-        <li>
-          <a
-            href="/blogs"
-            class="text-white hover:text-blue-200 transition duration-200"
-            >Blogs</a
-          >
-        </li>
-        <li>
-          <a
-            href="/blogs/new"
-            class="text-white hover:text-blue-200 transition duration-200"
-            >New Blog</a
-          >
-        </li>
-        <li>
-          <a
-            href="/logout"
-            class="text-white hover:text-blue-200 transition duration-200"
-            >Logout</a
-          >
-        </li>
-        <li>
-          <a
-            href="/login"
-            class="text-white hover:text-blue-200 transition duration-200"
-            >Login</a
-          >
-        </li>
-        <li>
-          <a
-            href="/register"
-            class="text-white hover:text-blue-200 transition duration-200"
-            >Register</a
-          >
-        </li>
-      </ul>
-    </div>
+  // Apply the theme on page load
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+  }
+</script>
+<nav class="bg-white dark:bg-gray-800 shadow-md py-4">
+  <div class="container mx-auto px-4 flex justify-between items-center">
+    <a
+      href="/"
+      class="text-2xl font-bold text-gray-800 dark:text-gray-100 hover:text-blue-500"
+      >MyBlog</a
+    >
+    <ul class="flex space-x-6">
+      <li>
+        <a
+          href="/"
+          class="text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors"
+          >Home</a
+        >
+      </li>
+      <li>
+        <a
+          href="/blogs"
+          class="text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors"
+          >Blogs</a
+        >
+      </li>
+      <li>
+        <a
+          href="/blogs/new"
+          class="text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors"
+          >New Blog</a
+        >
+      </li>
+      <li>
+        <a
+          href="/profile"
+          class="text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors"
+          >Profile</a
+        >
+      </li>
+      <li>
+        <a
+          href="/login"
+          class="text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors"
+          >Login</a
+        >
+      </li>
+      <li>
+        <a
+          href="/register"
+          class="text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors"
+          >Register</a
+        >
+      </li>
+      <li>
+        <a
+          href="/logout"
+          class="text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors"
+          >Logout</a
+        >
+      </li>
+    </ul>
+    <button
+      onclick="toggleDarkMode()"
+      class="px-2 py-1 bg-gray-800 dark:bg-gray-200 text-white dark:text-black rounded-sm"
+    >
+      <i class="fa-regular fa-sun"></i>
+    </button>
   </div>
 </nav>
+<!-- <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100"></body> -->

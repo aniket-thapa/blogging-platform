@@ -1,12 +1,71 @@
-<%- include('../partials/navbar') %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="min-h-screen relative bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+  >
+    <%- include('../partials/navbar') %>
 
-<h2>Register</h2>
-<form action="/register" method="POST">
-  <label for="username">Username</label>
-  <input type="text" name="username" id="username" required />
-  <label for="useremail">Useremail</label>
-  <input type="email" name="useremail" id="useremail" required />
-  <label for="password">Password</label>
-  <input type="password" name="password" id="password" required />
-  <button type="submit">Register</button>
-</form>
+    <div class="container mx-auto px-4 py-16 flex justify-center">
+      <div
+        class="w-full max-w-md bg-white dark:bg-gray-800 shadow-md rounded-lg p-6"
+      >
+        <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">
+          Register
+        </h2>
+        <form action="/register" method="POST" class="space-y-4">
+          <div>
+            <label for="username" class="block text-gray-700 dark:text-gray-300"
+              >Username</label
+            >
+            <input
+              type="text"
+              name="username"
+              id="username"
+              required
+              class="w-full mt-1 p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            />
+          </div>
+          <div>
+            <label
+              for="useremail"
+              class="block text-gray-700 dark:text-gray-300"
+              >User Email</label
+            >
+            <input
+              type="email"
+              name="useremail"
+              id="useremail"
+              required
+              class="w-full mt-1 p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            />
+          </div>
+          <div>
+            <label for="password" class="block text-gray-700 dark:text-gray-300"
+              >Password</label
+            >
+            <input
+              type="password"
+              name="password"
+              id="password"
+              required
+              class="w-full mt-1 p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            />
+          </div>
+          <button
+            type="submit"
+            class="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+          >
+            Register
+          </button>
+        </form>
+      </div>
+    </div>
+    <%- include('../partials/footer') %>
+  </body>
+</html>

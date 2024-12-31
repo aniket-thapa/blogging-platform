@@ -1,73 +1,62 @@
-<%- include('../partials/navbar') %>
-<style>
-  /* Custom CSS for multi-line ellipsis */
-
-  .eellipsis {
-    overflow: hidden; /* Hide overflowed content */
-    text-overflow: ellipsis; /* Add ellipsis for overflowed content */
-    display: -webkit-box; /* Enable multi-line truncation */
-    -webkit-box-orient: vertical; /* Set box orientation to vertical for multi-line truncation */
-    -webkit-line-clamp: 2; /* Limit to 2 lines */
-  }
-</style>
-
-<div class="bg-gray-50 min-h-screen py-12">
-  <!-- Header -->
-  <div class="container mx-auto text-center mb-12">
-    <h1 class="text-4xl font-bold text-gray-800">
-      Welcome to <span class="text-blue-600">Our Blog Space</span>
-    </h1>
-    <p class="text-gray-600 mt-2 text-lg">
-      Dive into the latest thoughts, insights, and stories from our
-      contributors.
-    </p>
-  </div>
-
-  <!-- Blogs Section -->
-  <div
-    class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog Listing</title>
+    <script
+      src="https://kit.fontawesome.com/9ca9aa7819.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body
+    class="min-h-screen relative bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
   >
-    <% blogs.forEach(blog => { %>
-    <div
-      class="relative h-48 bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:shadow-lg hover:scale-105"
-    >
-      <!-- Decorative Bar -->
-      <div class="absolute h-1 w-full bg-blue-600"></div>
+    <%- include('../partials/navbar') %>
+    <div class="max-w-4xl container mx-auto px-4 py-8">
+      <!-- Header -->
+      <header class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl font-bold">Blog Listing</h1>
+      </header>
 
-      <!-- Content -->
-      <div class="p-6 flex flex-col justify-between">
-        <div>
-          <h2 class="min-h-16 text-2xl eellipsis font-semibold text-gray-800">
-            <%= blog.title %>
-          </h2>
-          <p class="text-sm text-gray-500 mt-2">
-            By
-            <span class="font-medium text-gray-700"
-              ><%= blog.author.username %></span
+      <!-- Blog Listing -->
+      <div class="space-y-6">
+        <% blogs.forEach(blog => { %>
+        <div class="border-b border-gray-300 dark:border-gray-700 pb-4">
+          <a href="/blogs/<%= blog._id %>" class="block group mb-8">
+            <h2
+              class="text-xl font-semibold group-hover:text-blue-500 group-focus:text-blue-500 transition-colors"
             >
-            on <%= blog.createdAt.toDateString() %>
-          </p>
+              <%= blog.title %>
+            </h2>
+            <div
+              class="prose font-thin dark:prose-invert mt-4 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors"
+            >
+              <%= blog.content.replace(/<[^>]*>?/gm, '').substring(0, 100) %>...
+            </div>
+          </a>
+          <div class="flex justify-between items-center mt-4">
+            <div class="flex items-center space-x-4">
+              <div class="flex items-center space-x-1">
+                <i class="fa-regular fa-heart"></i>
+                <span><%= blog.likes.length %> </span>
+              </div>
+              <div class="flex items-center space-x-1">
+                <i class="fa-regular fa-comments"></i>
+                <span><%= blog.comments.length %></span>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                  By <%= blog.author.username %> on <%= new
+                  Date(blog.createdAt).toLocaleDateString() %>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <a
-          href="/blogs/<%= blog._id %>"
-          class="inline-block mt-4 text-blue-500 font-medium hover:text-blue-700 transition"
-        >
-          Read More →
-        </a>
+        <% }) %>
       </div>
     </div>
-
-    <% }) %>
-  </div>
-
-  <!-- Create New Blog -->
-  <div class="text-center mt-16">
-    <a
-      href="/blogs/new"
-      class="inline-block px-8 py-3 text-lg font-medium text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-700 hover:shadow-lg transition"
-    >
-      Create New Blog
-    </a>
-  </div>
-</div>
+    <%- include('../partials/footer') %>
+  </body>
+</html>
