@@ -1,4 +1,15 @@
 <%- include('../partials/navbar') %>
+<style>
+  /* Custom CSS for multi-line ellipsis */
+
+  .eellipsis {
+    overflow: hidden; /* Hide overflowed content */
+    text-overflow: ellipsis; /* Add ellipsis for overflowed content */
+    display: -webkit-box; /* Enable multi-line truncation */
+    -webkit-box-orient: vertical; /* Set box orientation to vertical for multi-line truncation */
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+  }
+</style>
 
 <div class="bg-gray-50 min-h-screen py-12">
   <!-- Header -->
@@ -18,15 +29,15 @@
   >
     <% blogs.forEach(blog => { %>
     <div
-      class="relative bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:shadow-lg hover:scale-105"
+      class="relative h-48 bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:shadow-lg hover:scale-105"
     >
       <!-- Decorative Bar -->
       <div class="absolute h-1 w-full bg-blue-600"></div>
 
       <!-- Content -->
-      <div class="p-6 flex flex-col justify-between h-full line-clamp-2">
+      <div class="p-6 flex flex-col justify-between">
         <div>
-          <h2 class="text-2xl font-semibold text-gray-800 line-clamp-2">
+          <h2 class="min-h-16 text-2xl eellipsis font-semibold text-gray-800">
             <%= blog.title %>
           </h2>
           <p class="text-sm text-gray-500 mt-2">

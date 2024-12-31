@@ -7,14 +7,17 @@
   </h1>
 
   <!-- Author and Date -->
-  <p class="text-sm text-gray-600 mb-6">
-    By
-    <span class="font-medium text-gray-800"><%= blog.author.username %></span>
-    on <%= blog.createdAt.toDateString() %>
-  </p>
+  <div class="text-sm text-gray-600 mb-6">
+    <p>
+      By
+      <span class="font-medium text-gray-800"><%= blog.author.username %></span>
+      on <%= blog.createdAt.toDateString() %> |
+      <span id="reading-time">Hello</span>
+    </p>
+  </div>
 
   <!-- Blog Content -->
-  <div class="blog-content text-gray-900 text-xl space-y-6">
+  <div id="blog-content" class="blog-content text-gray-900 text-xl space-y-6">
     <%- blog.content %>
   </div>
 
@@ -197,3 +200,28 @@
     font-size: 1rem;
   }
 </style>
+
+<script>
+  function stripHTML(html) {
+    return html.replace(/<[^>]*>/g, '');
+  }
+
+  function countWords(text) {
+    return text.trim().split(/\s+/).length;
+  }
+
+  function calculateReadingTime(content) {
+    const plainText = stripHTML(content);
+    const wordCount = countWords(plainText);
+    const wordsPerMinute = 150;
+    return Math.ceil(wordCount / wordsPerMinute);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const blogContent = document.getElementById('blog-content').innerHTML;
+    const readingTime = calculateReadingTime(blogContent);
+    document.getElementById(
+      'reading-time'
+    ).textContent = `Reading Time: ${readingTime} minutes`;
+  });
+</script>
