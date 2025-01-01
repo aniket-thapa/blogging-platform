@@ -129,7 +129,7 @@ Visit the live application: [Blogging Platform](https://blogging-platform-y0pb.o
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License [LICENSE](LICENSE).
 
 ---
 
