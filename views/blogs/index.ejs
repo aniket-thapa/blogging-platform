@@ -22,7 +22,7 @@
       <!-- Blog Listing -->
       <div class="space-y-6">
         <% blogs.forEach(blog => { %>
-        <div class="border-b border-gray-300 dark:border-gray-700 pb-4">
+        <div class="border-b border-gray-400 dark:border-gray-700 pb-4">
           <a href="/blogs/<%= blog._id %>" class="block group mb-8">
             <h2
               class="text-xl font-semibold group-hover:text-blue-500 group-focus:text-blue-500 transition-colors"
@@ -30,7 +30,7 @@
               <%= blog.title %>
             </h2>
             <div
-              class="prose font-thin dark:prose-invert mt-4 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors"
+              class="prose font-normal dark:prose-invert mt-4 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors"
             >
               <%= blog.content.replace(/<[^>]*>?/gm, '').substring(0, 100) %>...
             </div>
@@ -48,7 +48,7 @@
               <div>
                 <p class="text-sm text-gray-500 dark:text-gray-400">
                   By <%= blog.author.username %> on <%= new
-                  Date(blog.createdAt).toLocaleDateString() %>
+                  Date(blog.createdAt).toDateString() %>
                 </p>
               </div>
             </div>
