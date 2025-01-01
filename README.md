@@ -122,14 +122,14 @@ Visit the live application: [Blogging Platform](https://blogging-platform-y0pb.o
 
 ## Contributors
 
-- **Aniket Thapa** [Linkedin](/)
-- **Mayank Verma** [Linkedin](/)
+- **Aniket Thapa** [Linkedin](https://www.linkedin.com/in/aniket-thapa)
+- **Mayank Verma** [Linkedin](https://www.linkedin.com/in/mayank-verma04)
 
 ---
 
 ## License
 
-This project is licensed under the MIT License [LICENSE](LICENSE).
+This project is licensed under the [MIT License](LICENSE).
 
 ---
 
