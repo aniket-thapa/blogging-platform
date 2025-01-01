@@ -19,7 +19,7 @@
   <hr style="border-top: 2px solid #000" />
 
   <!-- Blog Content -->
-  <div id="blog-content" class="blog-content text-gray-900 text-xl space-y-6">
+  <div id="blog-content" class="blog-content text-gray-900 text-lg space-y-6">
     <%- blog.content %>
   </div>
 
@@ -98,18 +98,18 @@
       Add Comment
     </button>
   </form>
+  <% } %> <% if (!user) { %>
+
+  <div class="text-gray-500 text-lg">
+    <p class="">Please Login to Like & Comment</p>
+    <a href="/login" class="font-semibold hover:text-blue-500"
+      >Login with Google</a
+    >
+  </div>
   <% } %>
 
-  <!-- Copy Link Button -->
-  <button
-    onclick="navigator.clipboard.writeText(window.location.origin + '/blogs/<%= blog._id %>')"
-    class="mt-6 bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 transition"
-  >
-    Copy Link to Blog
-  </button>
-
   <!-- Back to All Blogs -->
-  <a href="/blogs" class="block mt-4 text-blue-500 hover:underline">
+  <a href="/blogs" class="block mt-8 text-center text-blue-500 hover:underline">
     Back to All Blogs
   </a>
 </div>
