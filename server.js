@@ -14,7 +14,6 @@ connectDB();
 
 // Middleware
 app.use(express.static('public'));
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.set('view engine', 'ejs');
@@ -32,11 +31,21 @@ const passportconfi = require('./config/passport'); // Passport config
 app.use(passportconfi.initialize());
 app.use(passportconfi.session());
 
-const authRoutes = require('./routes/authRoutes'); // Auth routes
-app.use(authRoutes);
-
-// Use MethodOverride in Blogs CRUD Opprations
+// Add MethodOverride
 app.use(methodOverride('_method'));
+
+// Middleware to save the original URL
+function saveOriginalUrl(req, res, next) {
+  if (!req.isAuthenticated() && req.method === 'GET') {
+    req.session.returnTo = req.originalUrl; // Save the URL in session
+  }
+  next();
+}
+app.use(saveOriginalUrl); // Add the middleware here
+
+// Routes
+const authRoutes = require('./routes/authRoutes');
+app.use(authRoutes);
 
 // Home Route
 app.get('/', (req, res) => {
