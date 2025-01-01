@@ -1,6 +1,6 @@
 # Blog Website
 
-[Live Link: Blogging Platform](https://blogging-platform-y0pb.onrender.com/)
+Live Link: [Blogging Platform](https://blogging-platform-y0pb.onrender.com/)
 
 A sleek and modern blogging platform developed by **Aniket Thapa** and **Mayank Verma**, empowering users to create, share, and engage with blogs effortlessly.
 
