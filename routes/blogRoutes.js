@@ -2,6 +2,7 @@ const express = require('express');
 const { isAuthenticated } = require('../middleware/authMiddleware');
 const Blog = require('../models/Blog');
 const Comment = require('../models/Comment');
+const BlogView = require('../models/BlogView');
 const router = express.Router();
 
 // Display All Blogs
@@ -133,6 +134,38 @@ router.post('/:id/comments', async (req, res) => {
     res.redirect(`/blogs/${blog._id}`);
   } catch (err) {
     res.redirect('/blogs');
+  }
+});
+
+// Track view count after the user has stayed for 20 seconds
+router.post('/track-view/:id', async (req, res) => {
+  try {
+    const blogId = req.params.id;
+
+    // Find or create the BlogView for the current blog post
+    let blogView = await BlogView.findOne({ blog: blogId });
+
+    if (!blogView) {
+      // If no BlogView exists for this blog, create one
+      blogView = new BlogView({
+        blog: blogId,
+        viewCount: 1,
+      });
+    } else {
+      // If BlogView exists, increment the view count
+      blogView.viewCount += 1;
+    }
+
+    // Update the lastViewed timestamp
+    blogView.lastViewed = new Date();
+
+    // Save the BlogView document
+    await blogView.save();
+
+    res.status(200).send('View recorded successfully');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
   }
 });
 

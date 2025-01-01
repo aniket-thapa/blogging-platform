@@ -1,353 +1,431 @@
-<%- include('../partials/navbar') %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blogs Listing</title>
+    <script
+      src="https://kit.fontawesome.com/9ca9aa7819.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body class="min-h-screen relative dark:bg-gray-900 dark:text-gray-100">
+    <%- include('../partials/navbar') %>
 
-<div class="container max-w-screen-md mx-auto px-4 py-8">
-  <!-- Blog Title -->
-  <h1 class="text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">
-    <%= blog.title %>
-  </h1>
+    <div class="container max-w-screen-md mx-auto px-4 py-8">
+      <!-- Blog Title -->
+      <h1
+        class="text-5xl font-extrabold text-gray-900 dark:text-gray-200 mb-4 tracking-tight"
+      >
+        <%= blog.title %>
+      </h1>
 
-  <!-- Author and Date -->
-  <div class="text-sm text-gray-600 mb-6">
-    <p>
-      By
-      <span class="font-medium text-gray-800"><%= blog.author.username %></span>
-      on <%= blog.createdAt.toDateString() %> |
-      <span id="reading-time">Hello</span>
-    </p>
-  </div>
+      <!-- Author and Date -->
+      <div class="text-sm text-gray-600 dark:text-gray-400 mb-6">
+        <p>
+          By
+          <span class="font-medium text-gray-800 dark:text-gray-300"
+            ><%= blog.author.username %></span
+          >
+          on <%= blog.createdAt.toDateString() %> |
+          <span id="reading-time"></span>
+        </p>
+      </div>
 
-  <hr style="border-top: 2px solid #000" />
+      <hr class="border-gray-300 dark:border-gray-700 mb-8" />
 
-  <!-- Blog Content -->
-  <div id="blog-content" class="blog-content text-gray-900 text-lg space-y-6">
-    <%- blog.content %>
-  </div>
+      <!-- Blog Content -->
+      <div
+        id="blog-content"
+        class="blog-content text-gray-900 dark:text-gray-300 text-lg space-y-6"
+      >
+        <%- blog.content %>
+      </div>
 
-  <!-- Horizontal Divider with Icon -->
-  <div class="flex items-center justify-center my-8">
-    <div class="w-1/3 border-t-2 border-gray-300"></div>
-    <span class="mx-4 text-gray-500 font-semibold font-mono">End of Blog</span>
-    <div class="w-1/3 border-t-2 border-gray-300"></div>
-  </div>
+      <!-- Divider -->
+      <div class="flex items-center justify-center my-8">
+        <div
+          class="w-1/3 border-t-2 border-gray-300 dark:border-gray-700"
+        ></div>
+        <span
+          class="mx-4 text-gray-500 dark:text-gray-400 font-semibold font-mono"
+          >End of Blog</span
+        >
+        <div
+          class="w-1/3 border-t-2 border-gray-300 dark:border-gray-700"
+        ></div>
+      </div>
 
-  <!-- Edit and Delete Buttons -->
-  <% if (user && blog.author._id.equals(user._id)) { %>
-  <div class="mb-6 flex gap-6 items-center">
-    <a
-      href="/blogs/<%= blog._id %>/edit"
-      class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition focus:ring-2 focus:ring-blue-700"
-    >
-      Edit
-    </a>
-    <button
-      onclick="deleteBlog('<%= blog._id %>')"
-      class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition focus:ring-2 focus:ring-red-700"
-    >
-      Delete
-    </button>
-  </div>
-  <% } %>
+      <!-- Edit and Delete Buttons -->
+      <% if (user && blog.author._id.equals(user._id)) { %>
+      <div class="mb-6 flex gap-6 items-center">
+        <a
+          href="/blogs/<%= blog._id %>/edit"
+          class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition focus:ring-2 focus:ring-blue-700"
+        >
+          Edit
+        </a>
+        <button
+          onclick="deleteBlog('<%= blog._id %>')"
+          class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition focus:ring-2 focus:ring-red-700"
+        >
+          Delete
+        </button>
+      </div>
+      <% } %>
 
-  <!-- Likes Section -->
-  <div class="h-10 flex items-center gap-6 text-xl">
-    <p id="likes-count" class="">
-      <i class="fa-solid fa-heart text-red-600"></i> <%= blog.likes.length %>
-    </p>
+      <!-- Likes Section -->
+      <div class="h-10 flex items-center gap-6 text-xl">
+        <p id="likes-count">
+          <i class="fa-solid fa-heart text-red-600"></i> <%= blog.likes.length
+          %>
+        </p>
 
-    <% if (user && !blog.likes.includes(user._id)) { %>
-    <button
-      id="like-button"
-      class="bg-red-500 text-white p-2 hover:bg-red-600 transition focus:ring-2 focus:ring-red-700"
-    >
-      <i class="fa-regular fa-heart"></i>
-    </button>
-    <% } %>
-  </div>
+        <% if (user && !blog.likes.includes(user._id)) { %>
+        <button
+          id="like-button"
+          class="bg-red-500 text-white p-2 hover:bg-red-600 transition focus:ring-2 focus:ring-red-700"
+        >
+          <i class="fa-regular fa-heart"></i>
+        </button>
+        <% } %>
+      </div>
 
-  <!-- Comments Section -->
-  <h3 class="text-2xl font-bold text-gray-800 mb-4">Comments</h3>
-  <div class="space-y-4 mb-6">
-    <% blog.comments.forEach(comment => { %>
-    <div class="border rounded-lg p-4 bg-gray-50">
-      <p class="font-medium text-gray-800"><%= comment.author.username %></p>
-      <p class="text-gray-700"><%= comment.content %></p>
-      <p class="text-sm text-gray-600">
-        Commented on <%= comment.createdAt.toDateString() %>
-      </p>
+      <!-- Comments Section -->
+      <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">
+        Comments
+      </h3>
+      <div class="space-y-4 mb-6">
+        <% blog.comments.forEach(comment => { %>
+        <div class="border rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
+          <p class="font-medium text-gray-800 dark:text-gray-300">
+            <%= comment.author.username %>
+          </p>
+          <p class="text-gray-700 dark:text-gray-400"><%= comment.content %></p>
+          <p class="text-sm text-gray-600 dark:text-gray-500">
+            Commented on <%= comment.createdAt.toDateString() %>
+          </p>
+        </div>
+        <% }) %>
+      </div>
+
+      <% if (user) { %>
+      <!-- Add Comment Form -->
+      <form
+        action="/blogs/<%= blog._id %>/comments"
+        method="POST"
+        class="space-y-4"
+      >
+        <textarea
+          name="content"
+          required
+          class="w-full border border-gray-300 dark:border-gray-600 rounded p-2 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+          placeholder="Write your comment..."
+        ></textarea>
+        <button
+          type="submit"
+          class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+        >
+          Add Comment
+        </button>
+      </form>
+      <% } %> <% if (!user) { %>
+      <div class="text-gray-500 dark:text-gray-400 text-lg">
+        <p>Please Login to Like & Comment</p>
+        <a href="/login" class="font-semibold hover:text-blue-500"
+          >Login with Google</a
+        >
+      </div>
+      <% } %>
+
+      <!-- Back to All Blogs -->
+      <a
+        href="/blogs"
+        class="block mt-8 text-center text-blue-500 dark:text-blue-400 hover:underline"
+      >
+        Back to All Blogs
+      </a>
     </div>
-    <% }) %>
-  </div>
-
-  <% if (user) { %>
-  <!-- Add Comment Form -->
-  <form
-    action="/blogs/<%= blog._id %>/comments"
-    method="POST"
-    class="space-y-4"
-  >
-    <textarea
-      name="content"
-      required
-      class="w-full border border-gray-300 rounded p-2 focus:ring-2 focus:ring-blue-500"
-      placeholder="Write your comment..."
-    ></textarea>
-    <button
-      type="submit"
-      class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
-    >
-      Add Comment
-    </button>
-  </form>
-  <% } %> <% if (!user) { %>
-
-  <div class="text-gray-500 text-lg">
-    <p class="">Please Login to Like & Comment</p>
-    <a href="/login" class="font-semibold hover:text-blue-500"
-      >Login with Google</a
-    >
-  </div>
-  <% } %>
-
-  <!-- Back to All Blogs -->
-  <a href="/blogs" class="block mt-8 text-center text-blue-500 hover:underline">
-    Back to All Blogs
-  </a>
-</div>
-
-<!-- Custom Styling -->
-<style>
-  .blog-content {
-    margin-bottom: 28px;
-  }
-  .blog-content hr {
-    border-color: #a8a8a8;
-  }
-  .blog-content p {
-    margin: 28px 0;
-    line-height: 1.75;
-  }
-
-  .blog-content h1,
-  .blog-content h2,
-  .blog-content h3,
-  .blog-content h4 {
-    margin-top: 32px;
-    font-weight: 700;
-    line-height: 1.25;
-  }
-
-  .blog-content h1 {
-    font-size: 2.5rem;
-    margin-top: 40px;
-    font-weight: 800;
-  }
-
-  .blog-content h2 {
-    font-size: 2rem;
-    margin-top: 40px;
-  }
-
-  .blog-content h3 {
-    font-size: 1.75rem;
-  }
-
-  .blog-content blockquote {
-    border-left: 4px solid #4a90e2;
-    padding-left: 16px;
-    margin: 16px 0;
-    font-style: italic;
-    color: #4a4a4a;
-  }
-
-  .blog-content ul {
-    padding-left: 1.5rem;
-    list-style-type: disc;
-  }
-
-  .blog-content ol {
-    padding-left: 1.5rem;
-    list-style-type: decimal;
-  }
-
-  .blog-content a {
-    color: #1e40af;
-    text-decoration: underline;
-  }
-
-  .blog-content a:hover {
-    text-decoration: none;
-    color: #2563eb;
-  }
-
-  .blog-content code {
-    background-color: #f3f4f6;
-    padding: 4px 8px;
-    border-radius: 4px;
-  }
-
-  .blog-content pre {
-    background-color: #f3f4f6;
-    padding: 16px;
-    border-radius: 8px;
-    overflow-x: auto;
-    font-size: 1rem;
-  }
-
-  /* Style the copy code button */
-
-  .copy-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: transparent;
-    border: none;
-    color: #555555;
-    cursor: pointer;
-    font-size: 0.85rem;
-    padding: 2px;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-  }
-
-  .copy-btn:hover {
-    opacity: 1;
-  }
-
-  .copy-btn .tooltip {
-    visibility: hidden;
-    background-color: #3e3e3e9e;
-    color: #ffffff;
-    text-align: center;
-    border-radius: 4px;
-    padding: 4px 8px;
-    position: absolute;
-    z-index: 1;
-    top: -4px;
-    right: 22px;
-    opacity: 0;
-    transition: opacity 0.3s;
-    font-size: 0.7rem;
-  }
-
-  .copy-btn:hover .tooltip {
-    visibility: visible;
-    opacity: 1;
-  }
-</style>
-
-<script>
-  // Reading Time Count
-  function stripHTML(html) {
-    return html.replace(/<[^>]*>/g, '');
-  }
-
-  function countWords(text) {
-    return text.trim().split(/\s+/).length;
-  }
-
-  function calculateReadingTime(content) {
-    const plainText = stripHTML(content);
-    const wordCount = countWords(plainText);
-    const wordsPerMinute = 150;
-    return Math.ceil(wordCount / wordsPerMinute);
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const blogContent = document.getElementById('blog-content').innerHTML;
-    const readingTime = calculateReadingTime(blogContent);
-    document.getElementById(
-      'reading-time'
-    ).textContent = `Reading Time: ${readingTime} minutes`;
-  });
-
-  // Delete a blog
-  function deleteBlog(blogId) {
-    const confirmed = confirm(
-      'Are you sure to delete this blog? This cannot be undo?'
-    );
-    if (confirmed) {
-      fetch(`/blogs/${blogId}?_method=DELETE`, {
-        method: 'POST', // Use POST to simulate DELETE with _method
-      })
-        .then((response) => {
-          if (response.ok) {
-            window.location.href = '/blogs';
-          } else {
-            alert('Failed to delete the blog');
-          }
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          alert('An error occurred');
-        });
-    }
-  }
-
-  // Likes show dynamically on the frontend with API call
-  const likeButton = document.getElementById('like-button');
-  const likesCount = document.getElementById('likes-count');
-
-  if (likeButton) {
-    likeButton.addEventListener('click', async () => {
-      try {
-        const response = await fetch('/blogs/<%= blog._id %>/like', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          likesCount.innerHTML = `<i class="fa-solid fa-heart text-red-600"></i> ${data.likes}`;
-          likeButton.style.display = 'none'; // Hide the like button after liking
-        } else {
-          console.error('Failed to like the blog');
-        }
-      } catch (error) {
-        console.error('Error:', error);
+    <!-- Custom Styling for Blog Content -->
+    <style>
+      .blog-content {
+        margin-bottom: 28px;
       }
-    });
-  }
+      .blog-content p {
+        margin: 28px 0;
+        line-height: 1.75;
+      }
+      .blog-content h1,
+      .blog-content h2,
+      .blog-content h3,
+      .blog-content h4 {
+        margin-top: 32px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+      .blog-content h1 {
+        font-size: 2.5rem;
+        margin-top: 40px;
+        font-weight: 800;
+      }
+      .blog-content h2 {
+        font-size: 1.8rem;
+        margin-top: 40px;
+      }
+      .blog-content h3 {
+        font-size: 1.5rem;
+      }
+      .blog-content blockquote {
+        border-left: 4px solid #4a90e2;
+        padding-left: 16px;
+        margin: 16px 0;
+        font-style: italic;
+        color: #4a4a4a;
+      }
+      .blog-content ul {
+        padding-left: 1.5rem;
+        list-style-type: disc;
+      }
+      .blog-content ol {
+        padding-left: 1.5rem;
+        list-style-type: decimal;
+      }
+      .blog-content a {
+        color: #1e40af;
+        text-decoration: underline;
+      }
+      .blog-content a:hover {
+        text-decoration: none;
+        color: #2563eb;
+      }
+      /* Dark mode */
+      :root {
+        --code-bg: #f3f4f6; /* Light mode background */
+        --code-text: #1a202c; /* Light mode text */
+        --hr-border-color: rgb(
+          209 213 219 / var(--tw-border-opacity, 1)
+        ); /* Light mode horizontal bar color */
+      }
+      .dark {
+        --code-bg: #2d3748; /* Dark mode background */
+        --code-text: #e2e8f0; /* Dark mode text */
+        --hr-border-color: rgb(
+          55 65 81 / var(--tw-border-opacity, 1)
+        ); /* Dark mode horizontal bar color */
+      }
+      .blog-content hr {
+        border-color: var(--hr-border-color);
+      }
+      .blog-content code {
+        background-color: var(--code-bg);
+        color: var(--code-text);
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
 
-  // code copy button
-  // Copy Code Icon //
-  document.addEventListener('DOMContentLoaded', function () {
-    const codeBlocks = document.querySelectorAll('#blog-content pre code');
+      .blog-content pre {
+        background-color: var(--code-bg);
+        color: var(--code-text);
+        padding: 16px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 1rem;
+        line-height: 1.6;
+        border: 1px solid rgba(128, 128, 128, 0.4);
+      }
 
-    codeBlocks.forEach((block) => {
-      // Create copy button
-      const copyButton = document.createElement('button');
-      copyButton.className = 'copy-btn';
-      copyButton.innerHTML =
-        '<i class="fa-regular fa-clone"></i><span class="tooltip">Copy</span>';
+      /* Style the copy code button */
 
-      // Append the button to the pre element
-      const pre = block.parentElement;
-      pre.style.position = 'relative';
-      pre.appendChild(copyButton);
+      .copy-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: transparent;
+        border: none;
+        color: var(--code-text);
+        cursor: pointer;
+        font-size: 0.85rem;
+        padding: 2px;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+      }
 
-      // Add copy functionality
-      copyButton.addEventListener('click', () => {
-        const text = block.innerText;
-        navigator.clipboard.writeText(text).then(() => {
-          copyButton.querySelector('.tooltip').textContent = 'Copied!';
+      .copy-btn:hover {
+        opacity: 1;
+      }
 
-          const copyIcon = copyButton.querySelector('i');
+      .copy-btn .tooltip {
+        visibility: hidden;
+        background-color: #3e3e3e9e;
+        color: #ffffff;
+        text-align: center;
+        border-radius: 4px;
+        padding: 4px 8px;
+        position: absolute;
+        z-index: 1;
+        top: -4px;
+        right: 22px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 0.7rem;
+      }
 
-          copyIcon.classList.remove('fa-regular', 'fa-clone');
-          copyIcon.classList.add('fa-solid', 'fa-check');
+      .copy-btn:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
+      }
+    </style>
 
-          copyButton.style.color = 'green';
+    <script>
+      // Reading Time Count
+      function stripHTML(html) {
+        return html.replace(/<[^>]*>/g, '');
+      }
 
-          setTimeout(() => {
-            copyButton.querySelector('.tooltip').textContent = 'Copy';
-            copyIcon.classList.add('fa-regular', 'fa-clone');
-            copyIcon.classList.remove('fa-solid', 'fa-check');
-            copyButton.style.color = '#555555';
-          }, 1500);
+      function countWords(text) {
+        return text.trim().split(/\s+/).length;
+      }
+
+      function calculateReadingTime(content) {
+        const plainText = stripHTML(content);
+        const wordCount = countWords(plainText);
+        const wordsPerMinute = 150;
+        return Math.ceil(wordCount / wordsPerMinute);
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const blogContent = document.getElementById('blog-content').innerHTML;
+        const readingTime = calculateReadingTime(blogContent);
+        document.getElementById(
+          'reading-time'
+        ).textContent = `Reading Time: ${readingTime} minutes`;
+      });
+
+      // Delete a blog
+      function deleteBlog(blogId) {
+        const confirmed = confirm(
+          'Are you sure to delete this blog? This cannot be undo?'
+        );
+        if (confirmed) {
+          fetch(`/blogs/${blogId}?_method=DELETE`, {
+            method: 'POST', // Use POST to simulate DELETE with _method
+          })
+            .then((response) => {
+              if (response.ok) {
+                window.location.href = '/blogs';
+              } else {
+                alert('Failed to delete the blog');
+              }
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+              alert('An error occurred');
+            });
+        }
+      }
+
+      // Likes show dynamically on the frontend with API call
+      const likeButton = document.getElementById('like-button');
+      const likesCount = document.getElementById('likes-count');
+
+      if (likeButton) {
+        likeButton.addEventListener('click', async () => {
+          try {
+            const response = await fetch('/blogs/<%= blog._id %>/like', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              likesCount.innerHTML = `<i class="fa-solid fa-heart text-red-600"></i> ${data.likes}`;
+              likeButton.style.display = 'none'; // Hide the like button after liking
+            } else {
+              console.error('Failed to like the blog');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+          }
+        });
+      }
+
+      // code copy button
+      // Copy Code Icon //
+      document.addEventListener('DOMContentLoaded', function () {
+        const codeBlocks = document.querySelectorAll('#blog-content pre code');
+
+        codeBlocks.forEach((block) => {
+          // Create copy button
+          const copyButton = document.createElement('button');
+          copyButton.className = 'copy-btn';
+          copyButton.innerHTML =
+            '<i class="fa-regular fa-clone"></i><span class="tooltip">Copy</span>';
+
+          // Append the button to the pre element
+          const pre = block.parentElement;
+          pre.style.position = 'relative';
+          pre.appendChild(copyButton);
+
+          // Add copy functionality
+          copyButton.addEventListener('click', () => {
+            const text = block.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+              copyButton.querySelector('.tooltip').textContent = 'Copied!';
+
+              const copyIcon = copyButton.querySelector('i');
+
+              copyIcon.classList.remove('fa-regular', 'fa-clone');
+              copyIcon.classList.add('fa-solid', 'fa-check');
+
+              copyButton.style.color = 'green';
+
+              setTimeout(() => {
+                copyButton.querySelector('.tooltip').textContent = 'Copy';
+                copyIcon.classList.add('fa-regular', 'fa-clone');
+                copyIcon.classList.remove('fa-solid', 'fa-check');
+                copyButton.style.color = '#555555';
+              }, 1500);
+            });
+          });
         });
       });
-    });
-  });
-</script>
+    </script>
+
+    <script>
+      // Get the postId from the rendered template
+      const postId = '<%= blog._id %>';
+
+      // Check if the cookie for this blog post already exists
+      const hasViewed = document.cookie
+        .split(';')
+        .some((item) => item.trim().startsWith(`viewed_${postId}=`));
+
+      // If the user hasn't viewed the blog before (no cookie for this post), start the 20-second timer
+      if (!hasViewed) {
+        window.onload = function () {
+          setTimeout(function () {
+            // Send an AJAX request to the server to track the view
+            fetch(`/blogs/track-view/${postId}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            })
+              .then((response) => {
+                if (response.ok) {
+                  // Set a cookie to indicate that the user has viewed this blog post
+                  document.cookie = `viewed_${postId}=true; max-age=31536000; path=/`; // Cookie lasts for 1 year
+                  console.log('View recorded successfully');
+                }
+              })
+              .catch((error) => {
+                console.error('Error recording view:', error);
+              });
+          }, 10000); // 10 seconds
+        };
+      }
+    </script>
+  </body>
+</html>

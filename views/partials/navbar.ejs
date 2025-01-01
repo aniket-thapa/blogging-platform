@@ -24,70 +24,106 @@
     document.documentElement.classList.add('dark');
   }
 </script>
-<nav class="bg-white dark:bg-gray-800 shadow-md py-4">
+<nav class="bg-white dark:bg-gray-800 shadow-md py-4 relative">
   <div class="container mx-auto px-4 flex justify-between items-center">
+    <!-- Logo -->
     <a
       href="/"
       class="text-2xl font-bold text-gray-800 dark:text-gray-100 hover:text-blue-500"
-      >MyBlog</a
     >
-    <ul class="flex space-x-6">
+      MyBlog
+    </a>
+
+    <!-- Hamburger Menu (Hidden by Default) -->
+    <button
+      id="menu-toggle"
+      class="text-gray-800 dark:text-gray-100 block sm:hidden focus:outline-none self-end"
+    >
+      <i class="fas fa-bars text-2xl"></i>
+    </button>
+
+    <!-- Nav Links -->
+    <ul
+      id="nav-links"
+      class="hidden absolute sm:relative top-full left-0 w-full sm:w-auto bg-white dark:bg-gray-800 sm:bg-transparent shadow-md sm:shadow-none z-50 sm:flex space-y-4 sm:space-y-0 sm:space-x-6 flex-col sm:flex-row"
+    >
       <li>
         <a
           href="/"
-          class="text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors"
-          >Home</a
+          class="block text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors py-2 px-4"
         >
+          Home
+        </a>
       </li>
       <li>
         <a
           href="/blogs"
-          class="text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors"
-          >Blogs</a
+          class="block text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors py-2 px-4"
         >
+          Blogs
+        </a>
       </li>
       <li>
         <a
           href="/blogs/new"
-          class="text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors"
-          >New Blog</a
+          class="block text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors py-2 px-4"
         >
+          New Blog
+        </a>
       </li>
       <li>
         <a
           href="/profile"
-          class="text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors"
-          >Profile</a
+          class="block text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors py-2 px-4"
         >
+          Profile
+        </a>
       </li>
       <li>
         <a
           href="/login"
-          class="text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors"
-          >Login</a
+          class="block text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors py-2 px-4"
         >
+          Login
+        </a>
       </li>
       <li>
         <a
           href="/register"
-          class="text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors"
-          >Register</a
+          class="block text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors py-2 px-4"
         >
+          Register
+        </a>
       </li>
       <li>
         <a
           href="/logout"
-          class="text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors"
-          >Logout</a
+          class="block text-gray-700 dark:text-gray-300 hover:text-blue-500 transition-colors py-2 px-4"
         >
+          Logout
+        </a>
       </li>
     </ul>
+    <!-- Dark Mode Toggle -->
     <button
       onclick="toggleDarkMode()"
-      class="px-2 py-1 bg-gray-800 dark:bg-gray-200 text-white dark:text-black rounded-sm"
+      class="hidden sm:block px-2 py-1 bg-gray-800 dark:bg-gray-200 text-white dark:text-black rounded-sm"
     >
       <i class="fa-regular fa-sun"></i>
     </button>
   </div>
 </nav>
+
+<script>
+  // Toggle the Menu-bar for small screens
+  document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('hidden');
+    });
+  });
+</script>
+
 <!-- <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100"></body> -->
