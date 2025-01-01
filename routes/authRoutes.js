@@ -20,17 +20,29 @@ router.post('/register', async (req, res) => {
 // Login Route
 router.get('/login', (req, res) => res.render('auth/login'));
 
+// Handle login with custom returnTo logic
 router.post(
   '/login',
   passport.authenticate('local', {
-    successRedirect: '/blogs',
     failureRedirect: '/login',
-  })
+    failureFlash: true,
+  }),
+  (req, res) => {
+    const returnTo = req.session.returnTo || '/blogs';
+    delete req.session.returnTo;
+    res.redirect(returnTo);
+  }
 );
 
 // Google OAuth Login
 router.get(
   '/auth/google',
+  (req, res, next) => {
+    if (req.query.returnTo) {
+      req.session.returnTo = req.query.returnTo; // Save returnTo from query
+    }
+    next();
+  },
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
@@ -38,9 +50,14 @@ router.get(
 router.get(
   '/auth/google/callback',
   passport.authenticate('google', {
-    successRedirect: '/profile',
     failureRedirect: '/login',
-  })
+    failureFlash: true,
+  }),
+  (req, res) => {
+    const returnTo = req.session.returnTo || '/profile';
+    delete req.session.returnTo;
+    res.redirect(returnTo);
+  }
 );
 
 // Logout Route
