@@ -40,7 +40,8 @@ app.use(authRoutes);
 
 // Home Route
 app.get('/', (req, res) => {
-  res.render('home');
+  const user = req.user || null;
+  res.render('home', { user });
 });
 
 // User Routes (for profile)

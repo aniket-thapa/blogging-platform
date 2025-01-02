@@ -10,12 +10,15 @@ router.get('/', async (req, res) => {
   const blogs = await Blog.find()
     .populate('author', 'username')
     .sort({ createdAt: -1 });
-  res.render('blogs/index', { blogs });
+  const user = req.user || null;
+  res.render('blogs/index', { blogs, user });
 });
 
 // Display Form to Create New Blog
 router.get('/new', isAuthenticated, (req, res) => {
-  res.render('blogs/new');
+  const user = req.user || null;
+  console.log(user);
+  res.render('blogs/new', { user });
 });
 
 // Create New Blog
@@ -56,7 +59,8 @@ router.get('/:id/edit', isAuthenticated, async (req, res) => {
     if (!blog.author.equals(req.user._id)) {
       return res.redirect('/blogs');
     }
-    res.render('blogs/edit', { blog });
+    const user = req.user || null;
+    res.render('blogs/edit', { blog, user });
   } catch (err) {
     res.redirect('/blogs');
   }

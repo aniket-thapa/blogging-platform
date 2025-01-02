@@ -4,7 +4,10 @@ const User = require('../models/User');
 const router = express.Router();
 
 // Register Route
-router.get('/register', (req, res) => res.render('auth/register'));
+router.get('/register', (req, res) => {
+  const user = req.user || null;
+  res.render('auth/register', { user });
+});
 
 router.post('/register', async (req, res) => {
   const { username, useremail, password } = req.body;
@@ -18,7 +21,10 @@ router.post('/register', async (req, res) => {
 });
 
 // Login Route
-router.get('/login', (req, res) => res.render('auth/login'));
+router.get('/login', (req, res) => {
+  const user = req.user || null;
+  res.render('auth/login', { user });
+});
 
 // Handle login with custom returnTo logic
 router.post(
