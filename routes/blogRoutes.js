@@ -17,7 +17,6 @@ router.get('/', async (req, res) => {
 // Display Form to Create New Blog
 router.get('/new', isAuthenticated, (req, res) => {
   const user = req.user || null;
-  console.log(user);
   res.render('blogs/new', { user });
 });
 
