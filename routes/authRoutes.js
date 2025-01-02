@@ -55,9 +55,8 @@ router.get(
     failureFlash: true,
   }),
   (req, res) => {
-    // Redirect to the saved URL or default to the dashboard
-    const redirectTo = req.session.returnTo || '/dashboard';
-    delete req.session.returnTo; // Clear the session variable
+    const redirectTo = req.session.returnTo || '/blogs';
+    delete req.session.returnTo;
     res.redirect(redirectTo);
   }
 );
