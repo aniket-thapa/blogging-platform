@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true },
   useremail: { type: String, required: true, unique: true },
   password: { type: String }, // Optional for Google users
-  googleId: { type: String, unique: true }, // Unique identifier for Google users
+  googleId: { type: String, unique: true, sparse: true }, // Unique identifier for Google users
 });
 
 userSchema.pre('save', async function (next) {
