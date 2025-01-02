@@ -28,11 +28,10 @@ router.post(
     failureFlash: true,
   }),
   (req, res) => {
-  // Redirect to the saved URL or default to the dashboard
-  const redirectTo = req.session.returnTo || '/blogs';
-  delete req.session.returnTo; // Clear the session variable
-  res.redirect(redirectTo);
-
+    // Redirect to the saved URL or default to the dashboard
+    const redirectTo = req.session.returnTo || '/blogs';
+    delete req.session.returnTo; // Clear the session variable
+    res.redirect(redirectTo);
   }
 );
 
@@ -55,11 +54,11 @@ router.get(
     failureRedirect: '/login',
     failureFlash: true,
   }),
-  }), (req, res) => {
-  // Redirect to the saved URL or default to the dashboard
-  const redirectTo = req.session.returnTo || '/dashboard';
-  delete req.session.returnTo; // Clear the session variable
-  res.redirect(redirectTo);
+  (req, res) => {
+    // Redirect to the saved URL or default to the dashboard
+    const redirectTo = req.session.returnTo || '/dashboard';
+    delete req.session.returnTo; // Clear the session variable
+    res.redirect(redirectTo);
   }
 );
 
