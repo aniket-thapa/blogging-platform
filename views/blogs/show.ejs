@@ -75,12 +75,13 @@
                 </div></a
               >
             </div>
-            <div class="font-light text-sm">
+            <div class="font-normal text-sm">
               <div
+                onclick="navigator.clipboard.writeText(window.location.origin + '/blogs/<%= blog._id %>')"
                 class="flex gap-2 content-center cursor-pointer border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
               >
-                <span><i class="fa-solid fa-link text-gray-500"></i></span
-                ><span>Share</span>
+                <span><i class="fa-solid fa-link text-gray-500"></i></span>
+                <span>Share</span>
               </div>
             </div>
           </div>
@@ -115,12 +116,13 @@
               </div></a
             >
           </div>
-          <div class="font-light text-sm">
+          <div class="font-normal text-sm">
             <div
+              onclick="navigator.clipboard.writeText(window.location.origin + '/blogs/<%= blog._id %>')"
               class="flex gap-2 content-center cursor-pointer border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
             >
-              <span><i class="fa-solid fa-link text-gray-500"></i></span
-              ><span>Share</span>
+              <span><i class="fa-solid fa-link text-gray-500"></i></span>
+              <span>Share</span>
             </div>
           </div>
         </div>
