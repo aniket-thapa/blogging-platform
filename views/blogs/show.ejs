@@ -77,11 +77,19 @@
             </div>
             <div class="font-normal text-sm">
               <div
-                onclick="navigator.clipboard.writeText(window.location.origin + '/blogs/<%= blog._id %>'); showNotification('Link Copied to Clipboard!', 2500)"
-                class="flex gap-2 content-center cursor-pointer border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+                onclick="navigator.clipboard.writeText(window.location.origin + '/blogs/<%= blog._id %>'); showNotification('Link Copied to Clipboard!', 2500); this.querySelector('.tooltip').classList.add('hidden');"
+                class="relative flex gap-2 content-center cursor-pointer border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+                onmouseover="this.querySelector('.tooltip').classList.remove('hidden')"
+                onmouseout="this.querySelector('.tooltip').classList.add('hidden')"
               >
                 <span><i class="fa-solid fa-link text-gray-500"></i></span>
                 <span>Share</span>
+                <!-- Tooltip -->
+                <div
+                  class="tooltip w-full absolute bottom-full left-1/2 transform -translate-x-1/2 bg-gray-600 text-white text-xs rounded px-2 py-1 shadow-lg hidden"
+                >
+                  Copy link
+                </div>
               </div>
             </div>
           </div>
@@ -118,11 +126,19 @@
           </div>
           <div class="font-normal text-sm">
             <div
-              onclick="navigator.clipboard.writeText(window.location.origin + '/blogs/<%= blog._id %>'); showNotification('Link Copied to Clipboard!', 2500)"
-              class="flex gap-2 content-center cursor-pointer border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+              onclick="navigator.clipboard.writeText(window.location.origin + '/blogs/<%= blog._id %>'); showNotification('Link Copied to Clipboard!', 2500); this.querySelector('.tooltip').classList.add('hidden');"
+              class="relative flex gap-2 content-center cursor-pointer border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+              onmouseover="this.querySelector('.tooltip').classList.remove('hidden')"
+              onmouseout="this.querySelector('.tooltip').classList.add('hidden')"
             >
               <span><i class="fa-solid fa-link text-gray-500"></i></span>
               <span>Share</span>
+              <!-- Tooltip -->
+              <div
+                class="tooltip w-full absolute bottom-full left-1/2 transform -translate-x-1/2 bg-gray-600 text-white text-xs rounded px-2 py-1 shadow-lg hidden"
+              >
+                Copy link
+              </div>
             </div>
           </div>
         </div>
