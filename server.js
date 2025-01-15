@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const dotenv = require('dotenv');
@@ -13,11 +14,11 @@ const connectDB = require('./config/database');
 connectDB();
 
 // Middleware
-app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.set('view engine', 'ejs');
-
+// Setup static files
+app.use('/public', express.static(path.join(__dirname, 'public')));
 // Session Setup
 app.use(
   session({
