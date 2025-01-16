@@ -9,7 +9,6 @@ const commentSchema = new mongoose.Schema(
       required: true,
     },
     blog: { type: mongoose.Schema.Types.ObjectId, ref: 'Blog', required: true },
-    createdAt: { type: Date, default: Date.now },
   },
   { timestamps: true }
 );
