@@ -65,7 +65,7 @@
                 class="flex gap-2 content-center border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <span><i class="fa-regular fa-heart"></i></span
-                ><span><%= blog.likes.length %></span>
+                ><span class="likes-count"><%= blog.likes.length %></span>
               </div>
               <a href="#comments"
                 ><div
@@ -114,7 +114,7 @@
               class="flex gap-2 content-center border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               <span><i class="fa-regular fa-heart"></i></span
-              ><span><%= blog.likes.length %></span>
+              ><span class="likes-count"><%= blog.likes.length %></span>
             </div>
             <a href="#comments"
               ><div
@@ -474,7 +474,7 @@
 
       // Likes show dynamically on the frontend with API call
       const likeButton = document.getElementById('like-button');
-      const likesCount = document.getElementById('likes-count');
+      const likesCount = document.querySelectorAll('.likes-count');
 
       if (likeButton) {
         likeButton.addEventListener('click', async () => {
@@ -488,7 +488,9 @@
 
             if (response.ok) {
               const data = await response.json();
-              likesCount.innerHTML = `<i class="fa-solid fa-heart text-red-600"></i> ${data.likes}`;
+              likesCount.forEach((element) => {
+                element.innerHTML = `${data.likes}`;
+              });
               likeButton.style.display = 'none'; // Hide the like button after liking
             } else {
               console.error('Failed to like the blog');
