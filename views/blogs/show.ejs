@@ -50,7 +50,8 @@
               <span class="font-medium text-gray-800 dark:text-gray-300"
                 ><%= blog.author.username %></span
               >
-              - <%= blog.createdAt.toDateString() %> |
+              <span class="px-1">•</span> <%= blog.createdAt.toDateString() %>
+              <span class="px-1">•</span>
               <span id="reading-time"></span>
             </p>
           </div>
@@ -64,8 +65,16 @@
               <div
                 class="flex gap-2 content-center border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
               >
-                <span><i class="fa-regular fa-heart"></i></span
-                ><span class="likes-count"><%= blog.likes.length %></span>
+                <% if (user && blog.likes.includes(user._id)) { %>
+                <button class="like-button2">
+                  <i class="fa-regular fa-heart text-red-500"></i>
+                </button>
+                <% } else { %>
+                <button class="like-button2">
+                  <i class="fa-regular fa-heart"></i>
+                </button>
+                <% } %>
+                <span class="likes-count"><%= blog.likes.length %></span>
               </div>
               <a href="#comments"
                 ><div
@@ -113,8 +122,16 @@
             <div
               class="flex gap-2 content-center border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
             >
-              <span><i class="fa-regular fa-heart"></i></span
-              ><span class="likes-count"><%= blog.likes.length %></span>
+              <% if (user && blog.likes.includes(user._id)) { %>
+              <button class="like-button2">
+                <i class="fa-regular fa-heart text-red-500"></i>
+              </button>
+              <% } else { %>
+              <button class="like-button2">
+                <i class="fa-regular fa-heart"></i>
+              </button>
+              <% } %>
+              <span class="likes-count"><%= blog.likes.length %></span>
             </div>
             <a href="#comments"
               ><div
@@ -145,18 +162,6 @@
         </div>
         <hr class="border-gray-300 dark:border-gray-700 mt-1 mb-4" />
 
-        <!-- Likes Section -->
-        <% if (user && !blog.likes.includes(user._id)) { %>
-        <div class="text-sm">
-          <button
-            id="like-button"
-            class="bg-red-500 text-white px-4 py-2 m-2 mb-6 rounded-xl hover:bg-red-600 transition focus:ring-2 focus:ring-red-700"
-          >
-            <i class="fa-regular fa-heart pr-2"></i>Like this Blog
-          </button>
-        </div>
-        <% } %>
-
         <!-- Comments Section -->
         <h3
           id="comments"
@@ -169,6 +174,7 @@
           <div class="border rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
             <p class="font-medium text-gray-800 dark:text-gray-300">
               <%= comment.author.username %>
+              <span>(<%= comment.author.useremail %>)</span>
             </p>
             <p class="text-gray-700 dark:text-gray-400">
               <%= comment.content %>
@@ -473,34 +479,48 @@
       }
 
       // Likes show dynamically on the frontend with API call
-      const likeButton = document.getElementById('like-button');
-      const likesCount = document.querySelectorAll('.likes-count');
+      const user = `<%= user %>`;
+      if (user) {
+        const likeButtons = document.querySelectorAll('.like-button2');
+        const likesCount = document.querySelectorAll('.likes-count');
 
-      if (likeButton) {
-        likeButton.addEventListener('click', async () => {
-          try {
-            const response = await fetch('/blogs/<%= blog._id %>/like', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
+        likeButtons.forEach((likeButton) => {
+          likeButton.addEventListener('click', async () => {
+            likeButtons.forEach((btn) => {
+              const likeIcon = btn.querySelector('i');
+              likeIcon.classList.toggle('text-red-500');
             });
 
-            if (response.ok) {
-              const data = await response.json();
-              likesCount.forEach((element) => {
-                element.innerHTML = `${data.likes}`;
+            try {
+              const response = await fetch('/blogs/<%= blog._id %>/like', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
               });
-              likeButton.style.display = 'none'; // Hide the like button after liking
-            } else {
-              console.error('Failed to like the blog');
+
+              if (response.ok) {
+                const data = await response.json();
+                likesCount.forEach((element) => {
+                  element.innerHTML = `${data.likes}`;
+                });
+                likeButtons.forEach((btn) => {
+                  const likeIcon = btn.querySelector('i');
+                  if (data.message === 'Liked') {
+                    likeIcon.classList.add('text-red-500');
+                  } else if (data.message === 'Unliked') {
+                    likeIcon.classList.remove('text-red-500');
+                  }
+                });
+              } else {
+                console.error('Failed to like the blog');
+              }
+            } catch (error) {
+              console.error('Error:', error);
             }
-          } catch (error) {
-            console.error('Error:', error);
-          }
+          });
         });
       }
-
       // code copy button
       // Copy Code Icon //
       document.addEventListener('DOMContentLoaded', function () {

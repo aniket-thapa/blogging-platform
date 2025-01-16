@@ -42,7 +42,7 @@ router.get('/:id', async (req, res) => {
       .populate('author', 'username')
       .populate({
         path: 'comments',
-        populate: { path: 'author', select: 'username' },
+        populate: { path: 'author', select: ['username', 'useremail'] },
       });
     const user = req.user || null;
     res.render('blogs/show', { blog, user });
@@ -102,15 +102,21 @@ router.post('/:id/like', isAuthenticated, async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
 
-    // Prevent multiple likes by the same user
-    if (blog.likes.includes(req.user._id)) {
-      return res.status(400).json({ message: 'Already liked' });
+    const userId = req.user._id;
+
+    if (blog.likes.includes(userId)) {
+      blog.likes.pull(userId);
+      await blog.save();
+      return res
+        .status(200)
+        .json({ likes: blog.likes.length, message: 'Unliked' });
+    } else {
+      blog.likes.push(userId);
+      await blog.save();
+      return res
+        .status(200)
+        .json({ likes: blog.likes.length, message: 'Liked' });
     }
-
-    blog.likes.push(req.user._id);
-    await blog.save();
-
-    res.status(200).json({ likes: blog.likes.length });
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
   }
