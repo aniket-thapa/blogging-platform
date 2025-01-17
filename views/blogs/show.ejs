@@ -91,7 +91,7 @@
               <% blog.tags.forEach(tag => { %>
               <a
                 href="/blogs/tags/<%= tag %>"
-                class="inline-block px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-sm rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                class="inline-block px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-sm rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
               >
                 #<%= tag %>
               </a>
@@ -104,7 +104,7 @@
           <div class="my-3 flex items-center space-x-4">
             <button
               id="bookmark-button"
-              class="<%= user && user.savedBlogs.includes(blog._id.toString()) ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-200' %> px-3 py-2 rounded-lg hover:bg-blue-500 hover:text-white transition"
+              class="<%= user && user.savedBlogs.includes(blog._id.toString()) ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-200' %> px-3 py-2 rounded-lg transition"
               data-blog-id="<%= blog._id %>"
               data-saved="<%= user && user.savedBlogs.includes(blog._id.toString()) %>"
               onclick="toggleSaveBlog(this)"
