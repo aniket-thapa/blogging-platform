@@ -683,14 +683,12 @@
             button.classList.toggle('dark:text-gray-200');
 
             // notification on save and unsave blog
-            if (result.success) {
-              showNotification(
-                isSaved
-                  ? 'Blog Unsaved Successfully!'
-                  : 'Blog Saved Successfully!',
-                3000
-              );
-            }
+            showNotification(
+              isSaved
+                ? 'Blog Unsaved Successfully!'
+                : 'Blog Saved Successfully!',
+              3000
+            );
           } else {
             alert(result.message);
           }
