@@ -21,11 +21,14 @@ router.get('/new', isAuthenticated, (req, res) => {
 });
 
 // Create New Blog
-router.post('/', isAuthenticated, async (req, res) => {
+router.post('/new', isAuthenticated, async (req, res) => {
   try {
+    const { title, content, tags } = req.body;
+    const tagArray = tags.split(',').map((tag) => tag.trim().toLowerCase());
     const blog = new Blog({
-      title: req.body.title,
-      content: req.body.content,
+      title: title,
+      content: content,
+      tags: tagArray,
       author: req.user._id,
     });
     await blog.save();
@@ -48,6 +51,19 @@ router.get('/:id', async (req, res) => {
     res.render('blogs/show', { blog, user });
   } catch (err) {
     res.redirect('/blogs');
+  }
+});
+
+// Show Single Blog filter with tag / tags
+router.get('/tags/:tag', async (req, res) => {
+  try {
+    const tag = req.params.tag.toLowerCase();
+    const blogs = await Blog.find({ tags: tag });
+    const user = req.user || null;
+    res.render('blogs/index', { blogs, user }); // Adjust view as necessary
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
   }
 });
 
