@@ -3,6 +3,7 @@ const { isAuthenticated } = require('../middleware/authMiddleware');
 const Blog = require('../models/Blog');
 const Comment = require('../models/Comment');
 const BlogView = require('../models/BlogView');
+const User = require('../models/User');
 const router = express.Router();
 
 // Display All Blogs
@@ -18,6 +19,34 @@ router.get('/', async (req, res) => {
 router.get('/new', isAuthenticated, (req, res) => {
   const user = req.user || null;
   res.render('blogs/new', { user });
+});
+router.get('/abc', (req, res) => {
+  res.send('INSIDE');
+});
+
+// Show Saved Blogs
+// GET route for displaying saved blogs
+router.get('/saved', isAuthenticated, async (req, res) => {
+  try {
+    // Fetch saved blogs for the logged-in user
+    const userId = req.user._id; // Assuming `req.user` contains authenticated user's info
+    const user = await User.findById(userId).populate({
+      path: 'savedBlogs', // Populate savedBlogs
+      populate: {
+        path: 'author', // Nested populate for the author field in Blog
+        select: 'username useremail', // Select specific fields from author
+      },
+    }); // Replace `savedBlogs` with your actual field name.
+    if (!user || !user.savedBlogs) {
+      return res.status(404).render('savedBlogs', { savedBlogs: [] }); // No saved blogs found
+    }
+
+    // Render the savedBlogs.ejs page and pass the blogs to it
+    res.render('blogs/savedBlogs', { savedBlogs: user.savedBlogs, user: user });
+  } catch (error) {
+    console.error('Error fetching saved blogs:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 // Create New Blog
@@ -159,6 +188,38 @@ router.post('/:id/comments', async (req, res) => {
     res.redirect(`/blogs/${blog._id}`);
   } catch (err) {
     res.redirect('/blogs');
+  }
+});
+
+// Save or Bookmark a Blog
+router.post('/:id/save', async (req, res) => {
+  try {
+    const blogId = req.params.id;
+    const user = await User.findById(req.user._id);
+
+    if (!user.savedBlogs.includes(blogId)) {
+      user.savedBlogs.push(blogId);
+      await user.save();
+      res.json({ success: true, message: 'Blog saved successfully!' });
+    } else {
+      res.json({ success: false, message: 'Blog already saved.' });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'An error occurred.' });
+  }
+});
+
+// Remove a Blog from Saved
+router.post('/:id/unsave', async (req, res) => {
+  try {
+    const blogId = req.params.id;
+    const user = await User.findById(req.user._id);
+
+    user.savedBlogs = user.savedBlogs.filter((id) => id.toString() !== blogId);
+    await user.save();
+    res.json({ success: true, message: 'Blog removed from saved!' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'An error occurred.' });
   }
 });
 

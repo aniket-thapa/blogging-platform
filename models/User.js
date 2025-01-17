@@ -5,8 +5,9 @@ const userSchema = new mongoose.Schema(
   {
     username: { type: String, required: true },
     useremail: { type: String, required: true, unique: true },
-    password: { type: String }, // Optional for Google users
-    googleId: { type: String, unique: true, sparse: true }, // Unique identifier for Google users
+    password: { type: String },
+    googleId: { type: String, unique: true, sparse: true },
+    savedBlogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Blog' }],
   },
   { timestamps: true }
 );
