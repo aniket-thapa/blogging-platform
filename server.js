@@ -5,13 +5,9 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const passport = require('passport');
 const methodOverride = require('method-override');
-
-dotenv.config();
-
-const app = express();
-
 const connectDB = require('./config/database');
-connectDB();
+const app = express();
+dotenv.config();
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -59,6 +55,15 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something went wrong!');
 });
 
-// Start Server
+// Connect to SERVER and DATABASE
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+connectDB()
+  .then(() => {
+    console.log('Database is Connected...');
+    app.listen(PORT, () => {
+      console.log(`Server is Listening on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('NOT ABLE TO CONNECT TO DATABASE AS WELL SERVER', err);
+  });
