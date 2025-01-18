@@ -1,0 +1,51 @@
+<link rel="stylesheet" href="/public/css/tailwind.css" />
+
+<%- include('../partials/navbar') %>
+
+<div class="max-w-5xl container mx-auto px-4 py-8 min-h-screen">
+  <!-- Header -->
+  <header class="flex items-center justify-between mb-8">
+    <h1 class="text-4xl font-extrabold text-blue-500">Saved Blogs</h1>
+  </header>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Your Blogs List -->
+    <!-- Saved Blogs Section -->
+    <% if (blogs.length === 0) { %>
+    <div class="text-center py-16">
+      <h2 class="text-2xl font-medium mb-4">
+        You haven't created any blogs yet.
+      </h2>
+      <p class="text-gray-600 dark:text-gray-400">
+        Create blogs and share your thoughts and stories with others
+      </p>
+    </div>
+    <% } else { %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% blogs.forEach(blog => { %>
+      <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">
+          <%= blog.title %>
+        </h2>
+        <p class="text-sm text-gray-600 mb-4">
+          Created on <%= blog.createdAt.toDateString() %>
+        </p>
+        <div class="flex justify-between">
+          <a
+            href="/blogs/<%= blog._id %>"
+            class="text-blue-500 hover:underline"
+          >
+            Read More
+          </a>
+          <a
+            href="/blogs/<%= blog._id %>/edit"
+            class="text-gray-500 hover:underline"
+          >
+            Edit
+          </a>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+    <% } %>
+  </div>
+</div>
