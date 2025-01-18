@@ -40,9 +40,7 @@
     <div class="max-w-5xl container mx-auto px-4 py-8">
       <!-- Header -->
       <header class="flex items-center justify-between mb-8">
-        <h1 class="text-3xl font-bold text-blue-600 dark:text-blue-400">
-          Saved Blogs
-        </h1>
+        <h1 class="text-4xl font-extrabold text-blue-500">Saved Blogs</h1>
       </header>
 
       <!-- Saved Blogs Section -->
@@ -59,53 +57,62 @@
       <div class="space-y-6">
         <% savedBlogs.forEach((blog) => { %>
         <div
-          class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 border border-gray-200 dark:border-gray-700"
+          class="border-b border-gray-400 hover:bg-gray-250 dark:hover:bg-gray-850 dark:border-gray-700 pb-6 rounded-md px-5 pt-4 transition-colors"
         >
-          <a href="/blogs/<%= blog._id %>" class="block group mb-4 md:mr-28">
+          <a
+            href="/blogs/<%= blog._id %>"
+            class="block group mb-6 md:mr-28 transition-colors"
+          >
             <h2
-              class="text-xl font-semibold group-hover:text-blue-500 group-focus:text-blue-500 transition-colors"
+              class="text-3xl font-semibold group-hover:text-blue-500 group-focus:text-blue-500 transition-colors"
             >
               <%= blog.title %>
             </h2>
-            <p
-              class="prose font-light dark:prose-invert mt-2 text-gray-600 dark:text-gray-400 truncate group-hover:text-gray-800 dark:group-hover:text-gray-300 transition-colors"
+            <div
+              class="prose font-normal dark:prose-invert mt-3 group-hover:text-blue-500 group-focus:text-blue-500 transition-colors"
             >
-              <%= blog.content.replace(/<[^>]*>?/gm, '').substring(0, 150) %>
-              ...
-            </p>
+              <%= blog.content.replace(/<[^>]*>?/gm, '').substring(0, 100) %>...
+            </div>
           </a>
-          <% if (blog.tags.length > 0) { %>
-          <div class="my-3 flex flex-wrap gap-2">
-            <% blog.tags.forEach((tag) => { %>
-            <a
-              href="/blogs/tags/<%= tag %>"
-              class="inline-block px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition"
-            >
-              #<%= tag %>
-            </a>
-            <% }); %>
+
+          <% if(blog.tags.length !== 0) { %>
+          <!-- Tags SHow Section -->
+          <div class="my-3">
+            <div class="flex flex-wrap gap-2">
+              <% blog.tags.forEach(tag => { %>
+              <a
+                href="/blogs/tags/<%= tag %>"
+                class="inline-block px-3 py-1 bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-sm rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700"
+              >
+                #<%= tag %>
+              </a>
+              <% }) %>
+            </div>
           </div>
           <% } %>
 
-          <div class="flex justify-between items-center mt-4">
-            <div class="flex items-center space-x-4">
+          <!-- Likes, Comments, Author and Date Section -->
+          <div
+            class="flex justify-between items-center mt-4 text-sm sm:text-base"
+          >
+            <div
+              class="flex items-center space-x-4 font-normal text-sm text-gray-600 dark:text-gray-400"
+            >
               <div class="flex items-center space-x-1">
                 <i class="fa-regular fa-heart"></i>
-                <span><%= blog.likes.length %></span>
+                <span><%= blog.likes.length %> </span>
               </div>
               <div class="flex items-center space-x-1">
                 <i class="fa-regular fa-comments"></i>
                 <span><%= blog.comments.length %></span>
               </div>
               <div class="flex items-center space-x-1">
-                <i class="fa-regular fa-user-circle"></i>
-                <span class="text-gray-800 dark:text-gray-200"
-                  ><%= blog.author.username %></span
-                >
+                <i class="fa-regular fa-circle-user"></i>
+                <span class=""><%= blog.author.username %></span>
               </div>
               <div class="flex items-center space-x-1">
                 <i class="fa-regular fa-calendar"></i>
-                <span class="text-gray-800 dark:text-gray-200"
+                <span class=""
                   ><%= new Date(blog.createdAt).toDateString() %></span
                 >
               </div>
