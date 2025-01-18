@@ -11,7 +11,7 @@
   >
     <%- include('../partials/navbar') %>
 
-    <div class="container mx-auto px-4 py-16 flex justify-center">
+    <div class="container mx-auto px-4 py-10 md:py-14 flex justify-center">
       <div
         class="w-full max-w-md bg-white dark:bg-gray-800 shadow-md rounded-lg p-6"
       >
@@ -27,6 +27,8 @@
               type="text"
               name="username"
               id="username"
+              placeholder="John Doe"
+              autocomplete="name"
               required
               class="w-full mt-1 p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             />
@@ -41,6 +43,8 @@
               type="email"
               name="useremail"
               id="useremail"
+              placeholder="johndoe@gmail.com"
+              autocomplete="email"
               required
               class="w-full mt-1 p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             />
@@ -53,6 +57,23 @@
               type="password"
               name="password"
               id="password"
+              autocomplete="new-password"
+              required
+              class="w-full mt-1 p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            />
+          </div>
+
+          <div>
+            <label
+              for="confirm_password"
+              class="block text-gray-700 dark:text-gray-300"
+              >Confirm Password</label
+            >
+            <input
+              type="password"
+              name="confirm_password"
+              id="confirm_password"
+              autocomplete="new-password"
               required
               class="w-full mt-1 p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             />
