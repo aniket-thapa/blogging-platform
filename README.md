@@ -58,7 +58,7 @@ A sleek and modern blogging platform developed by **Aniket Thapa** and **Mayank 
 2. Navigate to the project directory:
 
    ```bash
-   cd blog-website
+   cd blogging-platform
    ```
 
 3. Install dependencies:
