@@ -10,8 +10,8 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
-  const { username, useremail, password } = req.body;
   try {
+    const { username, useremail, password } = req.body;
     const user = new User({ username, useremail, password });
     await user.save();
     res.redirect('/login');
@@ -34,10 +34,7 @@ router.post(
     failureFlash: true,
   }),
   (req, res) => {
-    // Redirect to the saved URL or default to the dashboard
-    const redirectTo = req.session.returnTo || '/blogs';
-    delete req.session.returnTo; // Clear the session variable
-    res.redirect(redirectTo);
+    res.redirect('/profile');
   }
 );
 
@@ -45,9 +42,6 @@ router.post(
 router.get(
   '/auth/google',
   (req, res, next) => {
-    if (req.query.returnTo) {
-      req.session.returnTo = req.query.returnTo; // Save returnTo from query
-    }
     next();
   },
   passport.authenticate('google', { scope: ['profile', 'email'] })
@@ -61,9 +55,7 @@ router.get(
     failureFlash: true,
   }),
   (req, res) => {
-    const redirectTo = req.session.returnTo || '/blogs';
-    delete req.session.returnTo;
-    res.redirect(redirectTo);
+    res.redirect('/profile');
   }
 );
 
