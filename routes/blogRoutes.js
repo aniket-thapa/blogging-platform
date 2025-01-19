@@ -20,11 +20,7 @@ router.get('/new', isAuthenticated, (req, res) => {
   const user = req.user || null;
   res.render('blogs/new', { user });
 });
-router.get('/abc', (req, res) => {
-  res.send('INSIDE');
-});
 
-// Show Saved Blogs
 // GET route for displaying saved blogs
 router.get('/saved', isAuthenticated, async (req, res) => {
   try {
