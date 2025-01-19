@@ -88,23 +88,21 @@
       </form>
     </div>
     <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        tinymce.init({
-          selector: '#content',
-          menubar: true,
-          branding: false,
-          height: 600,
-          plugins: 'link image lists table code',
-          toolbar:
-            'undo redo | styleselect | formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image',
-          setup: function (editor) {
-            editor.on('init', function () {
-              var textarea = document.getElementById('content');
-              textarea.style.display = 'none';
-              textarea.removeAttribute('aria-hidden');
-            });
-          },
-        });
+      tinymce.init({
+        selector: '#content',
+        menubar: true,
+        branding: false,
+        height: 600,
+        plugins: 'link image lists table code',
+        toolbar:
+          'undo redo | styleselect | formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image',
+        setup: function (editor) {
+          editor.on('init', function () {
+            var textarea = document.getElementById('content');
+            textarea.style.display = 'none';
+            textarea.removeAttribute('aria-hidden');
+          });
+        },
       });
     </script>
   </body>
