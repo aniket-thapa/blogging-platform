@@ -4,7 +4,7 @@ const Blog = require('../models/Blog');
 const router = express.Router();
 
 // User Profile Route
-router.get('/', isAuthenticated, async (req, res) => {
+router.get('/profile', isAuthenticated, async (req, res) => {
   try {
     res.render('users/profile', { user: req.user });
   } catch (err) {

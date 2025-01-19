@@ -34,7 +34,7 @@ router.post(
     failureFlash: true,
   }),
   (req, res) => {
-    res.redirect('/profile');
+    res.redirect('/user/profile');
   }
 );
 
@@ -55,7 +55,7 @@ router.get(
     failureFlash: true,
   }),
   (req, res) => {
-    res.redirect('/profile');
+    res.redirect('/user/profile');
   }
 );
 

@@ -37,7 +37,7 @@ app.use(authRoutes);
 
 // User Routes (for profile)
 const userRoutes = require('./routes/userRoutes');
-app.use('/profile', userRoutes);
+app.use('/user', userRoutes);
 
 // Blog routes
 const blogRoutes = require('./routes/blogRoutes');
