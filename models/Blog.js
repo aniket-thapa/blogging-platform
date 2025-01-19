@@ -11,9 +11,7 @@ const blogSchema = new mongoose.Schema(
       required: true,
     },
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    comments: [
-      { type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }, // This references the Comment model
-    ],
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
   },
   { timestamps: true }
 );
