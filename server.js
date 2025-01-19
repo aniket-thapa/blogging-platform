@@ -12,9 +12,9 @@ dotenv.config();
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use('/public', express.static(path.join(__dirname, 'public'))); // Setup static files
 app.set('view engine', 'ejs');
-// Setup static files
-app.use('/public', express.static(path.join(__dirname, 'public')));
+
 // Session Setup
 app.use(
   session({
@@ -35,12 +35,6 @@ app.use(methodOverride('_method'));
 const authRoutes = require('./routes/authRoutes');
 app.use(authRoutes);
 
-// Home Route
-app.get('/', (req, res) => {
-  const user = req.user || null;
-  res.render('home', { user });
-});
-
 // User Routes (for profile)
 const userRoutes = require('./routes/userRoutes');
 app.use('/profile', userRoutes);
@@ -49,7 +43,13 @@ app.use('/profile', userRoutes);
 const blogRoutes = require('./routes/blogRoutes');
 app.use('/blogs', blogRoutes);
 
-// Error handling middleware (Optional but recommended)
+// Home Route
+app.get('/', (req, res) => {
+  const user = req.user || null;
+  res.render('home', { user });
+});
+
+// Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something went wrong!');
