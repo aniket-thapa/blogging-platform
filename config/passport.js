@@ -7,14 +7,13 @@ const User = require('../models/User');
 passport.use(
   new LocalStrategy(
     {
-      usernameField: 'useremail', // Tell Passport that the "username" is the "useremail"
-      passwordField: 'password', // This is the default field for the password
+      usernameField: 'useremail',
+      passwordField: 'password',
     },
     async (useremail, password, done) => {
       try {
         const user = await User.findOne({ useremail });
         if (!user || !user.password) {
-          // Ensure password exists for traditional login
           return done(null, false, {
             message: 'User not found or invalid login method.',
           });
