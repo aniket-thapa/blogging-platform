@@ -104,6 +104,10 @@ A sleek and modern blogging platform developed by **Aniket Thapa** and **Mayank 
 
 - Switch between light and dark themes for a personalized reading experience.
 
+### Save or Bookmark Blogs
+
+- Click bookmark icon to save or bookmark the Blog for later.
+
 ---
 
 ## Live Demo
