@@ -98,7 +98,7 @@ A sleek and modern blogging platform developed by **Aniket Thapa** and **Mayank 
 ### Engage with Content
 
 - Like blogs and leave comments to engage with other users.
-- Copy blog links to share with others.
+- Click Share Button to Copy blog links to share with others.
 
 ### Toggle Dark Mode
 
