@@ -1,4 +1,4 @@
-# Blog Website
+# Blog Website (Let's Blog)
 
 Live Link: [Blogging Platform](https://blogging-platform-y0pb.onrender.com/)
 
