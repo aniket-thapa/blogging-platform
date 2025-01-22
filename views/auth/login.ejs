@@ -6,6 +6,11 @@
     <title>Login</title>
     <link rel="stylesheet" href="/public/css/tailwind.css" />
 
+    <script
+      src="https://kit.fontawesome.com/9ca9aa7819.js"
+      crossorigin="anonymous"
+    ></script>
+
     <style>
       .spin-loader {
         animation: rotation 2.25s linear infinite;
@@ -87,6 +92,12 @@
       </div>
     </div>
     <%- include('../partials/footer') %>
+    <div
+      id="scroll-to-top"
+      class="hidden px-2 py-2 fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-600 text-white rounded-full cursor-pointer"
+    >
+      <i class="fa-solid fa-chevron-up text-center text-xl"></i>
+    </div>
     <script>
       const form = document.getElementById('loginForm');
       const button = document.getElementById('submitButton');
@@ -126,6 +137,22 @@
           button.disabled = false;
           alert(error.message);
         }
+      });
+    </script>
+    <script>
+      // Scroll to Top Icon
+      const scrollToTopButton = document.getElementById('scroll-to-top');
+
+      // Show the button when the user scrolls to the bottom
+      window.addEventListener('scroll', () => {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+          scrollToTopButton.classList.remove('hidden');
+        } else {
+          scrollToTopButton.classList.add('hidden');
+        }
+      });
+      scrollToTopButton.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     </script>
   </body>
