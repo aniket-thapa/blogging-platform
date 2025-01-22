@@ -141,6 +141,7 @@
             loader.classList.add('hidden');
             buttonText.classList.remove('hidden');
             button.disabled = false;
+            alert(result.message);
             window.location.href = '/login';
           } else {
             throw new Error(result.error);

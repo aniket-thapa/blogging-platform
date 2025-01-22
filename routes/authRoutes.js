@@ -42,7 +42,7 @@ router.post(
     failureFlash: true,
   }),
   (req, res) => {
-    res.redirect('/user/profile');
+    res.status(200).json({ message: 'User login successfully!' });
   }
 );
 
@@ -70,7 +70,11 @@ router.get(
 // Logout Route
 router.get('/logout', (req, res) => {
   req.logout((err) => {
-    if (err) return next(err);
+    if (err) {
+      return res
+        .status(500)
+        .json({ error: 'An error occurred while logging out.' });
+    }
     res.redirect('/login');
   });
 });

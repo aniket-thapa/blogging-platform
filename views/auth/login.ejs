@@ -111,18 +111,18 @@
             body: formData.toString(),
           });
 
-          if (!response.ok) {
+          const result = await response.json();
+
+          if (response.ok) {
+            loader.classList.add('hidden');
+            button.disabled = false;
+            alert(result.message);
+            window.location.href = '/user/profile';
+          } else {
             throw new Error('Login failed');
           }
-
-          loader.classList.add('hidden');
-          buttonText.classList.remove('hidden');
-          button.disabled = false;
-
-          window.location.href = '/user/profile';
         } catch (error) {
           loader.classList.add('hidden');
-          buttonText.classList.remove('hidden');
           button.disabled = false;
           alert(error.message);
         }
