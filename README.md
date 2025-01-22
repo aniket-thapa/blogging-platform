@@ -1,6 +1,6 @@
-# Blog Website
+# Blog Website (Let's Blog)
 
-Live Link: [Blogging Platform](https://blogging-platform-y0pb.onrender.com/)
+Live Link: [Let's Blog](https://blogging-platform-y0pb.onrender.com/)
 
 A sleek and modern blogging platform developed by **Aniket Thapa** and **Mayank Verma**, empowering users to create, share, and engage with blogs effortlessly.
 
@@ -98,11 +98,15 @@ A sleek and modern blogging platform developed by **Aniket Thapa** and **Mayank 
 ### Engage with Content
 
 - Like blogs and leave comments to engage with other users.
-- Copy blog links to share with others.
+- Click Share Button to Copy blog links to share with others.
 
 ### Toggle Dark Mode
 
 - Switch between light and dark themes for a personalized reading experience.
+
+### Save or Bookmark Blogs
+
+- Click bookmark icon to save or bookmark the Blog for later.
 
 ---
 
