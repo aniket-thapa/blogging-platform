@@ -10,13 +10,21 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
+  const { username, useremail, password } = req.body;
+
   try {
-    const { username, useremail, password } = req.body;
+    const existingUser = await User.findOne({ useremail });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Email is already registered.' });
+    }
+
     const user = new User({ username, useremail, password });
     await user.save();
-    res.redirect('/login');
+    res.status(200).json({ message: 'User registered successfully!' });
   } catch (err) {
-    res.redirect('/register');
+    res
+      .status(500)
+      .json({ error: 'An error occurred. Please try again later.' });
   }
 });
 

@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
     <link rel="stylesheet" href="/public/css/tailwind.css" />
+
+    <style>
+      .spin-loader {
+        animation: rotation 2.25s linear infinite;
+      }
+
+      @keyframes rotation {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
   </head>
   <body
     class="min-h-screen relative bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
@@ -18,7 +33,7 @@
         <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">
           Login
         </h2>
-        <form action="/login" method="POST" class="space-y-4">
+        <form id="loginForm" action="/login" method="POST" class="space-y-4">
           <div>
             <label
               for="useremail"
@@ -47,9 +62,14 @@
           </div>
           <button
             type="submit"
-            class="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 transition-all"
+            id="submitButton"
+            class="w-full py-2 flex justify-center items-center gap-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 transition-all"
           >
-            Login
+            <span id="buttonText">Login</span>
+            <span
+              id="spin-loader"
+              class="spin-loader w-6 h-6 border-4 border-dotted dark:border-white rounded-full hidden"
+            ></span>
           </button>
         </form>
 
@@ -57,7 +77,7 @@
 
         <a
           href="/auth/google"
-          class="w-full flex items-center justify-center gap-2 py-2 text-center border border-gray-500 text-white rounded-md hover:border-blue-500 focus:ring-2 focus:ring-blue-500 transition-all"
+          class="w-full flex items-center justify-center gap-2 py-2 text-center border border-gray-500 dark:text-white rounded-md hover:border-blue-500 focus:ring-2 focus:ring-blue-500 transition-all"
           ><img
             src="public\images\google-icon.webp"
             alt="google-logo"
@@ -67,5 +87,46 @@
       </div>
     </div>
     <%- include('../partials/footer') %>
+    <script>
+      const form = document.getElementById('loginForm');
+      const button = document.getElementById('submitButton');
+      const loader = document.getElementById('spin-loader');
+      const buttonText = document.getElementById('buttonText');
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        loader.classList.remove('hidden');
+        button.disabled = true;
+
+        const formData = new URLSearchParams(new FormData(form));
+
+        try {
+          console.log(form.action);
+          const response = await fetch('/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formData.toString(),
+          });
+
+          if (!response.ok) {
+            throw new Error('Login failed');
+          }
+
+          loader.classList.add('hidden');
+          buttonText.classList.remove('hidden');
+          button.disabled = false;
+
+          window.location.href = '/user/profile';
+        } catch (error) {
+          loader.classList.add('hidden');
+          buttonText.classList.remove('hidden');
+          button.disabled = false;
+          alert(error.message);
+        }
+      });
+    </script>
   </body>
 </html>
