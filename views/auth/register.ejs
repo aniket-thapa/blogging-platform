@@ -52,22 +52,54 @@
               class="w-full mt-1 p-2 focus:outline-none border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             />
           </div>
+
           <div>
             <label
               for="useremail"
               class="block text-gray-700 dark:text-gray-300"
               >User Email</label
             >
-            <input
-              type="email"
-              name="useremail"
-              id="useremail"
-              placeholder="johndoe@gmail.com"
-              autocomplete="email"
-              required
-              class="w-full mt-1 p-2 focus:outline-none border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            />
+            <div
+              class="flex justify-start flex-col gap-2 sm:flex-row sm:justify-between"
+            >
+              <input
+                type="email"
+                name="useremail"
+                id="useremail"
+                placeholder="johndoe@gmail.com"
+                autocomplete="email"
+                required
+                class="sm:w-2/3 mt-1 p-2 focus:outline-none border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              />
+              <button
+                id="send-otp-btn"
+                class="sm:w-1/4 mt-1 p-2 flex justify-center items-center gap-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+              >
+                Send OTP
+              </button>
+            </div>
           </div>
+
+          <!-- Send OTP -->
+          <div
+            class="flex justify-start flex-col gap-2 sm:flex-row sm:justify-between"
+          >
+            <input
+              id="otp"
+              type="text"
+              placeholder="Enter OTP"
+              class="sm:w-2/3 mt-1 p-2 focus:outline-none border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              required
+            />
+
+            <button
+              id="verify-otp-btn"
+              class="sm:w-1/4 mt-1 p-2 flex justify-center items-center gap-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+            >
+              Verify OTP
+            </button>
+          </div>
+
           <div>
             <label for="password" class="block text-gray-700 dark:text-gray-300"
               >Password</label
@@ -153,6 +185,39 @@
           alert(error.message);
         }
       });
+
+      // OPT SEND AND VERIFY
+      document
+        .getElementById('send-otp-btn')
+        .addEventListener('click', async () => {
+          const email = document.getElementById('useremail').value;
+          const response = await fetch('/send-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+          });
+          const result = await response.json();
+          alert(result.message);
+        });
+
+      document
+        .getElementById('verify-otp-btn')
+        .addEventListener('click', async () => {
+          const email = document.getElementById('useremail').value;
+          const otp = document.getElementById('otp').value;
+          const response = await fetch('/verify-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, otp }),
+          });
+          const result = await response.json();
+          if (result.verified) {
+            document.getElementById('useremail').disabled = true; // Disable email input
+            alert(result.message);
+          } else {
+            alert(result.message);
+          }
+        });
     </script>
   </body>
 </html>
