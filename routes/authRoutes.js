@@ -1,7 +1,57 @@
 const express = require('express');
 const passport = require('passport');
+const nodemailer = require('nodemailer'); // For Email OTPs
+const crypto = require('crypto'); // For generating OTPs
 const User = require('../models/User');
+const OTP = require('../models/OTP');
 const router = express.Router();
+
+// *******
+
+// Configure nodemailer
+const transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST,
+  port: process.env.EMAIL_PORT,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+// Send OTP Route
+router.post('/send-otp', async (req, res) => {
+  const { useremail } = req.body;
+
+  try {
+    const existingUser = await User.findOne({ useremail });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email is already registered.' });
+    }
+
+    if (!useremail)
+      return res.status(400).json({ message: 'Email is required' });
+
+    const otp = crypto.randomInt(100000, 999999).toString(); // Generate 6-digit OTP
+
+    // Delete any existing OTP for the email
+    await OTP.deleteOne({ email: useremail });
+
+    // Save new OTP in MongoDB
+    const newOtp = new OTP({ email: useremail, otp });
+    await newOtp.save();
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: useremail,
+      subject: 'OTP for Registration',
+      html: `Dear User,<br><br><b>${otp}</b> is your OTP for Registration on Let's Blog.<br><br>It is valid for 5 minutes.<br><br>Thank you.`,
+    });
+    res.status(200).json({ message: 'OTP sent successfully' });
+  } catch (error) {
+    console.error('Error sending OTP:', error);
+    res.status(500).json({ message: 'Error sending OTP' });
+  }
+});
 
 // Register Route
 router.get('/register', (req, res) => {
@@ -10,7 +60,13 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
-  const { username, useremail, password } = req.body;
+  const { username, useremail, otp, password, confirm_password } = req.body;
+
+  if (password !== confirm_password) {
+    return res
+      .status(400)
+      .json({ message: 'Password and Confirm Password must be same.' });
+  }
 
   try {
     const existingUser = await User.findOne({ useremail });
@@ -18,8 +74,30 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Email is already registered.' });
     }
 
+    if (!useremail || !otp) {
+      return res.status(400).json({ message: 'Email and OTP are required' });
+    }
+
+    // Find OTP in MongoDB
+    const storedOtp = await OTP.findOne({ email: useremail });
+
+    if (!storedOtp) {
+      return res
+        .status(400)
+        .json({ message: 'OTP expired or not found. Request a new one.' });
+    }
+
+    if (storedOtp.otp !== otp) {
+      return res.status(400).json({ error: 'Invalid OTP' });
+    }
+
+    // OTP is correct, proceed with registration
+
     const user = new User({ username, useremail, password });
     await user.save();
+
+    await OTP.deleteOne({ email: useremail }); // Delete OTP after successful verification
+
     res.status(200).json({ message: 'User registered successfully!' });
   } catch (err) {
     res

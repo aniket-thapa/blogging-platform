@@ -6,6 +6,16 @@
     <title>Register</title>
     <link rel="stylesheet" href="/public/css/tailwind.css" />
     <style>
+      @layer utilities {
+        .dark input:-webkit-autofill {
+          color: #ffffff !important;
+          -webkit-text-fill-color: #ffffff !important;
+          caret-color: #ffffff !important;
+          background-color: transparent !important;
+          transition: background-color 5000s ease-in-out 0s;
+        }
+      }
+
       .spin-loader {
         animation: rotation 2.25s linear infinite;
       }
@@ -60,7 +70,7 @@
               >User Email</label
             >
             <div
-              class="flex justify-start flex-col gap-2 sm:flex-row sm:justify-between"
+              class="flex justify-start flex-col gap-1 sm:flex-row sm:justify-between"
             >
               <input
                 type="email"
@@ -73,31 +83,25 @@
               />
               <button
                 id="send-otp-btn"
-                class="sm:w-1/4 mt-1 p-2 flex justify-center items-center gap-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                class="sm:w-1/4 mt-1 p-1 sm:p-2 flex justify-center items-center gap-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
               >
-                Send OTP
+                Get OTP
               </button>
             </div>
           </div>
 
-          <!-- Send OTP -->
-          <div
-            class="flex justify-start flex-col gap-2 sm:flex-row sm:justify-between"
-          >
+          <div>
+            <label for="password" class="block text-gray-700 dark:text-gray-300"
+              >Enter OTP</label
+            >
             <input
               id="otp"
+              name="otp"
               type="text"
-              placeholder="Enter OTP"
-              class="sm:w-2/3 mt-1 p-2 focus:outline-none border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              placeholder="123456"
+              class="w-full mt-1 p-2 focus:outline-none border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               required
             />
-
-            <button
-              id="verify-otp-btn"
-              class="sm:w-1/4 mt-1 p-2 flex justify-center items-center gap-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-            >
-              Verify OTP
-            </button>
           </div>
 
           <div>
@@ -109,6 +113,7 @@
               name="password"
               id="password"
               autocomplete="new-password"
+              placeholder="•••••••••••••"
               required
               class="w-full mt-1 p-2 focus:outline-none border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             />
@@ -125,6 +130,7 @@
               name="confirm_password"
               id="confirm_password"
               autocomplete="new-password"
+              placeholder="•••••••••••••"
               required
               class="w-full mt-1 p-2 focus:outline-none border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             />
@@ -157,6 +163,7 @@
         button.disabled = true;
 
         const formData = new URLSearchParams(new FormData(form));
+        console.log(formData.toString());
 
         try {
           const response = await fetch('/register', {
@@ -186,36 +193,45 @@
         }
       });
 
-      // OPT SEND AND VERIFY
+      // Send OTP
       document
         .getElementById('send-otp-btn')
-        .addEventListener('click', async () => {
-          const email = document.getElementById('useremail').value;
+        .addEventListener('click', async (e) => {
+          e.preventDefault();
+          const useremail = document.getElementById('useremail').value;
           const response = await fetch('/send-otp', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email }),
+            body: JSON.stringify({ useremail }),
           });
           const result = await response.json();
           alert(result.message);
-        });
 
-      document
-        .getElementById('verify-otp-btn')
-        .addEventListener('click', async () => {
-          const email = document.getElementById('useremail').value;
-          const otp = document.getElementById('otp').value;
-          const response = await fetch('/verify-otp', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, otp }),
-          });
-          const result = await response.json();
-          if (result.verified) {
-            document.getElementById('useremail').disabled = true; // Disable email input
-            alert(result.message);
-          } else {
-            alert(result.message);
+          if (response.status === 200) {
+            // Disable the button and start the timer
+            document.getElementById('send-otp-btn').disabled = true;
+
+            let timeLeft = 300;
+
+            const timerInterval = setInterval(function () {
+              let minutes = Math.floor(timeLeft / 60);
+              let seconds = timeLeft % 60;
+              document.getElementById('send-otp-btn').innerText = `${minutes}:${
+                seconds < 10 ? '0' + seconds : seconds
+              }`;
+
+              if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                document.getElementById('send-otp-btn').disabled = false; // Re-enable the button
+                document.getElementById('send-otp-btn').innerText = 'Send OTP'; // Reset the button text
+                document.getElementById('useremail').readOnly = false; // Re-enable the email field
+              }
+
+              timeLeft--;
+            }, 1000); // Update every second
+
+            // Disable email field while timer is active
+            document.getElementById('useremail').readOnly = true;
           }
         });
     </script>
