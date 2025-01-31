@@ -84,29 +84,25 @@
 
           <!-- Likes, Comments, Author and Date Section -->
           <div
-            class="flex justify-between items-center mt-4 text-sm sm:text-base"
+            class="mt-4 flex items-center space-x-4 font-normal text-sm sm:text-base text-gray-600 dark:text-gray-400"
           >
-            <div
-              class="flex items-center space-x-4 font-normal text-sm text-gray-600 dark:text-gray-400"
-            >
-              <div class="flex items-center space-x-1">
-                <i class="fa-regular fa-heart"></i>
-                <span><%= blog.likes.length %> </span>
-              </div>
-              <div class="flex items-center space-x-1">
-                <i class="fa-regular fa-comments"></i>
-                <span><%= blog.comments.length %></span>
-              </div>
-              <div class="flex items-center space-x-1">
-                <i class="fa-regular fa-circle-user"></i>
-                <span class=""><%= blog.author.username %></span>
-              </div>
-              <div class="flex items-center space-x-1">
-                <i class="fa-regular fa-calendar"></i>
-                <span class=""
-                  ><%= new Date(blog.createdAt).toDateString() %></span
-                >
-              </div>
+            <div class="flex items-center space-x-1">
+              <i class="fa-regular fa-heart"></i>
+              <span><%= blog.likes.length %> </span>
+            </div>
+            <div class="flex items-center space-x-1">
+              <i class="fa-regular fa-comments"></i>
+              <span><%= blog.comments.length %></span>
+            </div>
+            <div class="flex items-center space-x-1">
+              <i class="fa-regular fa-circle-user"></i>
+              <span class=""><%= blog.author.username %></span>
+            </div>
+            <div class="flex items-center space-x-1">
+              <i class="fa-regular fa-calendar"></i>
+              <span class=""
+                ><%= new Date(blog.createdAt).toDateString() %></span
+              >
             </div>
           </div>
         </div>
