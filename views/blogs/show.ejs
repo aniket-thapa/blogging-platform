@@ -458,6 +458,25 @@
         border-radius: 4px;
       }
 
+      .blog-content pre code {
+        display: block;
+        overflow-x: auto;
+        padding-bottom: 12px;
+      }
+
+      .blog-content pre code::-webkit-scrollbar {
+        height: 7px;
+      }
+
+      .blog-content pre code::-webkit-scrollbar-thumb {
+        background: #a3a3a3;
+        border-radius: 8px;
+      }
+      .blog-content pre code::-webkit-scrollbar-thumb:hover {
+        cursor: pointer;
+        background: #8d8d8d;
+      }
+
       .blog-content pre {
         background-color: var(--code-bg);
         color: var(--code-text);

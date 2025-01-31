@@ -121,6 +121,11 @@
     menuToggle.addEventListener('click', () => {
       navLinks.classList.toggle('hidden');
     });
+    document.addEventListener('click', function (event) {
+      if (!navLinks.parentElement.contains(event.target)) {
+        navLinks.classList.add('hidden');
+      }
+    });
   });
 </script>
 
