@@ -49,9 +49,26 @@ router.get('/saved', isAuthenticated, async (req, res) => {
 router.post('/new', isAuthenticated, async (req, res) => {
   try {
     const { title, content, tags } = req.body;
-    const tagArray = tags.split(',').map((tag) => tag.trim().toLowerCase());
+
+    let validTitle = title.trim().replace(/\s+/g, ' ');
+
+    if (validTitle == '' || content == '') {
+      if (validTitle == '')
+        return res.status(400).json({ message: 'Blog Title cannot be empty' });
+      else
+        return res
+          .status(400)
+          .json({ message: 'Blog Content cannot be empty' });
+    }
+    const tagArray = tags
+      ? tags
+          .split(',')
+          .map((tag) => tag.trim().toLowerCase())
+          .filter((tag) => tag.length > 0)
+      : [];
+
     const blog = new Blog({
-      title: title,
+      title: validTitle,
       content: content,
       tags: tagArray,
       author: req.user._id,
