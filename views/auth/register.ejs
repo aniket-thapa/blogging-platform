@@ -234,6 +234,15 @@
             document.getElementById('useremail').readOnly = true;
           }
         });
+
+      // Validations in Inputs:
+      document
+        .getElementById('username')
+        .addEventListener('input', function (event) {
+          let inputValue = event.target.value;
+          let formattedInput = inputValue.replace(/\s{2,}/g, ' ');
+          event.target.value = formattedInput;
+        });
     </script>
   </body>
 </html>
