@@ -9,33 +9,6 @@
       src="https://kit.fontawesome.com/9ca9aa7819.js"
       crossorigin="anonymous"
     ></script>
-    <style>
-      .custom-scrollbar::-webkit-scrollbar {
-        width: 12px;
-      }
-
-      .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #3b83f670;
-        transition: background-color 0.3s ease;
-      }
-
-      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background-color: #2563eb70;
-      }
-
-      .custom-scrollbar::-webkit-scrollbar-thumb:active {
-        background-color: #1d4fd870;
-        box-shadow: inset 0 0 10px #0000004d;
-      }
-
-      .custom-scrollbar::-webkit-scrollbar-corner {
-        background-color: transparent;
-      }
-
-      .custom-scrollbar::-webkit-scrollbar-track {
-        background-color: transparent;
-      }
-    </style>
   </head>
   <body
     class="custom-scrollbar min-h-screen dark:bg-gray-900 dark:text-gray-100"
@@ -295,94 +268,43 @@
       class="fixed bottom-4 right-4 flex flex-col gap-4"
     ></div>
 
-    <script>
-      function showNotification(message, duration = 2000) {
-        const container = document.getElementById('notification-container');
-
-        // Create notification element
-        const notification = document.createElement('div');
-        notification.className = `overflow-hidden relative max-w-xs w-full p-4 bg-white text-gray-900 rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-100 
-                                  transition-transform transform translate-y-4 opacity-0 
-                                  animate-slide-in`;
-        notification.innerHTML = `
-          <div>${message}</div>
-          <div class="absolute bottom-0 left-0 h-1 bg-blue-600" 
-               style="animation: progress ${duration}ms linear forwards;"></div>
-        `;
-
-        // Append notification
-        container.appendChild(notification);
-
-        // Fade-in animation
-        requestAnimationFrame(() => {
-          notification.classList.remove('translate-y-4', 'opacity-0');
-        });
-
-        // Fade-out and remove notification after duration
-        setTimeout(() => {
-          notification.classList.add('translate-y-4', 'opacity-0');
-
-          // Force removal after a short delay to ensure it doesn't persist
-          setTimeout(() => {
-            if (notification.parentNode) {
-              notification.remove();
-            }
-          }, 300); // Match this with your fade-out transition duration
-        }, duration);
-      }
-    </script>
-
-    <style>
-      @keyframes slide-in {
-        from {
-          transform: translateY(10px);
-          opacity: 0;
-        }
-        to {
-          transform: translateY(0);
-          opacity: 1;
-        }
-      }
-
-      .animate-slide-in {
-        animation: slide-in 0.3s ease-out forwards;
-      }
-
-      @keyframes progress {
-        from {
-          width: 100%;
-        }
-        to {
-          width: 0%;
-        }
-      }
-    </style>
-
-    <%- include('../partials/footer') %>
-    <div
+    <button
       id="scroll-to-top"
-      class="hidden px-2 py-2 fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-600 text-white rounded-full cursor-pointer"
+      class="hidden fixed bottom-10 right-10 cursor-pointer z-100 rounded-full bg-clip-padding border text-token-text-secondary border-token-border-light translate-x-1/2 bg-token-main-surface-primary w-8 h-8"
     >
       <i class="fa-solid fa-chevron-up text-center text-xl"></i>
-    </div>
-    <script>
-      // Scroll to Top Icon
-      const scrollToTopButton = document.getElementById('scroll-to-top');
+    </button>
 
-      // Show the button when the user scrolls to the bottom
-      window.addEventListener('scroll', () => {
-        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-          scrollToTopButton.classList.remove('hidden');
-        } else {
-          scrollToTopButton.classList.add('hidden');
-        }
-      });
-      scrollToTopButton.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    </script>
-    <!-- Custom Styling for Blog Content -->
+    <%- include('../partials/footer') %>
+
     <style>
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 12px;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: #3b83f670;
+        transition: background-color 0.3s ease;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: #2563eb70;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar-thumb:active {
+        background-color: #1d4fd870;
+        box-shadow: inset 0 0 10px #0000004d;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar-corner {
+        background-color: transparent;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
+
+      /* Custom Styling for Blog Content */
       .blog-content {
         margin-bottom: 28px;
       }
@@ -435,18 +357,14 @@
       }
       /* Dark mode */
       :root {
-        --code-bg: #f3f4f6; /* Light mode background */
-        --code-text: #1a202c; /* Light mode text */
-        --hr-border-color: rgb(
-          209 213 219 / var(--tw-border-opacity, 1)
-        ); /* Light mode horizontal bar color */
+        --code-bg: #f3f4f6;
+        --code-text: #1a202c;
+        --hr-border-color: rgb(209 213 219 / var(--tw-border-opacity, 1));
       }
       .dark {
-        --code-bg: #2d3748; /* Dark mode background */
-        --code-text: #e2e8f0; /* Dark mode text */
-        --hr-border-color: rgb(
-          55 65 81 / var(--tw-border-opacity, 1)
-        ); /* Dark mode horizontal bar color */
+        --code-bg: #2d3748;
+        --code-text: #e2e8f0;
+        --hr-border-color: rgb(55 65 81 / var(--tw-border-opacity, 1));
       }
       .blog-content hr {
         border-color: var(--hr-border-color);
@@ -528,9 +446,79 @@
         visibility: visible;
         opacity: 1;
       }
+
+      /* Notification Bar */
+      @keyframes slide-in {
+        from {
+          transform: translateY(10px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .animate-slide-in {
+        animation: slide-in 0.3s ease-out forwards;
+      }
+
+      @keyframes progress {
+        from {
+          width: 100%;
+        }
+        to {
+          width: 0%;
+        }
+      }
     </style>
 
     <script>
+      // Show Notifications
+      function showNotification(message, duration = 2000) {
+        const container = document.getElementById('notification-container');
+
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `overflow-hidden relative max-w-xs w-full p-4 bg-white text-gray-900 rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-100 transition-transform transform translate-y-4 opacity-0 animate-slide-in`;
+        notification.innerHTML = `<div>${message}</div><div class="absolute bottom-0 left-0 h-1 bg-blue-600" style="animation: progress ${duration}ms linear forwards;"></div>`;
+
+        // Append notification
+        container.appendChild(notification);
+
+        // Fade-in animation
+        requestAnimationFrame(() => {
+          notification.classList.remove('translate-y-4', 'opacity-0');
+        });
+
+        // Fade-out and remove notification after duration
+        setTimeout(() => {
+          notification.classList.add('translate-y-4', 'opacity-0');
+
+          // Force removal after a short delay to ensure it doesn't persist
+          setTimeout(() => {
+            if (notification.parentNode) {
+              notification.remove();
+            }
+          }, 300); // Match this with your fade-out transition duration
+        }, duration);
+      }
+
+      // Scroll to Top Icon
+      const scrollToTopButton = document.getElementById('scroll-to-top');
+
+      // Show the button when the user scrolls to the bottom
+      window.addEventListener('scroll', () => {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+          scrollToTopButton.classList.remove('hidden');
+        } else {
+          scrollToTopButton.classList.add('hidden');
+        }
+      });
+      scrollToTopButton.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
       // Reading Time Count
       function stripHTML(html) {
         return html.replace(/<[^>]*>/g, '');
@@ -621,14 +609,13 @@
           });
         });
       }
-      // code copy button
-      // Copy Code Icon //
+
+      // Copy Code Button
       document.addEventListener('DOMContentLoaded', function () {
         const codeBlocks = document.querySelectorAll('#blog-content pre code');
 
         codeBlocks.forEach((block) => {
-          // Create copy button
-          const copyButton = document.createElement('button');
+          const copyButton = document.createElement('button'); // Create copy button
           copyButton.className = 'copy-btn';
           copyButton.innerHTML =
             '<i class="fa-regular fa-clone"></i><span class="tooltip">Copy</span>';
@@ -647,26 +634,24 @@
               const copyIcon = copyButton.querySelector('i');
 
               copyIcon.classList.remove('fa-regular', 'fa-clone');
-              copyIcon.classList.add('fa-solid', 'fa-check');
-
-              copyButton.style.color = 'green';
+              copyIcon.classList.add('fa-solid', 'fa-check', 'text-green-500');
 
               setTimeout(() => {
                 copyButton.querySelector('.tooltip').textContent = 'Copy';
                 copyIcon.classList.add('fa-regular', 'fa-clone');
-                copyIcon.classList.remove('fa-solid', 'fa-check');
-                copyButton.style.color = '#555555';
-              }, 1500);
+                copyIcon.classList.remove(
+                  'fa-solid',
+                  'fa-check',
+                  'text-green-500'
+                );
+              }, 2000);
             });
           });
         });
       });
-    </script>
 
-    <script>
-      // Get the postId from the rendered template
+      // Add a View Count for the Blog
       const postId = '<%= blog._id %>';
-
       // Check if the cookie for this blog post already exists
       const hasViewed = document.cookie
         .split(';')
@@ -696,10 +681,8 @@
           }, 10000); // 10 seconds
         };
       }
-    </script>
 
-    <!-- Save / Bookmark Blog -->
-    <script>
+      // Save or Bookmark Blog
       async function toggleSaveBlog(button) {
         const blogId = button.getAttribute('data-blog-id');
         const isSaved = button.getAttribute('data-saved') === 'true';
