@@ -112,17 +112,28 @@ router.get('/login', (req, res) => {
   res.render('auth/login', { user });
 });
 
-// Handle login with custom returnTo logic
-router.post(
-  '/login',
-  passport.authenticate('local', {
-    failureRedirect: '/login',
-    failureFlash: true,
-  }),
-  (req, res) => {
-    res.status(200).json({ message: 'User login successfully!' });
-  }
-);
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      return res.status(500).json({ message: 'An error occurred', error: err });
+    }
+    if (!user) {
+      return res.status(401).json({ message: info?.message || 'Login failed' });
+    }
+
+    req.login(user, (loginErr) => {
+      if (loginErr) {
+        return res
+          .status(500)
+          .json({ message: 'Login error', error: loginErr });
+      }
+
+      return res
+        .status(200)
+        .json({ message: info?.message || 'Login successful', user });
+    });
+  })(req, res, next);
+});
 
 // Google OAuth Login
 router.get(
@@ -138,7 +149,6 @@ router.get(
   '/auth/google/callback',
   passport.authenticate('google', {
     failureRedirect: '/login',
-    failureFlash: true,
   }),
   (req, res) => {
     res.redirect('/user/profile');

@@ -123,7 +123,6 @@
         const formData = new URLSearchParams(new FormData(form));
 
         try {
-          console.log(form.action);
           const response = await fetch('/login', {
             method: 'POST',
             headers: {
@@ -135,17 +134,16 @@
           const result = await response.json();
 
           if (response.ok) {
-            loader.classList.add('hidden');
-            button.disabled = false;
-            alert(result.message);
             window.location.href = '/user/profile';
+            alert(result.message);
           } else {
-            throw new Error('Login failed');
+            throw new Error(result.message || 'Login failed');
           }
         } catch (error) {
+          alert(error.message);
+        } finally {
           loader.classList.add('hidden');
           button.disabled = false;
-          alert(error.message);
         }
       });
     </script>

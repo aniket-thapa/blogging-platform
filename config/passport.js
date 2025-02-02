@@ -20,12 +20,13 @@ passport.use(
         }
 
         const isMatch = await user.comparePassword(password);
-        if (!isMatch)
+        if (!isMatch) {
           return done(null, false, { message: 'Invalid Credentials' });
+        }
 
-        return done(null, user);
+        return done(null, user, { message: 'User login successfully!' });
       } catch (err) {
-        return done(err);
+        return done(err, false);
       }
     }
   )
@@ -65,7 +66,7 @@ passport.deserializeUser(async (id, done) => {
     const user = await User.findById(id);
     done(null, user);
   } catch (err) {
-    done(err);
+    done(err, false);
   }
 });
 
