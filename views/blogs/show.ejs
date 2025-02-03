@@ -289,33 +289,52 @@
           >
             <div class="flex gap-4">
               <div
-                class="flex gap-2 content-center border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+                class="group relative flex gap-2 content-center border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <% if (user && blog.likes.includes(user._id)) { %>
                 <button class="like-button2">
                   <i class="fa-regular fa-heart text-red-500"></i>
                 </button>
+                <!-- Tooltip -->
+                <div
+                  class="absolute z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
+                >
+                  Unlike
+                </div>
                 <% } else { %>
                 <button class="like-button2">
                   <i class="fa-regular fa-heart"></i>
                 </button>
+                <!-- Tooltip -->
+                <div
+                  class="absolute z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
+                >
+                  Like
+                </div>
                 <% } %>
                 <span class="likes-count"><%= blog.likes.length %></span>
               </div>
 
               <a href="#comments"
                 ><div
-                  class="flex gap-2 content-center border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  class="group relative flex gap-2 content-center border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
                   <span><i class="fa-regular fa-comment"></i></span
                   ><span><%= blog.comments.length %></span>
+
+                  <!-- Tooltip -->
+                  <div
+                    class="absolute z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
+                  >
+                    Comments
+                  </div>
                 </div></a
               >
             </div>
             <div class="font-normal text-sm">
               <div
                 onclick="navigator.clipboard.writeText(window.location.origin + '/blogs/<%= blog._id %>'); showNotification('Link Copied to Clipboard!', 2500); this.querySelector('.tooltip').classList.add('hidden');"
-                class="relative flex gap-2 content-center cursor-pointer border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+                class="group relative flex gap-2 content-center cursor-pointer border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
                 onmouseover="this.querySelector('.tooltip').classList.remove('hidden')"
                 onmouseout="this.querySelector('.tooltip').classList.add('hidden')"
               >
@@ -323,9 +342,9 @@
                 <span>Share</span>
                 <!-- Tooltip -->
                 <div
-                  class="tooltip w-full absolute bottom-full left-1/2 transform -translate-x-1/2 bg-gray-600 text-white text-xs rounded px-2 py-1 shadow-lg hidden"
+                  class="absolute z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
                 >
-                  Copy link
+                  Copy Code
                 </div>
               </div>
             </div>
@@ -347,32 +366,50 @@
         <div class="my-2 text-gray-700 dark:text-gray-300 flex justify-between">
           <div class="flex gap-4">
             <div
-              class="flex gap-2 content-center border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+              class="group relative flex gap-2 content-center border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               <% if (user && blog.likes.includes(user._id)) { %>
               <button class="like-button2">
                 <i class="fa-regular fa-heart text-red-500"></i>
               </button>
+              <!-- Tooltip -->
+              <div
+                class="absolute z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
+              >
+                Unlike
+              </div>
               <% } else { %>
               <button class="like-button2">
                 <i class="fa-regular fa-heart"></i>
               </button>
+              <!-- Tooltip -->
+              <div
+                class="absolute z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
+              >
+                Like
+              </div>
               <% } %>
               <span class="likes-count"><%= blog.likes.length %></span>
             </div>
             <a href="#comments"
               ><div
-                class="flex gap-2 content-center border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+                class="group relative flex gap-2 content-center border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <span><i class="fa-regular fa-comment"></i></span
                 ><span><%= blog.comments.length %></span>
+                <!-- Tooltip -->
+                <div
+                  class="absolute z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
+                >
+                  Comments
+                </div>
               </div></a
             >
           </div>
           <div class="font-normal text-sm">
             <div
               onclick="navigator.clipboard.writeText(window.location.origin + '/blogs/<%= blog._id %>'); showNotification('Link Copied to Clipboard!', 2500); this.querySelector('.tooltip').classList.add('hidden');"
-              class="relative flex gap-2 content-center cursor-pointer border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+              class="relative group flex gap-2 content-center cursor-pointer border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
               onmouseover="this.querySelector('.tooltip').classList.remove('hidden')"
               onmouseout="this.querySelector('.tooltip').classList.add('hidden')"
             >
@@ -380,9 +417,9 @@
               <span>Share</span>
               <!-- Tooltip -->
               <div
-                class="tooltip w-full absolute bottom-full left-1/2 transform -translate-x-1/2 bg-gray-600 text-white text-xs rounded px-2 py-1 shadow-lg hidden"
+                class="absolute z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
               >
-                Copy link
+                Copy Code
               </div>
             </div>
           </div>
