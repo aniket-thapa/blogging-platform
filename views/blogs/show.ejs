@@ -398,10 +398,31 @@
         </h3>
         <div class="space-y-4 mb-6">
           <% blog.comments.forEach(comment => { %>
-          <div class="border rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
-            <p class="font-medium text-gray-800 dark:text-gray-300">
+          <div
+            id="comment-<%= comment._id %>"
+            class="border rounded-lg p-4 bg-gray-50 dark:bg-gray-800"
+          >
+            <p class="relative font-medium text-gray-800 dark:text-gray-300">
               <%= comment.author.username %>
               <span>(<%= comment.author.useremail %>)</span>
+
+              <% if (user && user._id.toString() ===
+              comment.author._id.toString()) { %>
+              <button
+                class="absolute right-0 text-gray-600 hover:text-red-900 transition-colors"
+                onclick="deleteComment('<%= comment._id %>')"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+              <% } %> <% if (user && blog.author._id.toString() ===
+              user._id.toString()) { %>
+              <button
+                class="absolute right-0 text-gray-600 hover:text-red-900 transition-colors"
+                onclick="deleteComment('<%= comment._id %>')"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+              <% } %>
             </p>
             <p class="text-gray-700 dark:text-gray-400">
               <%= comment.content %>
@@ -416,6 +437,7 @@
         <% if (user) { %>
         <!-- Add Comment Form -->
         <form
+          id="commentForm"
           action="/blogs/<%= blog._id %>/comments"
           method="POST"
           class="space-y-4"
@@ -423,12 +445,12 @@
           <textarea
             name="content"
             required
-            class="w-full border border-gray-300 dark:border-gray-600 rounded p-2 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+            class="w-full border-2 border-gray-300 dark:border-gray-600 rounded p-2 focus:outline-none focus:border-blue-400 dark:focus:border-blue-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
             placeholder="Write your comment..."
           ></textarea>
           <button
             type="submit"
-            class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+            class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 focus:ring transition"
           >
             Add Comment
           </button>
@@ -460,7 +482,7 @@
 
     <div
       id="notification-container"
-      class="fixed bottom-4 right-4 flex flex-col gap-4"
+      class="fixed top-4 right-4 flex flex-col gap-4"
     ></div>
 
     <button
@@ -556,6 +578,63 @@
                 window.location.href = '/blogs';
               } else {
                 alert('Failed to delete the blog');
+              }
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+              alert('An error occurred');
+            });
+        }
+      }
+
+      // Add a new Comment
+      const commentForm = document.getElementById('commentForm');
+      commentForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const commentData = new URLSearchParams(new FormData(commentForm));
+        console.log(commentData);
+        try {
+          const response = await fetch(commentForm.action, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: commentData.toString(),
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            commentForm.reset();
+            showNotification(result.message, 2500);
+            setTimeout(() => {
+              location.reload();
+            }, 2500);
+          } else {
+            throw new Error(result.message || 'Login failed');
+          }
+        } catch (error) {
+          alert(error.message);
+        }
+      });
+
+      // Delete a Comment
+      function deleteComment(commentId) {
+        const confirmed = confirm(
+          'Are you sure to delete this comment? This cannot be undo.'
+        );
+        if (confirmed) {
+          fetch(`/blogs/comments/${commentId}?_method=DELETE`, {
+            method: 'POST',
+          })
+            .then((response) => {
+              if (response.ok) {
+                commentForm.reset();
+                showNotification('Comment deleted successfully', 2500);
+                document.getElementById(`comment-${commentId}`).remove();
+              } else {
+                alert('Failed to delete the comment');
               }
             })
             .catch((error) => {

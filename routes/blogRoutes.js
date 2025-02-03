@@ -195,12 +195,39 @@ router.post('/:id/comments', async (req, res) => {
     });
 
     await newComment.save();
-
     blog.comments.push(newComment._id);
     await blog.save();
-    res.redirect(`/blogs/${blog._id}`);
+    res.status(200).json({ message: 'Comment added successfully' });
   } catch (err) {
-    res.redirect('/blogs');
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Delete Comment by Comment User
+router.delete('/comments/:id', isAuthenticated, async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.id);
+    if (!comment) {
+      return res.status(404).json({ message: 'Comment not found' });
+    }
+
+    // Check if the user is the author of the comment or an admin
+    const blog = await Blog.findById(comment.blog.toString()).select(
+      '-_id author'
+    );
+    if (blog.author.toString() === req.user.id) {
+      // Delete the comment
+      await comment.deleteOne();
+      return res.status(200).json({ message: 'Comment deleted successfully' });
+    }
+    if (comment.author.toString() === req.user.id) {
+      await comment.deleteOne();
+      return res.status(200).json({ message: 'Comment deleted successfully' });
+    }
+    res.status(403).json({ message: 'Not authorized to delete this comment' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
