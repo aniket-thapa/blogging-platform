@@ -158,7 +158,7 @@
         opacity: 1;
       }
 
-      .copy-btn .tooltip {
+      .copy-btn .tooltip-code {
         visibility: hidden;
         background-color: #3e3e3e9e;
         color: #ffffff;
@@ -174,7 +174,7 @@
         font-size: 0.7rem;
       }
 
-      .copy-btn:hover .tooltip {
+      .copy-btn:hover .tooltip-code {
         visibility: visible;
         opacity: 1;
       }
@@ -297,7 +297,7 @@
                 </button>
                 <!-- Tooltip -->
                 <div
-                  class="absolute z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
+                  class="absolute font-medium z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
                 >
                   Unlike
                 </div>
@@ -307,7 +307,7 @@
                 </button>
                 <!-- Tooltip -->
                 <div
-                  class="absolute z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
+                  class="absolute font-medium z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
                 >
                   Like
                 </div>
@@ -324,7 +324,7 @@
 
                   <!-- Tooltip -->
                   <div
-                    class="absolute z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
+                    class="absolute font-medium z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
                   >
                     Comments
                   </div>
@@ -333,18 +333,16 @@
             </div>
             <div class="font-normal text-sm">
               <div
-                onclick="navigator.clipboard.writeText(window.location.origin + '/blogs/<%= blog._id %>'); showNotification('Link Copied to Clipboard!', 2500); this.querySelector('.tooltip').classList.add('hidden');"
+                onclick="navigator.clipboard.writeText(window.location.origin + '/blogs/<%= blog._id %>'); showNotification('Link Copied to Clipboard!', 2500);"
                 class="group relative flex gap-2 content-center cursor-pointer border border-gray-300 dark:border-gray-700 rounded-2xl px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800"
-                onmouseover="this.querySelector('.tooltip').classList.remove('hidden')"
-                onmouseout="this.querySelector('.tooltip').classList.add('hidden')"
               >
                 <span><i class="fa-solid fa-link text-gray-500"></i></span>
                 <span>Share</span>
                 <!-- Tooltip -->
                 <div
-                  class="absolute z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
+                  class="absolute font-medium z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
                 >
-                  Copy Code
+                  Copy Link
                 </div>
               </div>
             </div>
@@ -374,7 +372,7 @@
               </button>
               <!-- Tooltip -->
               <div
-                class="absolute z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
+                class="absolute font-medium z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
               >
                 Unlike
               </div>
@@ -384,7 +382,7 @@
               </button>
               <!-- Tooltip -->
               <div
-                class="absolute z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
+                class="absolute font-medium z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
               >
                 Like
               </div>
@@ -399,7 +397,7 @@
                 ><span><%= blog.comments.length %></span>
                 <!-- Tooltip -->
                 <div
-                  class="absolute z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
+                  class="absolute font-medium z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
                 >
                   Comments
                 </div>
@@ -419,7 +417,7 @@
               <div
                 class="absolute z-50 invisible group-hover:visible bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 text-sm px-2 py-1 rounded-md whitespace-nowrap"
               >
-                Copy Code
+                Copy Link
               </div>
             </div>
           </div>
@@ -626,35 +624,37 @@
 
       // Add a new Comment
       const commentForm = document.getElementById('commentForm');
-      commentForm.addEventListener('submit', async function (event) {
-        event.preventDefault();
+      if (commentForm) {
+        commentForm.addEventListener('submit', async function (event) {
+          event.preventDefault();
 
-        const commentData = new URLSearchParams(new FormData(commentForm));
-        console.log(commentData);
-        try {
-          const response = await fetch(commentForm.action, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: commentData.toString(),
-          });
+          const commentData = new URLSearchParams(new FormData(commentForm));
+          console.log(commentData);
+          try {
+            const response = await fetch(commentForm.action, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: commentData.toString(),
+            });
 
-          const result = await response.json();
+            const result = await response.json();
 
-          if (response.ok) {
-            commentForm.reset();
-            showNotification(result.message, 2500);
-            setTimeout(() => {
-              location.reload();
-            }, 2500);
-          } else {
-            throw new Error(result.message || 'Login failed');
+            if (response.ok) {
+              commentForm.reset();
+              showNotification(result.message, 2500);
+              setTimeout(() => {
+                location.reload();
+              }, 2500);
+            } else {
+              throw new Error(result.message || 'Login failed');
+            }
+          } catch (error) {
+            alert(error.message);
           }
-        } catch (error) {
-          alert(error.message);
-        }
-      });
+        });
+      }
 
       // Delete a Comment
       function deleteComment(commentId) {
@@ -732,8 +732,7 @@
         codeBlocks.forEach((block) => {
           const copyButton = document.createElement('button'); // Create copy button
           copyButton.className = 'copy-btn';
-          copyButton.innerHTML =
-            '<i class="fa-regular fa-clone"></i><span class="tooltip">Copy</span>';
+          copyButton.innerHTML = `<i class="fa-regular fa-clone"></i><span class="tooltip-code">Copy</span>`;
 
           // Append the button to the pre element
           const pre = block.parentElement;
@@ -744,7 +743,7 @@
           copyButton.addEventListener('click', () => {
             const text = block.innerText;
             navigator.clipboard.writeText(text).then(() => {
-              copyButton.querySelector('.tooltip').textContent = 'Copied!';
+              copyButton.querySelector('.tooltip-code').textContent = 'Copied!';
 
               const copyIcon = copyButton.querySelector('i');
 
@@ -752,7 +751,7 @@
               copyIcon.classList.add('fa-solid', 'fa-check', 'text-green-500');
 
               setTimeout(() => {
-                copyButton.querySelector('.tooltip').textContent = 'Copy';
+                copyButton.querySelector('.tooltip-code').textContent = 'Copy';
                 copyIcon.classList.add('fa-regular', 'fa-clone');
                 copyIcon.classList.remove(
                   'fa-solid',
