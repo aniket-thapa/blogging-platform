@@ -88,7 +88,7 @@
             </div>
           </div>
 
-          <div>
+          <div id="enter-otp-div" class="hidden">
             <label for="password" class="block text-gray-700 dark:text-gray-300"
               >Enter OTP</label
             >
@@ -235,6 +235,7 @@
 
             // Disable email field while timer is active
             document.getElementById('useremail').readOnly = true;
+            document.getElementById('enter-otp-div').classList.remove('hidden');
           }
         });
 
