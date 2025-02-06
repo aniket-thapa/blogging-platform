@@ -101,7 +101,8 @@
             <div class="flex items-center space-x-1">
               <i class="fa-regular fa-calendar"></i>
               <span class=""
-                ><%= new Date(blog.createdAt).toDateString() %></span
+                ><%= new Intl.DateTimeFormat('en-US', { year: 'numeric', month:
+                'long', day: 'numeric' }).format(blog.createdAt) %></span
               >
             </div>
           </div>

@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/public', express.static(path.join(__dirname, 'public'))); // Setup static files
 app.set('view engine', 'ejs');
+app.set('view cache', true);
 
 // Session Setup
 app.use(

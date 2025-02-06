@@ -155,22 +155,26 @@ router.delete('/:id', isAuthenticated, async (req, res) => {
   }
 });
 
-// Like a Blog
+// Like or Unlike a Blog
 router.post('/:id/like', isAuthenticated, async (req, res) => {
   try {
-    const blog = await Blog.findById(req.params.id);
+    let blog = await Blog.findById(req.params.id).select('-_id likes');
 
     const userId = req.user._id;
 
     if (blog.likes.includes(userId)) {
-      blog.likes.pull(userId);
-      await blog.save();
+      await Blog.findByIdAndUpdate(req.params.id, {
+        $pull: { likes: userId },
+      });
+      blog = await Blog.findById(req.params.id).select('-_id likes');
       return res
         .status(200)
         .json({ likes: blog.likes.length, message: 'Unliked' });
     } else {
-      blog.likes.push(userId);
-      await blog.save();
+      await Blog.findByIdAndUpdate(req.params.id, {
+        $push: { likes: userId },
+      });
+      blog = await Blog.findById(req.params.id).select('-_id likes');
       return res
         .status(200)
         .json({ likes: blog.likes.length, message: 'Liked' });
@@ -216,12 +220,17 @@ router.delete('/comments/:id', isAuthenticated, async (req, res) => {
       '-_id author'
     );
     if (blog.author.toString() === req.user.id) {
-      // Delete the comment
       await comment.deleteOne();
+      await Blog.findByIdAndUpdate(comment.blog.toString(), {
+        $pull: { comments: comment._id },
+      });
       return res.status(200).json({ message: 'Comment deleted successfully' });
     }
     if (comment.author.toString() === req.user.id) {
       await comment.deleteOne();
+      await Blog.findByIdAndUpdate(comment.blog.toString(), {
+        $pull: { comments: comment._id },
+      });
       return res.status(200).json({ message: 'Comment deleted successfully' });
     }
     res.status(403).json({ message: 'Not authorized to delete this comment' });
