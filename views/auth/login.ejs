@@ -118,7 +118,10 @@
         event.preventDefault();
 
         loader.classList.remove('hidden');
-        button.disabled = true;
+        const elements = form.querySelectorAll('input, button');
+        elements.forEach((element) => {
+          element.disabled = true;
+        });
 
         const formData = new URLSearchParams(new FormData(form));
 
@@ -135,7 +138,6 @@
 
           if (response.ok) {
             window.location.href = '/user/profile';
-            alert(result.message);
           } else {
             throw new Error(result.message || 'Login failed');
           }
