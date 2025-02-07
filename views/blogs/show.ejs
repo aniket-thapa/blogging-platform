@@ -247,7 +247,9 @@
               <span class="font-medium text-gray-800 dark:text-gray-300"
                 ><%= blog.author.username %></span
               >
-              <span class="px-1">•</span> <%= blog.createdAt.toDateString() %>
+              <span class="px-1">•</span> <%= new Intl.DateTimeFormat('en-US', {
+              year: 'numeric', month: 'long', day: 'numeric'
+              }).format(blog.createdAt) %>
               <span class="px-1">•</span>
               <span id="reading-time"></span>
             </p>

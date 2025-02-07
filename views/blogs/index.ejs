@@ -62,7 +62,7 @@
             <div
               class="prose font-normal dark:prose-invert mt-3 group-hover:text-blue-500 group-focus:text-blue-500 transition-colors"
             >
-              <%= blog.content.replace(/<[^>]*>?/gm, '').substring(0, 100) %>...
+              <%= blog.content.replace(/<[^>]*>?/gm, '').substring(0, 200) %>...
             </div>
           </a>
 
@@ -99,7 +99,7 @@
               <span class=""><%= blog.author.username %></span>
             </div>
             <div class="flex items-center space-x-1">
-              <i class="fa-regular fa-calendar"></i>
+              <i class="fa-regular fa-calendar-days"></i>
               <span class=""
                 ><%= new Intl.DateTimeFormat('en-US', { year: 'numeric', month:
                 'long', day: 'numeric' }).format(blog.createdAt) %></span
