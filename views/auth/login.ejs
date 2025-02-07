@@ -118,10 +118,6 @@
         event.preventDefault();
 
         loader.classList.remove('hidden');
-        const elements = form.querySelectorAll('input, button');
-        elements.forEach((element) => {
-          element.disabled = true;
-        });
 
         const formData = new URLSearchParams(new FormData(form));
 
