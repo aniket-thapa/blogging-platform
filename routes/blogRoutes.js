@@ -158,28 +158,30 @@ router.delete('/:id', isAuthenticated, async (req, res) => {
 // Like or Unlike a Blog
 router.post('/:id/like', isAuthenticated, async (req, res) => {
   try {
-    let blog = await Blog.findById(req.params.id).select('-_id likes');
-
     const userId = req.user._id;
+    const blog = await Blog.findById(req.params.id).select('likes');
+
+    if (!blog) {
+      return res.status(404).json({ error: 'Blog not found' });
+    }
 
     if (blog.likes.includes(userId)) {
-      await Blog.findByIdAndUpdate(req.params.id, {
-        $pull: { likes: userId },
-      });
-      blog = await Blog.findById(req.params.id).select('-_id likes');
+      // Unlike (Remove User ID from Likes)
+      await Blog.findByIdAndUpdate(req.params.id, { $pull: { likes: userId } });
       return res
         .status(200)
-        .json({ likes: blog.likes.length, message: 'Unliked' });
+        .json({ likes: blog.likes.length - 1, message: 'Unliked' });
     } else {
+      // Like (Add User ID to Likes using $addToSet)
       await Blog.findByIdAndUpdate(req.params.id, {
-        $push: { likes: userId },
+        $addToSet: { likes: userId },
       });
-      blog = await Blog.findById(req.params.id).select('-_id likes');
       return res
         .status(200)
-        .json({ likes: blog.likes.length, message: 'Liked' });
+        .json({ likes: blog.likes.length + 1, message: 'Liked' });
     }
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Server error' });
   }
 });

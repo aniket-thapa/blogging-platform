@@ -715,9 +715,12 @@
               const likeIcon = btn.querySelector('i');
               likeIcon.classList.toggle('text-red-500');
               likeIcon.classList.toggle('heart-beat');
-              if (likeIcon.classList.contains('text-red-500')) {
-                document.getElementById('like-tooltip').innerText = 'Unlike';
-              } else document.getElementById('like-tooltip').innerText = 'Like';
+              let likeTooltips = document.querySelectorAll('#like-tooltip');
+              likeTooltips.forEach((tooltip) => {
+                if (likeIcon.classList.contains('text-red-500')) {
+                  tooltip.innerText = 'Unlike';
+                } else tooltip.innerText = 'Like';
+              });
             });
 
             try {
