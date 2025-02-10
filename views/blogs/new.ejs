@@ -35,14 +35,19 @@
           <label
             for="title"
             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >Title</label
+            >Title
+            <span id="titleCharCount" class="text-gray-500 text-xs"
+              >(0/100)</span
+            ></label
           >
           <input
             type="text"
             id="title"
             name="title"
             required
+            maxlength="100"
             class="w-full border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            oninput="updateCharCount()"
           />
         </div>
 
@@ -52,13 +57,16 @@
             for="tags"
             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
           >
-            Tags (comma-separated)
+            Tags
+            <span id="charCount" class="text-gray-500 text-xs"
+              >(comma-separated)</span
+            >
           </label>
           <input
             type="text"
             id="tags"
             name="tags"
-            placeholder="e.g., Tag 1, Tag 2, Tag 3"
+            placeholder="Tag 1, Tag 2, Tag 3"
             class="w-full border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </div>
@@ -120,6 +128,29 @@
           let formattedInput = inputValue.replace(/\s{2,}/g, ' ');
           event.target.value = formattedInput;
         });
+
+      // Check Title Character Size
+      function updateCharCount() {
+        const titleInput = document.getElementById('title');
+        const titleCharCount = document.getElementById('titleCharCount');
+        const maxLength = 100;
+
+        // Ensure max length is not exceeded
+        if (titleInput.value.length > maxLength) {
+          titleInput.value = titleInput.value.substring(0, maxLength);
+        }
+
+        // Update character count text
+        const currentLength = titleInput.value.length;
+        titleCharCount.textContent = `(${currentLength}/${maxLength})`;
+
+        // Change color to red when limit is reached
+        if (currentLength >= maxLength) {
+          titleCharCount.classList.add('text-red-500');
+        } else {
+          titleCharCount.classList.remove('text-red-500');
+        }
+      }
     </script>
   </body>
 </html>

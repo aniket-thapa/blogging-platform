@@ -15,10 +15,9 @@ router.get('/profile', isAuthenticated, async (req, res) => {
 // User Profile Route
 router.get('/created', isAuthenticated, async (req, res) => {
   try {
-    const userBlogs = await Blog.find({ author: req.user._id }).populate(
-      'author',
-      'username'
-    );
+    const userBlogs = await Blog.find({ author: req.user._id })
+      .populate('author', 'username')
+      .sort({ createdAt: -1 });
     res.render('users/createdBlogs', { user: req.user, blogs: userBlogs });
   } catch (err) {
     res.redirect('/blogs');
