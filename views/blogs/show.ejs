@@ -12,10 +12,11 @@
     <script async defer src="/public/js/scrollToTop.js"></script>
     <style>
       .custom-scrollbar::-webkit-scrollbar {
-        width: 12px;
+        width: 10px;
       }
 
       .custom-scrollbar::-webkit-scrollbar-thumb {
+        border-radius: 25px;
         background-color: #3b83f670;
         transition: background-color 0.3s ease;
       }
@@ -222,7 +223,7 @@
     </style>
   </head>
   <body
-    class="custom-scrollbar min-h-screen dark:bg-gray-900 dark:text-gray-100"
+    class="custom-scrollbar flex flex-col min-h-screen dark:bg-gray-900 dark:text-gray-100"
   >
     <%- include('../partials/navbar') %>
 

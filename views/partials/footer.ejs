@@ -1,27 +1,61 @@
-<button
-  id="scroll-to-top"
-  class="hidden bg-blue-500 fixed bottom-10 right-10 cursor-pointer z-100 rounded-full translate-x-1/2 w-8 h-8"
->
-  <i class="fa-solid text-white fa-arrow-up text-center text-xl"></i>
-</button>
 <!-- Footer -->
-<footer class="w-full bg-gray-200 dark:bg-gray-800 py-6 mt-4">
-  <div class="text-center mx-auto text-gray-600 dark:text-gray-300">
+<footer
+  class="w-full mt-auto bg-gray-100 dark:bg-gray-900 py-6 border-t border-gray-300 dark:border-gray-700"
+>
+  <div
+    class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-gray-700 dark:text-gray-300"
+  >
     <!-- Dark Mode Toggle -->
     <button
       onclick="toggleDarkMode()"
-      class="mt-4 mb-4 px-2 py-1 bg-gray-800 dark:bg-gray-200 text-white dark:text-black rounded-sm"
+      class="sm:hidden mt-4 mb-4 px-2 py-1 bg-gray-800 dark:bg-gray-200 text-white dark:text-black rounded-sm"
     >
       <i class="fa-regular fa-sun"></i>
     </button>
 
-    <p>
-      &copy; 2024 Let's Blog. All rights reserved.
+    <!-- Branding -->
+    <p class="text-sm">
+      &copy; 2024 <span class="font-semibold">Let's Blog</span>. All rights
+      reserved.
+    </p>
+
+    <!-- Navigation Links -->
+    <div class="flex space-x-4 mt-3 md:mt-0">
+      <a href="#" class="text-sm hover:text-blue-500 transition-colors"
+        >Privacy Policy</a
+      >
+      <a href="#" class="text-sm hover:text-blue-500 transition-colors"
+        >Terms of Service</a
+      >
       <a
-        class="hover:text-blue-500 transition-colors"
         href="mailto:aniketthapa.dev@gmail.com"
+        class="text-sm hover:text-blue-500 transition-colors"
         >Contact Us</a
       >
-    </p>
+    </div>
   </div>
+  <!-- Scroll To Top -->
+  <button
+    id="scroll-to-top"
+    class="hidden bg-blue-500 fixed bottom-20 right-10 cursor-pointer z-100 rounded-full translate-x-1/2 w-8 h-8"
+  >
+    <i class="fa-solid text-white fa-arrow-up text-center text-xl"></i>
+  </button>
 </footer>
+<script>
+  // Dark mode toggle button
+  function toggleDarkMode() {
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    }
+  }
+
+  // Apply the theme on page load
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+  }
+</script>
