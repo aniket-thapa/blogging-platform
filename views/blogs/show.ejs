@@ -587,7 +587,10 @@
 
       // Show the button when the user scrolls to the bottom
       window.addEventListener('scroll', () => {
-        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        if (
+          document.body.scrollTop > 200 ||
+          document.documentElement.scrollTop > 200
+        ) {
           scrollToTopButton.classList.remove('hidden');
         } else {
           scrollToTopButton.classList.add('hidden');
