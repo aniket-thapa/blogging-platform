@@ -5,14 +5,6 @@
   <div
     class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-gray-700 dark:text-gray-300"
   >
-    <!-- Dark Mode Toggle -->
-    <button
-      onclick="toggleDarkMode()"
-      class="sm:hidden mt-4 mb-4 px-2 py-1 bg-gray-800 dark:bg-gray-200 text-white dark:text-black rounded-sm"
-    >
-      <i class="fa-regular fa-sun"></i>
-    </button>
-
     <!-- Branding -->
     <p class="text-sm">
       &copy; 2024 <span class="font-semibold">Let's Blog</span>. All rights
@@ -42,20 +34,3 @@
     <i class="fa-solid text-white fa-arrow-up text-center text-xl"></i>
   </button>
 </footer>
-<script>
-  // Dark mode toggle button
-  function toggleDarkMode() {
-    if (localStorage.getItem('theme') === 'dark') {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    } else {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    }
-  }
-
-  // Apply the theme on page load
-  if (localStorage.getItem('theme') === 'dark') {
-    document.documentElement.classList.add('dark');
-  }
-</script>
