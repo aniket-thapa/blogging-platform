@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register</title>
     <link rel="stylesheet" href="/public/css/tailwind.css" />
+    <script src="/public/js/showNotification.js"></script>
     <style>
       @layer utilities {
         .dark input:-webkit-autofill {
@@ -187,7 +188,7 @@
           loader.classList.add('hidden');
           buttonText.classList.remove('hidden');
           button.disabled = false;
-          alert(error.message);
+          showNotification(error.message, 4000);
         }
       });
 
@@ -203,8 +204,7 @@
             body: JSON.stringify({ useremail }),
           });
           const result = await response.json();
-          alert(result.message);
-
+          showNotification(result.message, 4000);
           if (response.status === 200) {
             // Disable the button and start the timer
             document.getElementById('send-otp-btn').disabled = true;
