@@ -258,18 +258,37 @@
           <% } %>
 
           <!-- Author and Date -->
-          <div class="text-md text-gray-600 dark:text-gray-400 mb-6">
-            <p>
-              <i class="fa-regular fa-circle-user font-bold"></i>
-              <span class="font-medium text-gray-800 dark:text-gray-300"
-                ><%= blog.author.username %></span
-              >
-              <span class="px-1">•</span> <%= new Intl.DateTimeFormat('en-US', {
-              year: 'numeric', month: 'long', day: 'numeric'
-              }).format(blog.createdAt) %>
-              <span class="px-1">•</span>
+          <div
+            class="flex justify-between items-center text-md text-gray-800 dark:text-gray-300 mb-6"
+          >
+            <div class="flex gap-2 md:gap-4 md:flex-row flex-col">
+              <div>
+                <span class="font-medium">
+                  <i class="fa-regular fa-circle-user font-bold"></i>
+                  <%= blog.author.username %>
+                </span>
+                <span>
+                  on <%= new Intl.DateTimeFormat('en-US', { year: 'numeric',
+                  month: 'short' , day: 'numeric' }).format(blog.createdAt)
+                  %></span
+                >
+              </div>
               <span id="reading-time"></span>
-            </p>
+            </div>
+            <% if (user) { %>
+            <!-- Bookmark Button -->
+            <button
+              id="bookmark-button"
+              class="<%= user && user.savedBlogs.includes(blog._id.toString()) ? 'bg-blue-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-200' %> px-3 py-2 rounded-lg transition"
+              data-blog-id="<%= blog._id %>"
+              data-saved="<%= user && user.savedBlogs.includes(blog._id.toString()) %>"
+              onclick="toggleSaveBlog(this)"
+            >
+              <i
+                class="<%= user && user.savedBlogs.includes(blog._id.toString()) ? 'fa-solid' : 'fa-regular' %> fa-bookmark"
+              ></i>
+            </button>
+            <% } %>
           </div>
 
           <!-- Tags SHow Section -->
@@ -285,22 +304,6 @@
               <% }) %>
             </div>
           </div>
-
-          <% if (user) { %>
-          <!-- Bookmark Button -->
-          <div class="my-3 flex items-center space-x-4">
-            <button
-              id="bookmark-button"
-              class="<%= user && user.savedBlogs.includes(blog._id.toString()) ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-200' %> px-3 py-2 rounded-lg transition"
-              data-blog-id="<%= blog._id %>"
-              data-saved="<%= user && user.savedBlogs.includes(blog._id.toString()) %>"
-              onclick="toggleSaveBlog(this)"
-            >
-              <i class="fa-solid fa-bookmark"></i>
-              <!-- <i class="fa-regular fa-bookmark"></i> -->
-            </button>
-          </div>
-          <% } %>
 
           <!-- Like, Comment and Share Row -->
           <hr class="border-gray-200 dark:border-gray-800 my-1" />
@@ -529,7 +532,6 @@
         </div>
         <% } %>
 
-        <!-- Back to All Blogs -->
         <a
           href="/blogs"
           class="block mt-8 text-center text-blue-500 dark:text-blue-400 hover:underline"
@@ -598,7 +600,7 @@
         const readingTime = calculateReadingTime(blogContent);
         document.getElementById(
           'reading-time'
-        ).textContent = `${readingTime} min read`;
+        ).innerHTML = `<i class="fa-regular fa-clock"></i> ${readingTime} min read`;
       });
 
       // Delete a blog
@@ -608,7 +610,7 @@
         );
         if (confirmed) {
           fetch(`/blogs/${blogId}?_method=DELETE`, {
-            method: 'POST', // Use POST to simulate DELETE with _method
+            method: 'POST',
           })
             .then((response) => {
               if (response.ok) {
@@ -824,10 +826,18 @@
             button.setAttribute('data-saved', !isSaved);
             button.classList.toggle('bg-blue-500');
             button.classList.toggle('text-white');
-            button.classList.toggle('bg-gray-200');
-            button.classList.toggle('dark:bg-gray-700');
+            button.classList.toggle('hover:bg-gray-200');
+            button.classList.toggle('dark:hover:bg-gray-700');
             button.classList.toggle('text-gray-900');
             button.classList.toggle('dark:text-gray-200');
+            let icon = button.querySelector('i');
+            if (isSaved) {
+              icon.classList.remove('fa-solid');
+              icon.classList.add('fa-regular');
+            } else {
+              icon.classList.remove('fa-regular');
+              icon.classList.add('fa-solid');
+            }
 
             // notification on save and unsave blog
             showNotification(
