@@ -235,19 +235,29 @@
 
           <!-- Author and Date -->
           <div
-            class="flex justify-between items-center text-md text-gray-800 dark:text-gray-300 mb-6"
+            class="text-sm md:text-base flex justify-between items-center text-md text-gray-800 dark:text-gray-300 mb-6"
           >
-            <div class="flex gap-2 md:gap-4 md:flex-row flex-col">
-              <div>
-                <span class="font-medium">
-                  <i class="fa-regular fa-circle-user font-bold"></i>
-                  <%= blog.author.username %>
-                </span>
-                <span>
-                  on <%= new Intl.DateTimeFormat('en-US', { year: 'numeric',
-                  month: 'short' , day: 'numeric' }).format(blog.createdAt)
-                  %></span
-                >
+            <div class="flex gap-2 sm:gap-5 sm:flex-row flex-col">
+              <div class="flex gap-2 sm:gap-3 sm:flex-row flex-col">
+                <div>
+                  <span class="font-medium">
+                    <i class="fa-regular fa-circle-user font-bold"></i>
+                    <%= blog.author.username %>
+                  </span>
+                  <span>
+                    on <%= new Intl.DateTimeFormat('en-US', { year: 'numeric',
+                    month: 'short' , day: 'numeric' }).format(blog.createdAt)
+                    %></span
+                  >
+                </div>
+                <span class="hidden md:block">|</span>
+                <div>
+                  <span
+                    >Updated on <%= new Intl.DateTimeFormat('en-US', { year:
+                    'numeric', month: 'short' , day: 'numeric'
+                    }).format(blog.updatedOn) %></span
+                  >
+                </div>
               </div>
               <span id="reading-time"></span>
             </div>
