@@ -210,8 +210,32 @@
       }
 
       // Ensure tags are stored before submitting the form
-      form.addEventListener('submit', function () {
+      form.addEventListener('submit', async function (event) {
+        event.preventDefault();
         updateHiddenInput();
+        tinymce.get('content').save();
+
+        const formData = new URLSearchParams(new FormData(form));
+        try {
+          const response = await fetch('/blogs/new', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formData.toString(),
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            window.location.href = `/blogs/${result.blogId}`;
+          } else {
+            throw new Error(result.error || 'Error occured');
+          }
+        } catch (err) {
+          alert(err);
+          console.error(err);
+        }
       });
     </script>
     <script async defer src="/public/js/scrollToTop.js"></script>

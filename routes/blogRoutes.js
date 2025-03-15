@@ -54,13 +54,13 @@ router.post('/new', isAuthenticated, async (req, res) => {
 
     let validTitle = title.trim().replace(/\s+/g, ' ');
 
-    if (validTitle == '' || content == '') {
-      if (validTitle == '')
-        return res.status(400).json({ message: 'Blog Title cannot be empty' });
-      else
+    if (validTitle == '' || content == '' || validTitle.length <= 8) {
+      if (validTitle == '' || validTitle.length <= 8)
         return res
           .status(400)
-          .json({ message: 'Blog Content cannot be empty' });
+          .json({ error: 'Blog Title cannot be less than 8 characters' });
+      else
+        return res.status(400).json({ error: 'Blog Content cannot be empty' });
     }
 
     const blog = new Blog({
@@ -69,11 +69,12 @@ router.post('/new', isAuthenticated, async (req, res) => {
       tags: tagArray,
       author: req.user._id,
     });
-    await blog.save();
-    res.redirect('/blogs');
+    let savedBlog = await blog.save();
+    console.log(savedBlog);
+
+    res.status(200).json({ message: 'Blog is saved', blogId: savedBlog._id });
   } catch (err) {
-    console.error(err);
-    res.redirect('/blogs/new');
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
