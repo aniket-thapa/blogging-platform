@@ -13,10 +13,11 @@
 
     <style>
       .custom-scrollbar::-webkit-scrollbar {
-        width: 12px;
+        width: 10px;
       }
 
       .custom-scrollbar::-webkit-scrollbar-thumb {
+        border-radius: 25px;
         background-color: #3b83f670;
         transition: background-color 0.3s ease;
       }
@@ -62,9 +63,9 @@
               <%= blog.title %>
             </h2>
             <div
-              class="prose font-normal dark:prose-invert mt-3 group-hover:text-blue-500 group-focus:text-blue-500 transition-colors"
+              class="prose font-normal dark:prose-invert mt-3 group-hover:text-blue-500 group-focus:text-blue-500 transition-colors line-clamp-3"
             >
-              <%= blog.content.replace(/<[^>]*>?/gm, '').substring(0, 200) %>...
+              <%- blog.content %>
             </div>
           </a>
 

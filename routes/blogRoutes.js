@@ -100,9 +100,11 @@ router.get('/:id', async (req, res) => {
 router.get('/tags/:tag', async (req, res) => {
   try {
     const tag = req.params.tag.toLowerCase();
-    const blogs = await Blog.find({ tags: tag });
+    const blogs = await Blog.find({ tags: tag })
+      .populate('author', 'username')
+      .sort({ createdAt: -1 });
     const user = req.user || null;
-    res.render('blogs/index', { blogs, user }); // Adjust view as necessary
+    res.render('blogs/index', { blogs, user });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');

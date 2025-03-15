@@ -46,7 +46,7 @@ passport.use(
         if (!user) {
           user = new User({
             googleId: profile.id,
-            username: profile.displayName,
+            username: profile.displayName.toLowerCase(),
             useremail: profile.emails[0].value,
           });
           await user.save();

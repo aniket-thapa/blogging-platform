@@ -42,9 +42,11 @@
       <!-- Profile Header -->
       <div class="mx-auto px-4 my-8">
         <div class="my-6">
-          <h1 class="text-4xl font-bold text-blue-600"><%= user.username %></h1>
+          <h1 class="font-semibold text-4xl text-blue-600 capitalize">
+            <%= user.username %>
+          </h1>
 
-          <p class="font-light">(<%= user.useremail %>)</p>
+          <p class="font-light italic">(<%= user.useremail %>)</p>
         </div>
 
         <div
