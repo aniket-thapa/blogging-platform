@@ -252,11 +252,7 @@ router.post('/reset-password', async (req, res) => {
       });
     }
 
-    // Hash new password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    // Update password in the database
-    user.password = hashedPassword;
+    user.password = newPassword;
     await user.save();
 
     // Delete OTP after successful password reset
