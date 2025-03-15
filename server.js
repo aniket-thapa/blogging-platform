@@ -20,13 +20,13 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
   })
 );
 
-const passportconfi = require('./config/passport'); // Passport config
-app.use(passportconfi.initialize());
-app.use(passportconfi.session());
+const passportconfig = require('./config/passport'); // Passport config
+app.use(passportconfig.initialize());
+app.use(passportconfig.session());
 
 // Add MethodOverride
 app.use(methodOverride('_method'));
