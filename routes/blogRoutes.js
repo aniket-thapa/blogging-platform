@@ -47,11 +47,8 @@ router.get('/saved', isAuthenticated, async (req, res) => {
 
 // Create New Blog
 router.post('/new', isAuthenticated, async (req, res) => {
-  console.log('11111111111234567');
-
   try {
     const { title, content, tags } = req.body;
-    console.log('hhhh12222');
 
     const tagArray = JSON.parse(tags);
 
@@ -75,6 +72,7 @@ router.post('/new', isAuthenticated, async (req, res) => {
     await blog.save();
     res.redirect('/blogs');
   } catch (err) {
+    console.error(err);
     res.redirect('/blogs/new');
   }
 });
