@@ -52,25 +52,31 @@
           />
         </div>
 
-        <!-- Tags Field -->
+        <!-- ///////////////////////////// -->
+        <!-- Tags Input Wrapper -->
         <div class="mb-4">
           <label
             for="tags"
             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
           >
-            Tags
-            <span id="charCount" class="text-gray-500 text-xs"
-              >(comma-separated)</span
-            >
+            Enter Tags
           </label>
-          <input
-            type="text"
-            id="tags"
-            name="tags"
-            placeholder="Tag 1, Tag 2, Tag 3"
-            class="w-full border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          />
+          <div
+            class="flex flex-wrap items-center gap-2 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg p-3 focus-within:ring-2 focus-within:ring-blue-500"
+          >
+            <div id="tags-container" class="flex flex-wrap gap-2"></div>
+            <input
+              type="text"
+              id="tag-input"
+              class="p-1 flex-1 placeholder-gray-400 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 outline-none"
+              placeholder="Type and press space..."
+            />
+          </div>
+
+          <!-- Hidden input to store the tags -->
+          <input type="hidden" name="tags" id="hidden-tags" />
         </div>
+        <!-- ///////////////////////////// -->
 
         <!-- Content Field -->
         <div class="mb-4">
@@ -124,13 +130,6 @@
           let formattedInput = inputValue.replace(/\s{2,}/g, ' ');
           event.target.value = formattedInput;
         });
-      document
-        .getElementById('tags')
-        .addEventListener('input', function (event) {
-          let inputValue = event.target.value;
-          let formattedInput = inputValue.replace(/\s{2,}/g, ' ');
-          event.target.value = formattedInput;
-        });
 
       // Check Title Character Size
       function updateCharCount() {
@@ -154,6 +153,67 @@
           titleCharCount.classList.remove('text-red-500');
         }
       }
+
+      // Adding Tags
+      const tagInput = document.getElementById('tag-input');
+      const tagsContainer = document.getElementById('tags-container');
+      const hiddenTagsInput = document.getElementById('hidden-tags');
+      const form = document.querySelector('form');
+
+      let tags = [];
+
+      tagInput.addEventListener('keydown', function (event) {
+        if (event.key === ' ' && this.value.trim() !== '') {
+          event.preventDefault();
+          addTag(this.value.trim());
+          this.value = '';
+        }
+      });
+
+      function addTag(tag) {
+        if (!tags.includes(tag)) {
+          tags.push(tag);
+          renderTags();
+          updateHiddenInput();
+        }
+      }
+
+      function removeTag(tag) {
+        tags = tags.filter((t) => t !== tag);
+        renderTags();
+        updateHiddenInput();
+      }
+
+      function renderTags() {
+        tagsContainer.innerHTML = '';
+        tags.forEach((tag) => {
+          const tagElement = document.createElement('div');
+          tagElement.className =
+            'flex items-center gap-1 bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-200 px-2 py-1 border border-blue-300 dark:border-blue-700 rounded-full text-md';
+
+          const hashSymbol = document.createElement('span');
+          hashSymbol.textContent = `#${tag}`;
+
+          const closeButton = document.createElement('button');
+          closeButton.className =
+            'mx-1 text-blue-700 dark:text-blue-200 hover:text-red-500 dark:hover:text-red-500 transition';
+          closeButton.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+          closeButton.onclick = () => removeTag(tag);
+
+          tagElement.appendChild(hashSymbol);
+          tagElement.appendChild(closeButton);
+          tagsContainer.appendChild(tagElement);
+        });
+      }
+
+      function updateHiddenInput() {
+        hiddenTagsInput.value = JSON.stringify(tags);
+      }
+
+      // Ensure tags are stored before submitting the form
+      form.addEventListener('submit', function () {
+        updateHiddenInput();
+      });
     </script>
   </body>
 </html>
