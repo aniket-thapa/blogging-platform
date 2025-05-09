@@ -4,6 +4,40 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= blog.title %></title>
+    <meta name="title" content="<%= blog.title %>" />
+    <meta name="description" content="<%= blog.content.slice(0, 160) %>" />
+    <meta name="author" content="<%= blog.author.username %>" />
+    <meta
+      name="keywords"
+      content="<%= blog.tags ? blog.tags.join(', ') : '' %>"
+    />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:url"
+      content="http://blogging-platform-y0pb.onrender.com/blog/<%= blog._id %>"
+    />
+    <meta property="og:title" content="<%= blog.title %>" />
+    <meta
+      property="og:description"
+      content="<%= blog.content.slice(0, 160) %>"
+    />
+    <meta property="og:image" content="<%= blog.coverImage ? blog.coverImage.url
+    : "" %>" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:url"
+      content="https://yourdomain.com/blog/<%= blog.slug %>"
+    />
+    <meta name="twitter:title" content="<%= blog.title %>" />
+    <meta
+      name="twitter:description"
+      content="<%= blog.content.slice(0, 160) %>"
+    />
+    <meta name="twitter:image" content="<%= blog.coverImage ?
+    blog.coverImage.url : "" %>" />
+
     <link rel="stylesheet" href="/public/css/tailwind.css" />
     <script
       src="https://kit.fontawesome.com/9ca9aa7819.js"
@@ -224,13 +258,27 @@
 
     <article>
       <div class="max-w-screen-md mx-auto px-4 py-8">
-        <!-- Blog Title -->
         <article>
+          <!-- Blog Title -->
           <h1
-            class="text-5xl font-extrabold text-gray-900 dark:text-gray-200 mb-4 tracking-tight"
+            class="text-5xl break-words font-extrabold text-gray-900 dark:text-gray-200 mb-4 tracking-tight"
           >
             <%= blog.title %>
           </h1>
+
+          <!-- Blog Image -->
+          <% if (blog.coverImage && blog.coverImage.url) { %>
+          <div
+            class="w-full mt-6 aspect-w-16 aspect-h-9 mb-8 rounded-xl overflow-hidden shadow-md border border-gray-200 dark:border-gray-700"
+          >
+            <img
+              src="<%= blog.coverImage.url %>"
+              alt="Blog Cover Image"
+              class="w-full h-full object-cover transition-transform duration-500 hover:scale-[1.02]"
+              loading="lazy"
+            />
+          </div>
+          <% } %>
 
           <!-- Edit and Delete Buttons -->
           <% if (user && blog.author._id.equals(user._id)) { %>

@@ -1,6 +1,7 @@
 const express = require('express');
 const { isAuthenticated } = require('../middleware/authMiddleware');
 const Blog = require('../models/Blog');
+const { upload } = require('../config/cloudinary');
 const Comment = require('../models/Comment');
 const BlogView = require('../models/BlogView');
 const User = require('../models/User');
@@ -46,37 +47,44 @@ router.get('/saved', isAuthenticated, async (req, res) => {
 });
 
 // Create New Blog
-router.post('/new', isAuthenticated, async (req, res) => {
-  try {
-    const { title, content, tags } = req.body;
-
-    const tagArray = JSON.parse(tags);
-
-    let validTitle = title.trim().replace(/\s+/g, ' ');
-
-    if (validTitle == '' || content == '' || validTitle.length <= 8) {
-      if (validTitle == '' || validTitle.length <= 8)
-        return res
-          .status(400)
-          .json({ error: 'Blog Title cannot be less than 8 characters' });
-      else
-        return res.status(400).json({ error: 'Blog Content cannot be empty' });
+router.post(
+  '/new',
+  isAuthenticated,
+  upload.single('coverImage'),
+  async (req, res) => {
+    try {
+      const { title, content, tags } = req.body;
+      const tagArray = JSON.parse(tags);
+      let validTitle = title.trim().replace(/\s+/g, ' ');
+      if (validTitle == '' || content == '' || validTitle.length <= 8) {
+        if (validTitle == '' || validTitle.length <= 8)
+          return res
+            .status(400)
+            .json({ error: 'Blog Title cannot be less than 8 characters' });
+        else
+          return res
+            .status(400)
+            .json({ error: 'Blog Content cannot be empty' });
+      }
+      const blog = new Blog({
+        title: validTitle,
+        content: content,
+        tags: tagArray,
+        author: req.user._id,
+        coverImage: {
+          url: req.file.path,
+          public_id: req.file.filename,
+        },
+      });
+      let savedBlog = await blog.save();
+      res.json({ success: true, blogId: savedBlog._id });
+    } catch (err) {
+      res
+        .status(500)
+        .json({ error: 'Failed to create blog (Internal Server Error)' });
     }
-
-    const blog = new Blog({
-      title: validTitle,
-      content: content,
-      tags: tagArray,
-      author: req.user._id,
-    });
-    let savedBlog = await blog.save();
-    console.log(savedBlog);
-
-    res.status(200).json({ message: 'Blog is saved', blogId: savedBlog._id });
-  } catch (err) {
-    res.status(500).json({ error: 'Internal Server Error' });
   }
-});
+);
 
 // Show Single Blog
 router.get('/:id', async (req, res) => {

@@ -27,6 +27,7 @@
       <form
         action="/blogs/new"
         method="POST"
+        enctype="multipart/form-data"
         onsubmit="tinymce.get('content').save();"
         class="w-full max-w-lg sm:max-w-xl lg:max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 sm:p-8"
       >
@@ -75,6 +76,38 @@
           <!-- Hidden input to store the tags -->
           <input type="hidden" name="tags" id="hidden-tags" />
         </div>
+
+        <!-- Cover Image Upload with 16:9 Preview -->
+        <div class="mb-6">
+          <label
+            for="coverImage"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >
+            Cover Image
+            <span class="text-xs text-gray-500"
+              >(Recommended: 16:9 aspect ratio)</span
+            >
+          </label>
+          <input
+            type="file"
+            id="coverImage"
+            name="coverImage"
+            accept="image/*"
+            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200"
+          />
+
+          <!-- Preview Container with Fixed Aspect Ratio -->
+          <div
+            class="relative w-full pt-[56.25%] mt-4 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700"
+          >
+            <img
+              id="previewImage"
+              class="absolute top-0 left-0 w-full h-full object-cover hidden rounded-lg transition"
+              alt="Image preview"
+            />
+          </div>
+        </div>
+
         <!-- ///////////////////////////// -->
 
         <!-- Content Field -->
@@ -120,6 +153,28 @@
           });
         },
       });
+
+      // Preview Image
+      document
+        .getElementById('coverImage')
+        .addEventListener('change', function (e) {
+          const fileInput = e.target;
+          const file = fileInput.files[0];
+          const previewImg = document.getElementById('previewImage');
+
+          if (file && file.type.startsWith('image/')) {
+            const url = URL.createObjectURL(file);
+            previewImg.src = url;
+            previewImg.classList.remove('hidden');
+          } else {
+            previewImg.src = '';
+            previewImg.classList.add('hidden');
+            fileInput.value = '';
+            alert(
+              'Please upload a valid image file (e.g., .jpg, .png, .webp).'
+            );
+          }
+        });
 
       // Validations in Inputs:
       document
@@ -209,20 +264,16 @@
         hiddenTagsInput.value = JSON.stringify(tags);
       }
 
-      // Ensure tags are stored before submitting the form
+      // Form Submission
       form.addEventListener('submit', async function (event) {
         event.preventDefault();
         updateHiddenInput();
         tinymce.get('content').save();
-
-        const formData = new URLSearchParams(new FormData(form));
+        const formData = new FormData(form);
         try {
           const response = await fetch('/blogs/new', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: formData.toString(),
+            body: formData,
           });
 
           const result = await response.json();
@@ -230,10 +281,10 @@
           if (response.ok) {
             window.location.href = `/blogs/${result.blogId}`;
           } else {
-            throw new Error(result.error || 'Error occured');
+            throw new Error(result.error || 'An error occurred');
           }
         } catch (err) {
-          alert(err);
+          alert(err.message);
           console.error(err);
         }
       });
