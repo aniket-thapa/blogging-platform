@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
   <head>
+    <% function stripHTML(html) { return html.replace(/<[^>]*>/g, ''); } const
+    cleanDescription = stripHTML(blog.content).replace(/\s+/g,
+    '').trim().slice(0, 160); %>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= blog.title %></title>
     <meta name="title" content="<%= blog.title %>" />
-    <meta name="description" content="<%= blog.content.slice(0, 160) %>" />
+    <meta name="description" content="<%= cleanDescription  %>" />
     <meta name="author" content="<%= blog.author.username %>" />
     <meta
       name="keywords"
@@ -17,10 +21,7 @@
       content="http://blogging-platform-y0pb.onrender.com/blog/<%= blog._id %>"
     />
     <meta property="og:title" content="<%= blog.title %>" />
-    <meta
-      property="og:description"
-      content="<%= blog.content.slice(0, 160) %>"
-    />
+    <meta property="og:description" content="<%= cleanDescription %>" />
     <meta property="og:image" content="<%= blog.coverImage ? blog.coverImage.url
     : "" %>" />
 
@@ -31,10 +32,7 @@
       content="https://yourdomain.com/blog/<%= blog.slug %>"
     />
     <meta name="twitter:title" content="<%= blog.title %>" />
-    <meta
-      name="twitter:description"
-      content="<%= blog.content.slice(0, 160) %>"
-    />
+    <meta name="twitter:description" content="<%= cleanDescriptions %>" />
     <meta name="twitter:image" content="<%= blog.coverImage ?
     blog.coverImage.url : "" %>" />
 
