@@ -259,9 +259,9 @@ router.post('/:id/save', async (req, res) => {
     if (!user.savedBlogs.includes(blogId)) {
       user.savedBlogs.push(blogId);
       await user.save();
-      res.json({ success: true, message: 'Blog saved successfully!' });
+      res.json({ success: true });
     } else {
-      res.json({ success: false, message: 'Blog already saved.' });
+      res.json({ success: false });
     }
   } catch (error) {
     res.status(500).json({ success: false, message: 'An error occurred.' });
@@ -276,7 +276,7 @@ router.post('/:id/unsave', async (req, res) => {
 
     user.savedBlogs = user.savedBlogs.filter((id) => id.toString() !== blogId);
     await user.save();
-    res.json({ success: true, message: 'Blog removed from saved!' });
+    res.json({ success: true });
   } catch (error) {
     res.status(500).json({ success: false, message: 'An error occurred.' });
   }

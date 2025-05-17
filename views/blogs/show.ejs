@@ -135,7 +135,7 @@
             <% } %>
           </div>
 
-          <!-- Tags SHow Section -->
+          <!-- Tags Show Section -->
           <div class="my-4">
             <div class="flex flex-wrap gap-2">
               <% blog.tags.forEach(tag => { %>
@@ -219,7 +219,6 @@
           <hr class="border-gray-200 dark:border-gray-800 my-1 mb-6" />
 
           <!-- Blog Content -->
-
           <div
             id="blog-content"
             class="blog-content text-gray-900 dark:text-gray-300 text-lg space-y-6"
@@ -293,7 +292,6 @@
         </div>
         <hr class="border-gray-200 dark:border-gray-800 mt-1 mb-4" />
 
-        <!-- Comments Section -->
         <h3
           id="comments"
           class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4"
@@ -369,7 +367,6 @@
         </div>
         <% } %>
 
-        <!-- Newsletter Section -->
         <div
           class="mt-16 mb-8 border-t border-gray-200 dark:border-gray-700 pt-8"
         >
@@ -521,7 +518,6 @@
             const likesCount = group.querySelector('.likes-count');
             const tooltip = group.querySelector('#like-tooltip');
 
-            // Toggle UI instantly
             const liked = likeIcon.classList.contains('text-red-500');
             if (!liked) {
               likeIcon.classList.add('fa-solid', 'text-red-500', 'heart-beat');
@@ -582,16 +578,14 @@
         const codeBlocks = document.querySelectorAll('#blog-content pre code');
 
         codeBlocks.forEach((block) => {
-          const copyButton = document.createElement('button'); // Create copy button
+          const copyButton = document.createElement('button');
           copyButton.className = 'copy-btn';
           copyButton.innerHTML = `<i class="fa-regular fa-clone"></i><span class="tooltip-code">Copy</span>`;
 
-          // Append the button to the pre element
           const pre = block.parentElement;
           pre.style.position = 'relative';
           pre.appendChild(copyButton);
 
-          // Add copy functionality
           copyButton.addEventListener('click', () => {
             const text = block.innerText;
             navigator.clipboard.writeText(text).then(() => {
@@ -663,7 +657,6 @@
           const result = await response.json();
 
           if (result.success) {
-            // Toggle button state
             button.setAttribute('data-saved', !isSaved);
             button.classList.toggle('bg-blue-500');
             button.classList.toggle('text-white');
