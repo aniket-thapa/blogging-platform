@@ -42,6 +42,190 @@
       crossorigin="anonymous"
     ></script>
     <script src="/public/js/showNotification.js"></script>
+    <style>
+      /* Custom Styling for Blog Content */
+      .blog-content {
+        margin-bottom: 28px;
+      }
+      .blog-content p {
+        margin: 28px 0;
+        line-height: 1.75;
+      }
+      .blog-content h1,
+      .blog-content h2,
+      .blog-content h3,
+      .blog-content h4 {
+        margin-top: 32px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+      .blog-content h1 {
+        font-size: 2.5rem;
+        margin-top: 40px;
+        font-weight: 800;
+      }
+      .blog-content h2 {
+        font-size: 1.8rem;
+        margin-top: 40px;
+      }
+      .blog-content h3 {
+        font-size: 1.5rem;
+      }
+      .blog-content blockquote {
+        border-left: 4px solid #4a90e2;
+        padding-left: 16px;
+        margin: 16px 0;
+        font-style: italic;
+        color: #4a4a4a;
+      }
+      .blog-content ul {
+        padding-left: 1.5rem;
+        list-style-type: disc;
+      }
+      .blog-content ol {
+        padding-left: 1.5rem;
+        list-style-type: decimal;
+      }
+      .blog-content a {
+        color: #1e40af;
+        text-decoration: underline;
+      }
+      .blog-content a:hover {
+        text-decoration: none;
+        color: #2563eb;
+      }
+      /* Dark mode */
+      :root {
+        --code-bg: #f3f4f6;
+        --code-text: #1a202c;
+        --hr-border-color: rgb(209 213 219 / var(--tw-border-opacity, 1));
+      }
+      .dark {
+        --code-bg: #2d3748;
+        --code-text: #e2e8f0;
+        --hr-border-color: rgb(55 65 81 / var(--tw-border-opacity, 1));
+      }
+      .blog-content hr {
+        border-color: var(--hr-border-color);
+      }
+      .blog-content code {
+        background-color: var(--code-bg);
+        color: var(--code-text);
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+
+      .blog-content pre code {
+        display: block;
+        overflow-x: auto;
+        padding-bottom: 12px;
+      }
+
+      .blog-content pre code::-webkit-scrollbar {
+        height: 7px;
+      }
+
+      .blog-content pre code::-webkit-scrollbar-thumb {
+        background: #a3a3a3;
+        border-radius: 8px;
+      }
+      .blog-content pre code::-webkit-scrollbar-thumb:hover {
+        cursor: pointer;
+        background: #8d8d8d;
+      }
+
+      .blog-content pre {
+        background-color: var(--code-bg);
+        color: var(--code-text);
+        padding: 16px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 1rem;
+        line-height: 1.6;
+        border: 1px solid rgba(128, 128, 128, 0.4);
+      }
+
+      /* Style the copy code button */
+
+      .copy-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: transparent;
+        border: none;
+        color: var(--code-text);
+        cursor: pointer;
+        font-size: 0.85rem;
+        padding: 2px;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+      }
+
+      .copy-btn:hover {
+        opacity: 1;
+      }
+
+      .copy-btn .tooltip-code {
+        visibility: hidden;
+        background-color: #3e3e3e9e;
+        color: #ffffff;
+        text-align: center;
+        border-radius: 4px;
+        padding: 4px 8px;
+        position: absolute;
+        z-index: 1;
+        top: -4px;
+        right: 22px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 0.7rem;
+      }
+
+      .copy-btn:hover .tooltip-code {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      /* Notification Bar */
+      @keyframes slide-in {
+        from {
+          transform: translateY(10px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .animate-slide-in {
+        animation: slide-in 0.3s ease-out forwards;
+      }
+
+      @keyframes progress {
+        from {
+          width: 100%;
+        }
+        to {
+          width: 0%;
+        }
+      }
+      @keyframes heartbeat {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.3);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .heart-beat {
+        animation: heartbeat 0.4s ease-in-out;
+      }
+    </style>
   </head>
   <body class="flex flex-col min-h-screen dark:bg-gray-900 dark:text-gray-100">
     <%- include('../partials/navbar') %>
