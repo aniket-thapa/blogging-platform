@@ -10,11 +10,9 @@
       crossorigin="anonymous"
     ></script>
   </head>
-  <body
-    class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
-  >
+  <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
     <%- include('../partials/navbar') %>
-    <div class="max-w-4xl min-h-screen container mx-auto px-4 py-8">
+    <div class="max-w-4xl container mx-auto px-4 py-8">
       <!-- Header -->
       <header class="flex items-center justify-between mb-8">
         <h1 class="text-4xl font-extrabold text-blue-500">Blogs</h1>
@@ -83,7 +81,7 @@
         <% }) %>
       </div>
     </div>
-    <%- include('../partials/footer') %>
+    <div class="relative mt-24"><%- include('../partials/footer') %></div>
     <script async defer src="/public/js/scrollToTop.js"></script>
   </body>
 </html>

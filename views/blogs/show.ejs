@@ -160,7 +160,7 @@
               >
                 <% if (user && blog.likes.includes(user._id)) { %>
                 <button class="like-button2 transition-all duration-300">
-                  <i class="fa-regular fa-heart text-red-500 heart-beat"></i>
+                  <i class="fa-solid fa-heart text-red-500 heart-beat"></i>
                 </button>
                 <!-- Tooltip -->
                 <div
@@ -216,7 +216,7 @@
               </div>
             </div>
           </div>
-          <hr class="border-gray-200 dark:border-gray-800 my-1" />
+          <hr class="border-gray-200 dark:border-gray-800 my-1 mb-6" />
 
           <!-- Blog Content -->
 
@@ -229,7 +229,7 @@
         </article>
 
         <!-- Like, Comment and Share Row -->
-        <hr class="border-gray-200 dark:border-gray-800 my-1" />
+        <hr class="border-gray-200 dark:border-gray-800 my-1 mt-12" />
         <div class="my-2 text-gray-700 dark:text-gray-300 flex justify-between">
           <div class="flex gap-4">
             <div
@@ -237,7 +237,7 @@
             >
               <% if (user && blog.likes.includes(user._id)) { %>
               <button class="like-button2 transition-all duration-300">
-                <i class="fa-regular fa-heart text-red-500 heart-beat"></i>
+                <i class="fa-solid fa-heart text-red-500 heart-beat"></i>
               </button>
               <!-- Tooltip -->
               <div
@@ -398,13 +398,12 @@
         </div>
       </div>
     </div>
+    <div class="relative mt-24"><%- include('../partials/footer') %></div>
 
     <div
       id="notification-container"
       class="fixed top-20 right-5 space-y-3 z-50"
     ></div>
-    <%- include('../partials/footer') %>
-
     <script>
       // Reading Time Count
       function stripHTML(html) {
@@ -515,49 +514,64 @@
       // Likes show dynamically on the frontend with API call
       const user = `<%= user %>`;
       if (user) {
-        const likeButtons = document.querySelectorAll('.like-button2');
-        const likesCount = document.querySelectorAll('.likes-count');
-
-        likeButtons.forEach((likeButton) => {
+        document.querySelectorAll('.like-button2').forEach((likeButton) => {
           likeButton.addEventListener('click', async () => {
-            likeButtons.forEach((btn) => {
-              const likeIcon = btn.querySelector('i');
-              likeIcon.classList.toggle('text-red-500');
-              likeIcon.classList.toggle('heart-beat');
-              let likeTooltips = document.querySelectorAll('#like-tooltip');
-              likeTooltips.forEach((tooltip) => {
-                if (likeIcon.classList.contains('text-red-500')) {
-                  tooltip.innerText = 'Unlike';
-                } else tooltip.innerText = 'Like';
-              });
-            });
+            const group = likeButton.closest('.group');
+            const likeIcon = likeButton.querySelector('i');
+            const likesCount = group.querySelector('.likes-count');
+            const tooltip = group.querySelector('#like-tooltip');
+
+            // Toggle UI instantly
+            const liked = likeIcon.classList.contains('text-red-500');
+            if (!liked) {
+              likeIcon.classList.add('fa-solid', 'text-red-500', 'heart-beat');
+              likeIcon.classList.remove('fa-regular');
+              if (tooltip) tooltip.innerText = 'Unlike';
+              if (likesCount)
+                likesCount.innerText = parseInt(likesCount.innerText) + 1;
+            } else {
+              likeIcon.classList.remove(
+                'fa-solid',
+                'text-red-500',
+                'heart-beat'
+              );
+              likeIcon.classList.add('fa-regular');
+              if (tooltip) tooltip.innerText = 'Like';
+              if (likesCount)
+                likesCount.innerText = parseInt(likesCount.innerText) - 1;
+            }
 
             try {
               const response = await fetch('/blogs/<%= blog._id %>/like', {
                 method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
               });
-
               if (response.ok) {
                 const data = await response.json();
-                likesCount.forEach((element) => {
-                  element.innerHTML = `${data.likes}`;
+                document.querySelectorAll('.likes-count').forEach((el) => {
+                  el.innerText = data.likes;
                 });
-                likeButtons.forEach((btn) => {
-                  const likeIcon = btn.querySelector('i');
+                document.querySelectorAll('.like-button2').forEach((btn) => {
+                  const icon = btn.querySelector('i');
                   if (data.message === 'Liked') {
-                    likeIcon.classList.add('text-red-500');
-                  } else if (data.message === 'Unliked') {
-                    likeIcon.classList.remove('text-red-500');
+                    icon.classList.add(
+                      'fa-solid',
+                      'text-red-500',
+                      'heart-beat'
+                    );
+                    icon.classList.remove('fa-regular');
+                  } else {
+                    icon.classList.remove(
+                      'fa-solid',
+                      'text-red-500',
+                      'heart-beat'
+                    );
+                    icon.classList.add('fa-regular');
                   }
                 });
-              } else {
-                console.error('Failed to like the blog');
               }
             } catch (error) {
-              console.error('Error:', error);
+              console.error('Error:', error.message);
             }
           });
         });
