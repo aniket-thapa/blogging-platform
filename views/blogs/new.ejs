@@ -28,7 +28,6 @@
         action="/blogs/new"
         method="POST"
         enctype="multipart/form-data"
-        onsubmit="tinymce.get('content').save();"
         class="w-full max-w-lg sm:max-w-xl lg:max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 sm:p-8"
       >
         <!-- Title Field -->
@@ -272,7 +271,7 @@
         tinymce.get('content').save();
         const formData = new FormData(form);
         try {
-          const response = await fetch('/blogs/new', {
+          const response = await fetch(form.action, {
             method: 'POST',
             body: formData,
           });
