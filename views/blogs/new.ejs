@@ -25,7 +25,7 @@
 
       <!-- Blog Form -->
       <form
-        action="https://blogging-platform-y0pb.onrender.com/blogs/new"
+        action="/blogs/new"
         method="POST"
         enctype="multipart/form-data"
         class="w-full max-w-lg sm:max-w-xl lg:max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 sm:p-8"
@@ -274,6 +274,7 @@
           const response = await fetch(form.action, {
             method: 'POST',
             body: formData,
+            credentials: 'include',
           });
 
           const result = await response.json();
