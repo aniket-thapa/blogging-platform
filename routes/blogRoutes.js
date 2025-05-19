@@ -79,6 +79,8 @@ router.post(
       let savedBlog = await blog.save();
       res.json({ success: true, blogId: savedBlog._id });
     } catch (err) {
+      console.log(err.message);
+      console.log(err);
       res
         .status(500)
         .json({ error: 'Failed to create blog (Internal Server Error)' });
