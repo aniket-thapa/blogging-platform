@@ -26,6 +26,7 @@ passport.use(
 
         return done(null, user, { message: 'User login successfully!' });
       } catch (err) {
+        console.error('Error in Local strategy:', err);
         return done(err, false);
       }
     }
@@ -53,6 +54,7 @@ passport.use(
         }
         return done(null, user);
       } catch (err) {
+        console.error('Error in Google strategy:', err);
         return done(err);
       }
     }
@@ -66,6 +68,7 @@ passport.deserializeUser(async (id, done) => {
     const user = await User.findById(id);
     done(null, user);
   } catch (err) {
+    console.error('Error in deserializing user:', err);
     done(err, false);
   }
 });

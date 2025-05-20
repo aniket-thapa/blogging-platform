@@ -640,7 +640,6 @@
           event.preventDefault();
 
           const commentData = new URLSearchParams(new FormData(commentForm));
-          console.log(commentData);
           try {
             const response = await fetch(commentForm.action, {
               method: 'POST',

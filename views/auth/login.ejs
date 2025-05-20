@@ -126,11 +126,8 @@
 
       form.addEventListener('submit', async (event) => {
         event.preventDefault();
-
         loader.classList.remove('hidden');
-
         const formData = new URLSearchParams(new FormData(form));
-
         try {
           const response = await fetch('/login', {
             method: 'POST',
@@ -139,9 +136,7 @@
             },
             body: formData.toString(),
           });
-
           const result = await response.json();
-
           if (response.ok) {
             window.location.href = '/user/profile';
           } else {
@@ -149,6 +144,7 @@
           }
         } catch (error) {
           showNotification(error.message, 4000);
+          console.error('Error', error);
         } finally {
           loader.classList.add('hidden');
           button.disabled = false;

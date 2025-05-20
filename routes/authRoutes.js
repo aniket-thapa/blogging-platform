@@ -60,15 +60,15 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
-  const { username, useremail, otp, password, confirm_password } = req.body;
-
-  if (password !== confirm_password) {
-    return res
-      .status(400)
-      .json({ message: 'Password and Confirm Password must be same.' });
-  }
-
   try {
+    const { username, useremail, otp, password, confirm_password } = req.body;
+
+    if (password !== confirm_password) {
+      return res
+        .status(400)
+        .json({ message: 'Password and Confirm Password must be same.' });
+    }
+
     const existingUser = await User.findOne({ useremail });
     if (existingUser) {
       return res.status(400).json({ error: 'Email is already registered.' });
@@ -100,6 +100,7 @@ router.post('/register', async (req, res) => {
 
     res.status(200).json({ message: 'User registered successfully!' });
   } catch (err) {
+    console.error('Error during registration:', err);
     res
       .status(500)
       .json({ error: 'An error occurred. Please try again later.' });
@@ -113,26 +114,35 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login', (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
-    if (err) {
-      return res.status(500).json({ message: 'An error occurred', error: err });
-    }
-    if (!user) {
-      return res.status(401).json({ message: info?.message || 'Login failed' });
-    }
-
-    req.login(user, (loginErr) => {
-      if (loginErr) {
+  try {
+    passport.authenticate('local', (err, user, info) => {
+      if (err) {
         return res
           .status(500)
-          .json({ message: 'Login error', error: loginErr });
+          .json({ message: 'An error occurred', error: err });
+      }
+      if (!user) {
+        return res
+          .status(401)
+          .json({ message: info?.message || 'Login failed' });
       }
 
-      return res
-        .status(200)
-        .json({ message: info?.message || 'Login successful', user });
-    });
-  })(req, res, next);
+      req.login(user, (loginErr) => {
+        if (loginErr) {
+          return res
+            .status(500)
+            .json({ message: 'Login error', error: loginErr });
+        }
+
+        return res
+          .status(200)
+          .json({ message: info?.message || 'Login successful', user });
+      });
+    })(req, res, next);
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ message: 'An error occurred during login' });
+  }
 });
 
 // Google OAuth Login
@@ -175,13 +185,12 @@ router.get('/forgot-password', (req, res) => {
 
 // Forgot Password - Send OTP
 router.post('/forgot-password', async (req, res) => {
-  const { useremail } = req.body;
-
-  if (!useremail) {
-    return res.status(400).json({ message: 'Email is required' });
-  }
-
   try {
+    const { useremail } = req.body;
+
+    if (!useremail) {
+      return res.status(400).json({ message: 'Email is required' });
+    }
     const user = await User.findOne({ useremail });
     if (!user) {
       return res
@@ -221,17 +230,17 @@ router.post('/forgot-password', async (req, res) => {
 
 // Reset Password
 router.post('/reset-password', async (req, res) => {
-  const { useremail, otp, newPassword, confirmNewPassword } = req.body;
-
-  if (!useremail || !otp || !newPassword || !confirmNewPassword) {
-    return res.status(400).json({ message: 'All fields are required' });
-  }
-
-  if (newPassword !== confirmNewPassword) {
-    return res.status(400).json({ message: 'Passwords do not match' });
-  }
-
   try {
+    const { useremail, otp, newPassword, confirmNewPassword } = req.body;
+
+    if (!useremail || !otp || !newPassword || !confirmNewPassword) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      return res.status(400).json({ message: 'Passwords do not match' });
+    }
+
     const storedOtp = await OTP.findOne({ email: useremail });
 
     if (!storedOtp || storedOtp.otp !== otp) {

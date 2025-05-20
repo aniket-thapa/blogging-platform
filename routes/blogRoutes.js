@@ -9,11 +9,19 @@ const router = express.Router();
 
 // Display All Blogs
 router.get('/', async (req, res) => {
-  const blogs = await Blog.find()
-    .populate('author', 'username')
-    .sort({ createdAt: -1 });
-  const user = req.user || null;
-  res.render('blogs/index', { blogs, user });
+  try {
+    const blogs = await Blog.find()
+      .populate('author', 'username')
+      .sort({ createdAt: -1 });
+    const user = req.user || null;
+    res.render('blogs/index', { blogs, user });
+  } catch (err) {
+    console.error('Error fetching blogs:', err);
+    res.status(500).render('error', {
+      message: 'Internal Server Error',
+      user: req.user || null,
+    });
+  }
 });
 
 // Display Form to Create New Blog
@@ -79,7 +87,7 @@ router.post(
       let savedBlog = await blog.save();
       res.json({ success: true, blogId: savedBlog._id });
     } catch (err) {
-      console.log(err.message);
+      console.log('Error creating blog:', err);
       res
         .status(500)
         .json({ error: 'Failed to create blog (Internal Server Error)' });
@@ -97,8 +105,15 @@ router.get('/:id', async (req, res) => {
         populate: { path: 'author', select: ['username', 'useremail'] },
       });
     const user = req.user || null;
+    if (!blog) {
+      return res.status(404).render('error', {
+        message: 'Blog not found',
+        user,
+      });
+    }
     res.render('blogs/show', { blog, user });
   } catch (err) {
+    console.error('Error fetching blog in show route:', err);
     res.redirect('/blogs');
   }
 });
@@ -113,7 +128,7 @@ router.get('/tags/:tag', async (req, res) => {
     const user = req.user || null;
     res.render('blogs/index', { blogs, user });
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching blogs by tag:', error);
     res.status(500).send('Internal Server Error');
   }
 });

@@ -157,13 +157,9 @@
 
       form.addEventListener('submit', async (event) => {
         event.preventDefault();
-
         loader.classList.remove('hidden');
         button.disabled = true;
-
         const formData = new URLSearchParams(new FormData(form));
-        console.log(formData.toString());
-
         try {
           const response = await fetch('/register', {
             method: 'POST',
@@ -189,6 +185,7 @@
           buttonText.classList.remove('hidden');
           button.disabled = false;
           showNotification(error.message, 4000);
+          console.error('Error', err);
         }
       });
 
@@ -196,46 +193,55 @@
       document
         .getElementById('send-otp-btn')
         .addEventListener('click', async (e) => {
-          e.preventDefault();
-          const useremail = document.getElementById('useremail').value;
-          const response = await fetch('/send-otp', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ useremail }),
-          });
-          const result = await response.json();
-          showNotification(result.message, 4000);
-          if (response.status === 200) {
-            // Disable the button and start the timer
-            document.getElementById('send-otp-btn').disabled = true;
-            document.getElementById('send-otp-btn').style.cursor =
-              'not-allowed';
+          try {
+            e.preventDefault();
+            const useremail = document.getElementById('useremail').value;
+            const response = await fetch('/send-otp', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ useremail }),
+            });
+            const result = await response.json();
+            showNotification(result.message, 4000);
+            if (response.status === 200) {
+              // Disable the button and start the timer
+              document.getElementById('send-otp-btn').disabled = true;
+              document.getElementById('send-otp-btn').style.cursor =
+                'not-allowed';
 
-            let timeLeft = 300;
+              let timeLeft = 300;
 
-            const timerInterval = setInterval(function () {
-              let minutes = Math.floor(timeLeft / 60);
-              let seconds = timeLeft % 60;
-              document.getElementById('send-otp-btn').innerText = `${minutes}:${
-                seconds < 10 ? '0' + seconds : seconds
-              }`;
+              const timerInterval = setInterval(function () {
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                document.getElementById(
+                  'send-otp-btn'
+                ).innerText = `${minutes}:${
+                  seconds < 10 ? '0' + seconds : seconds
+                }`;
 
-              if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                document.getElementById('send-otp-btn').disabled = false; // Re-enable the button
-                document.getElementById('send-otp-btn').innerText = 'Send OTP'; // Reset the button text
-                document.getElementById('send-otp-btn').style.cursor =
-                  'default';
+                if (timeLeft <= 0) {
+                  clearInterval(timerInterval);
+                  document.getElementById('send-otp-btn').disabled = false; // Re-enable the button
+                  document.getElementById('send-otp-btn').innerText =
+                    'Send OTP'; // Reset the button text
+                  document.getElementById('send-otp-btn').style.cursor =
+                    'default';
 
-                document.getElementById('useremail').readOnly = false; // Re-enable the email field
-              }
+                  document.getElementById('useremail').readOnly = false; // Re-enable the email field
+                }
 
-              timeLeft--;
-            }, 1000); // Update every second
+                timeLeft--;
+              }, 1000); // Update every second
 
-            // Disable email field while timer is active
-            document.getElementById('useremail').readOnly = true;
-            document.getElementById('enter-otp-div').classList.remove('hidden');
+              // Disable email field while timer is active
+              document.getElementById('useremail').readOnly = true;
+              document
+                .getElementById('enter-otp-div')
+                .classList.remove('hidden');
+            }
+          } catch (error) {
+            console.error('Error', error);
           }
         });
 

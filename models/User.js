@@ -13,10 +13,14 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre('save', async function (next) {
-  if (this.password && this.isModified('password')) {
-    this.password = await bcrypt.hash(this.password, 10);
+  try {
+    if (this.password && this.isModified('password')) {
+      this.password = await bcrypt.hash(this.password, 10);
+    }
+    next();
+  } catch (err) {
+    console.error('Error in User Model', err);
   }
-  next();
 });
 
 userSchema.methods.comparePassword = function (password) {
