@@ -70,11 +70,18 @@ A sleek and modern blogging platform developed by **Aniket Thapa** and **Mayank 
 4. Create a `.env` file and add the following environment variables:
 
    ```env
-   DATABASE_URL=your_mongodb_connection_string
-   SESSION_SECRET=your_secret_key
+   MONGO_URI=
+   SESSION_SECRET=
    PORT=3000
-   GOOGLE_CLIENT_ID=your_google_client_id
-   GOOGLE_CLIENT_SECRET=your_google_client_secret
+   GOOGLE_CLIENT_ID=
+   GOOGLE_CLIENT_SECRET=
+   EMAIL_HOST=
+   EMAIL_PORT=
+   EMAIL_USER=
+   EMAIL_PASS=
+   CLOUDINARY_CLOUD_NAME=
+   CLOUDINARY_API_KEY=
+   CLOUDINARY_API_SECRET=
    ```
 
 5. Start the server:
