@@ -267,6 +267,10 @@
       // Form Submission
       form.addEventListener('submit', async function (event) {
         event.preventDefault();
+        // Publish button disable
+        const publishButton = document.querySelector('.publish-button');
+        publishButton.disabled = true;
+        publishButton.textContent = 'Publishing...';
         updateHiddenInput();
         tinymce.get('content').save();
         const formData = new FormData(form);
@@ -276,11 +280,6 @@
             body: formData,
             credentials: 'include',
           });
-
-          // Publish button disable
-          const publishButton = document.querySelector('.publish-button');
-          publishButton.disabled = true;
-          publishButton.textContent = 'Publishing...';
 
           const result = await response.json();
 
