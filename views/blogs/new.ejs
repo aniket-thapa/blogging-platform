@@ -273,9 +273,8 @@
 
         // Validate cover image
         if (
-          !form.ATTRIBUTE_NODE.coverImage ||
-          !form.ATTRIBUTE_NODE.coverImage.files ||
-          form.ATTRIBUTE_NODE.coverImage.files.length === 0
+          !formData.get('coverImage') ||
+          formData.get('coverImage').size === 0
         ) {
           alert('Please upload a cover image.');
           return;
