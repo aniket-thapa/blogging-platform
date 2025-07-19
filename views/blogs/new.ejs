@@ -92,7 +92,7 @@
             id="coverImage"
             name="coverImage"
             accept="image/*"
-            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200"
+            class="block w-full cursor-pointer text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200"
           />
 
           <!-- Preview Container with Fixed Aspect Ratio -->
@@ -267,13 +267,26 @@
       // Form Submission
       form.addEventListener('submit', async function (event) {
         event.preventDefault();
+        updateHiddenInput();
+        tinymce.get('content').save();
+        const formData = new FormData(form);
+
+        // Validate cover image
+        if (
+          !form.ATTRIBUTE_NODE.coverImage ||
+          !form.ATTRIBUTE_NODE.coverImage.files ||
+          form.ATTRIBUTE_NODE.coverImage.files.length === 0
+        ) {
+          alert('Please upload a cover image.');
+          return;
+        }
+
         // Publish button disable
         const publishButton = document.querySelector('.publish-button');
         publishButton.disabled = true;
         publishButton.textContent = 'Publishing...';
-        updateHiddenInput();
-        tinymce.get('content').save();
-        const formData = new FormData(form);
+        publishButton.classList.add('cursor-progress');
+
         try {
           const response = await fetch(form.action, {
             method: 'POST',
@@ -285,8 +298,10 @@
 
           if (response.ok) {
             publishButton.textContent = 'Published!';
+            publishButton.classList.add('cursor-pointer');
             window.location.href = `/blogs/${result.blogId}`;
           } else {
+            publishButton.classList.add('cursor-pointer');
             publishButton.disabled = false;
             publishButton.textContent = 'Publish Blog';
             throw new Error(result.error || 'An error occurred');
