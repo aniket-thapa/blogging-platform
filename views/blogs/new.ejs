@@ -127,7 +127,7 @@
         <!-- Submit Button -->
         <button
           type="submit"
-          class="w-full bg-blue-500 text-white py-2 sm:py-3 rounded-lg hover:bg-blue-600 transition"
+          class="publish-button w-full bg-blue-500 text-white py-2 sm:py-3 rounded-lg hover:bg-blue-600 transition"
         >
           Publish Blog
         </button>
@@ -277,16 +277,26 @@
             credentials: 'include',
           });
 
+          // Publish button disable
+          const publishButton = document.querySelector('.publish-button');
+          publishButton.disabled = true;
+          publishButton.textContent = 'Publishing...';
+
           const result = await response.json();
 
           if (response.ok) {
+            publishButton.textContent = 'Published!';
             window.location.href = `/blogs/${result.blogId}`;
           } else {
+            publishButton.disabled = false;
+            publishButton.textContent = 'Publish Blog';
             throw new Error(result.error || 'An error occurred');
           }
         } catch (err) {
           alert(err.message);
           console.error(err);
+          publishButton.disabled = false;
+          publishButton.textContent = 'Publish Blog';
         }
       });
     </script>
