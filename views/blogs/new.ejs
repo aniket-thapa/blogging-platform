@@ -35,7 +35,7 @@
           <label
             for="title"
             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >Title
+            >Title <span class="text-red-500">*</span>
             <span id="titleCharCount" class="text-gray-500 text-xs"
               >(0/100)</span
             ></label
@@ -82,7 +82,7 @@
             for="coverImage"
             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
           >
-            Cover Image
+            Cover Image <span class="text-red-500">*</span>
             <span class="text-xs text-gray-500"
               >(Recommended: 16:9 aspect ratio)</span
             >
@@ -97,7 +97,8 @@
 
           <!-- Preview Container with Fixed Aspect Ratio -->
           <div
-            class="relative w-full pt-[56.25%] mt-4 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700"
+            id="previewContainer"
+            class="relative w-full pt-[56.25%] mt-4 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700 hidden"
           >
             <img
               id="previewImage"
@@ -113,9 +114,9 @@
         <div class="mb-4">
           <label
             for="content"
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            class="block mb-4 text-sm font-medium text-gray-700 dark:text-gray-300"
           >
-            Content
+            Content <span class="text-red-500">*</span>
           </label>
           <textarea
             id="content"
@@ -137,22 +138,83 @@
     <div class="relative mt-24"><%- include('../partials/footer') %></div>
 
     <script>
-      tinymce.init({
-        selector: '#content',
-        menubar: true,
-        branding: false,
-        height: 600,
-        plugins: 'link image lists table code',
-        toolbar:
-          'undo redo | styleselect | formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image',
-        setup: function (editor) {
-          editor.on('init', function () {
-            var textarea = document.getElementById('content');
-            textarea.style.display = 'none';
-            textarea.removeAttribute('aria-hidden');
-          });
-        },
+      function isDarkMode() {
+        return document.documentElement.classList.contains('dark');
+      }
+
+      function setupTinyMCE() {
+        if (tinymce.get('content')) {
+          tinymce.get('content').destroy();
+        }
+
+        tinymce.init({
+          selector: '#content',
+          menubar: true,
+          branding: false,
+          height: 600,
+          plugins:
+            'advlist autolink lists link image charmap print preview anchor ' +
+            'searchreplace visualblocks code fullscreen insertdatetime media table paste ' +
+            'wordcount hr nonbreaking',
+          toolbar_mode: 'sliding',
+          toolbar:
+            'undo redo | formatselect | bold italic underline strikethrough | forecolor backcolor | ' +
+            'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | ' +
+            'link image media table hr | charmap | code preview',
+
+          setup: function (editor) {
+            editor.on('init', function () {
+              let textarea = document.getElementById('content');
+              textarea.style.display = 'none';
+              textarea.removeAttribute('aria-hidden');
+            });
+          },
+          skin: isDarkMode() ? 'oxide-dark' : 'oxide',
+          content_css: isDarkMode() ? 'dark' : 'default',
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', setupTinyMCE);
+
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (
+            mutation.type === 'attributes' &&
+            mutation.attributeName === 'class' &&
+            mutation.target === document.documentElement
+          ) {
+            setupTinyMCE(); // Re-setup TinyMCE when the theme class changes
+          }
+        });
       });
+
+      // Start observing the <html> tag for class attribute changes
+      observer.observe(document.documentElement, { attributes: true });
+
+      // =========================================//
+
+      // Preview Image
+      document
+        .getElementById('coverImage')
+        .addEventListener('change', function (e) {
+          const fileInput = e.target;
+          const file = fileInput.files[0];
+          const previewImg = document.getElementById('previewImage');
+          const previewContainer = document.getElementById('previewContainer'); // Get the preview container
+
+          if (file && file.type.startsWith('image/')) {
+            const url = URL.createObjectURL(file);
+            previewImg.src = url;
+            previewContainer.classList.remove('hidden'); // Show the container
+          } else {
+            previewImg.src = '';
+            previewContainer.classList.add('hidden'); // Hide the container
+            fileInput.value = '';
+            alert(
+              'Please upload a valid image file (e.g., .jpg, .png, .webp).'
+            );
+          }
+        });
 
       // Preview Image
       document
