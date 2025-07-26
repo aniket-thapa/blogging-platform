@@ -89,31 +89,37 @@
 
     <!-- Dark Mode Toggle Switch -->
     <button
-      id="darkModeToggle"
-      class="bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 shadow-xl px-2 py-1 rounded-full flex items-center transition-all duration-200"
+      onclick="toggleTheme()"
+      class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
     >
-      <!-- Sun Icon -->
-      <i
-        id="sunIcon"
-        class="fas fa-sun text-yellow-500 text-lg transition-all transform scale-100 dark:scale-0"
-      ></i>
-
-      <!-- Toggle Background -->
-      <div
-        class="relative w-12 h-6 mx-2 rounded-full bg-gray-400 dark:bg-gray-600 transition-all duration-300"
+      <svg
+        id="theme-icon-light"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
       >
-        <!-- Toggle Circle -->
-        <div
-          id="toggleCircle"
-          class="absolute top-1 left-1 w-4 h-4 bg-white dark:bg-gray-900 rounded-full shadow-md transform transition-all duration-300 dark:translate-x-6"
-        ></div>
-      </div>
-
-      <!-- Moon Icon -->
-      <i
-        id="moonIcon"
-        class="fas fa-moon text-blue-400 text-lg transition-all transform scale-0 dark:scale-100"
-      ></i>
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+        />
+      </svg>
+      <svg
+        id="theme-icon-dark"
+        class="h-6 w-6 hidden"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+        />
+      </svg>
     </button>
   </div>
 </nav>
@@ -134,41 +140,27 @@
     });
   });
 
-  // Dark Mode Toggle Script
-  const darkModeToggle = document.getElementById('darkModeToggle');
-  const sunIcon = document.getElementById('sunIcon');
-  const moonIcon = document.getElementById('moonIcon');
-  const toggleCircle = document.querySelector('#toggleCircle');
+  // Dark / Light Mode Toggle Theme Script
 
-  function enableDarkMode() {
+  // Set the theme on initial load
+  if (
+    localStorage.theme === 'dark' ||
+    (!('theme' in localStorage) &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches)
+  ) {
     document.documentElement.classList.add('dark');
-    localStorage.setItem('theme', 'dark');
-    toggleCircle.classList.add('translate-x-6');
-    sunIcon.classList.add('scale-0');
-    moonIcon.classList.remove('scale-0');
-  }
-
-  function disableDarkMode() {
-    document.documentElement.classList.remove('dark');
-    localStorage.setItem('theme', 'light');
-    toggleCircle.classList.remove('translate-x-6');
-    sunIcon.classList.remove('scale-0');
-    moonIcon.classList.add('scale-0');
-  }
-
-  // Load theme from local storage
-  if (localStorage.getItem('theme') === 'dark') {
-    enableDarkMode();
   } else {
-    disableDarkMode();
+    document.documentElement.classList.remove('dark');
   }
 
-  // Toggle Dark Mode on Click
-  darkModeToggle.addEventListener('click', () => {
-    if (document.documentElement.classList.contains('dark')) {
-      disableDarkMode();
+  function toggleTheme() {
+    const html = document.documentElement;
+    if (html.classList.contains('dark')) {
+      html.classList.remove('dark');
+      localStorage.theme = 'light';
     } else {
-      enableDarkMode();
+      html.classList.add('dark');
+      localStorage.theme = 'dark';
     }
-  });
+  }
 </script>

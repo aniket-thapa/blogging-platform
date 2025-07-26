@@ -1,7 +1,7 @@
 const express = require('express');
 const { isAuthenticated } = require('../middleware/authMiddleware');
 const Blog = require('../models/Blog');
-const { upload } = require('../config/cloudinary');
+const { upload, cloudinary } = require('../config/cloudinary');
 const Comment = require('../models/Comment');
 const BlogView = require('../models/BlogView');
 const User = require('../models/User');
