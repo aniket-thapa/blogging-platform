@@ -172,6 +172,7 @@ router.delete('/:id', isAuthenticated, async (req, res) => {
       return res.redirect('/blogs');
     }
     await Comment.deleteMany({ blog: blog._id });
+    await cloudinary.uploader.destroy(blog.coverImage.public_id);
     await blog.deleteOne();
     res.redirect('/blogs');
   } catch (err) {
