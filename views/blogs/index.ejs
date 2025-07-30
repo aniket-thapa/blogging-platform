@@ -77,7 +77,11 @@
                 />
                 <div>
                   <span class="font-semibold text-gray-700 dark:text-gray-300"
-                    ><%= blog.author.username %></span
+                    ><a
+                      href="/author/<%= blog.author.userId %>"
+                      class="hover:underline"
+                      ><%= blog.author.username %></a
+                    ></span
                   >
                   <span class="block text-xs"
                     ><%= new Intl.DateTimeFormat('en-US', { year: 'numeric',

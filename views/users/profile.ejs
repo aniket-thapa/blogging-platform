@@ -25,6 +25,18 @@
             </h1>
 
             <p class="font-light italic">(<%= user.useremail %>)</p>
+            <p class="text-gray-600 dark:text-gray-400">
+              User ID: <%= user.userId || 'Not set' %>
+            </p>
+            <!-- Settings -->
+            <div class="mt-4">
+              <a
+                href="/user/settings"
+                class="text-blue-500 hover:underline focus:outline-none"
+              >
+                Edit Profile Settings
+              </a>
+            </div>
           </div>
 
           <div

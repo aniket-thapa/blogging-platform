@@ -10,9 +10,7 @@ const router = express.Router();
 // Display All Blogs
 router.get('/', async (req, res) => {
   try {
-    const blogs = await Blog.find()
-      .populate('author', 'username')
-      .sort({ createdAt: -1 });
+    const blogs = await Blog.find().populate('author').sort({ createdAt: -1 });
     const user = req.user || null;
     res.render('blogs/index', { blogs, user });
   } catch (err) {
@@ -99,7 +97,7 @@ router.post(
 router.get('/:id', async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id)
-      .populate('author', 'username')
+      .populate('author')
       .populate({
         path: 'comments',
         populate: { path: 'author', select: ['username', 'useremail'] },
@@ -123,7 +121,7 @@ router.get('/tags/:tag', async (req, res) => {
   try {
     const tag = req.params.tag.toLowerCase();
     const blogs = await Blog.find({ tags: tag })
-      .populate('author', 'username')
+      .populate('author')
       .sort({ createdAt: -1 });
     const user = req.user || null;
     res.render('blogs/index', { blogs, user });

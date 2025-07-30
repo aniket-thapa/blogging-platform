@@ -285,7 +285,11 @@
                 >
                   <span class="font-medium">
                     <i class="fa-regular fa-circle-user font-bold"></i>
-                    <%= blog.author.username %>
+                    <a
+                      href="/author/<%= blog.author.userId %>"
+                      class="hover:underline"
+                      ><%= blog.author.username %></a
+                    >
                   </span>
                   <span>
                     on <%= new Intl.DateTimeFormat('en-US', { year: 'numeric',

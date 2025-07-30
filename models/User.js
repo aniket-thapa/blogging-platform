@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String },
     googleId: { type: String, unique: true, sparse: true },
     savedBlogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Blog' }],
+    userId: { type: String, unique: true, sparse: true },
   },
   { timestamps: true }
 );

@@ -43,6 +43,10 @@ app.use('/user', userRoutes);
 const blogRoutes = require('./routes/blogRoutes');
 app.use('/blogs', blogRoutes);
 
+// Author routes
+const authorRoutes = require('./routes/authorRoutes');
+app.use('/author', authorRoutes);
+
 // Home Route
 app.get('/', (req, res) => {
   const user = req.user || null;
