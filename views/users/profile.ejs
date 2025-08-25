@@ -25,18 +25,23 @@
             </h1>
 
             <p class="font-light italic">(<%= user.useremail %>)</p>
-            <p class="text-gray-600 dark:text-gray-400">
-              User ID: <%= user.userId || 'Not set' %>
+            <p class="my-4">
+              <% if (user.userId) { %>
+              <span>User ID: <%= user.userId %></span> <% } else { %>
+              <span
+                class="flex md:flex-row flex-col w-fit text-sm border border-gray-300 p-2 rounded-lg bg-purple-500 bg-opacity-40 text-black dark:text-white"
+                ><span
+                  >Add UserId if you want others to find your all blogs:</span
+                >
+                <a
+                  href="/user/settings"
+                  class="dark:text-blue-500 text-blue-700 font-bold hover:underline focus:outline-none"
+                >
+                  Add User Id
+                </a>
+              </span>
+              <% } %>
             </p>
-            <!-- Settings -->
-            <div class="mt-4">
-              <a
-                href="/user/settings"
-                class="text-blue-500 hover:underline focus:outline-none"
-              >
-                Edit Profile Settings
-              </a>
-            </div>
           </div>
 
           <div
@@ -75,6 +80,5 @@
         </div>
       </div>
     </div>
-    <%- include('../partials/footer') %>
   </body>
 </html>
