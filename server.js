@@ -4,18 +4,22 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const methodOverride = require('method-override');
 const connectDB = require('./config/database');
-const User = require('./models/User');
+
+// Initialize app
 const app = express();
 dotenv.config();
 
-// Middleware
+// Body parsers
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use('/public', express.static(path.join(__dirname, 'public'))); // Setup static files
-app.set('view engine', 'ejs');
-// app.set('view cache', true);
 
-// Session Setup
+// Static files
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
+// Template engine
+app.set('view engine', 'ejs');
+
+// Sessions
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -24,42 +28,43 @@ app.use(
   })
 );
 
-const passportconfig = require('./config/passport'); // Passport config
+// Passport authentication
+const passportconfig = require('./config/passport');
 app.use(passportconfig.initialize());
 app.use(passportconfig.session());
 
-// Add MethodOverride
+// Method override (for PUT/DELETE in forms)
 app.use(methodOverride('_method'));
 
-// Routes
+// Auth routes
 const authRoutes = require('./routes/authRoutes');
 app.use(authRoutes);
 
-// User Routes (for profile)
+// User routes (/user/...)
 const userRoutes = require('./routes/userRoutes');
 app.use('/user', userRoutes);
 
-// Blog routes
+// Blog routes (/blogs/...)
 const blogRoutes = require('./routes/blogRoutes');
 app.use('/blogs', blogRoutes);
 
-// Author routes
+// Author routes (/@username)
 const authorRoutes = require('./routes/authorRoutes');
-app.use('/author', authorRoutes);
+app.use('/', authorRoutes);
 
-// Home Route
+// Home route
 app.get('/', (req, res) => {
   const user = req.user || null;
   res.render('home', { user });
 });
 
-// Error handling middleware
+// General error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).render('error', { message: 'Something went wrong!' });
 });
 
-// Connect to SERVER and DATABASE
+// Server & Database Connection
 const PORT = process.env.PORT || 3000;
 connectDB()
   .then(() => {
@@ -69,5 +74,5 @@ connectDB()
     });
   })
   .catch((err) => {
-    console.error('NOT ABLE TO CONNECT TO DATABASE AS WELL SERVER', err);
+    console.error('NOT ABLE TO CONNECT TO DATABASE OR SERVER', err);
   });
